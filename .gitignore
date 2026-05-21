@@ -28,5 +28,3 @@ pnpm-debug.log*
 .idea/
 
 .claude
-context
-CLAUDE.md
