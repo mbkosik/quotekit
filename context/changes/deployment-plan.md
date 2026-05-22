@@ -68,7 +68,7 @@ Automatyczny deploy na każdy push do `main` bez GitHub Actions.
 3. Konfiguracja:
    - Branch: `main`
    - Build command: `npm run build`
-   - Deploy command: *(puste — Cloudflare użyje `wrangler deploy` z `wrangler.jsonc`)*
+   - Deploy command: _(puste — Cloudflare użyje `wrangler deploy` z `wrangler.jsonc`)_
 4. **Environment Variables** (Encrypted):
    - `SUPABASE_URL` = `https://[ref].supabase.co`
    - `SUPABASE_KEY` = anon key z Supabase dashboard
@@ -81,21 +81,21 @@ Automatyczny deploy na każdy push do `main` bez GitHub Actions.
 
 URL: `https://quote-kit.[account].workers.dev`
 
-- [ ] Strona główna ładuje się bez błędów 200
-- [ ] `GET /auth/signup` — formularz rejestracji
-- [ ] `POST /api/auth/signup` — rejestracja nowego konta
-- [ ] `POST /api/auth/signin` — logowanie
-- [ ] `GET /dashboard` — dostęp po zalogowaniu; bez sesji → redirect `/auth/signin`
-- [ ] `POST /api/auth/signout` — wylogowanie, redirect na `/`
-- [ ] `wrangler tail` — brak wyjątków Worker-level podczas testów
+- [x] Strona główna ładuje się bez błędów 200
+- [x] `GET /auth/signup` — formularz rejestracji
+- [x] `POST /api/auth/signup` — rejestracja nowego konta
+- [x] `POST /api/auth/signin` — logowanie
+- [x] `GET /dashboard` — dostęp po zalogowaniu; bez sesji → redirect `/auth/signin`
+- [x] `POST /api/auth/signout` — wylogowanie, redirect na `/`
+- [x] `wrangler tail` — brak wyjątków Worker-level podczas testów
 
 ---
 
 ## Etap 6 — Weryfikacja auto-deploy
 
-- [ ] Push do `main` → deploy widoczny w Cloudflare dashboard (Builds & Deployments)
-- [ ] `npx wrangler deployments list` — nowa wersja Workera na liście
-- [ ] GitHub Actions `ci` job — zielony, niezależny od deploy
+- [x] Push do `main` → deploy widoczny w Cloudflare dashboard (Builds & Deployments)
+- [x] `npx wrangler deployments list` — nowa wersja Workera na liście
+- [x] GitHub Actions `ci` job — zielony, niezależny od deploy
 
 ---
 
@@ -116,10 +116,10 @@ npx wrangler rollback <version-id>
 
 ## Risk Register
 
-| Ryzyko | Prawdopodobieństwo | Wpływ | Mitygacja |
-|---|---|---|---|
-| Free tier 10ms CPU limit — SSR przekroczy | Wysokie | Wysokie | Upgrade Workers Paid ($5/mo) przed pierwszym publicznym userem |
-| `npm run dev` maskuje błędy workerd | Wysokie | Średnie | Używaj `wrangler dev` do testowania Cloudflare-specific ścieżek |
-| SUPABASE_URL z `/rest/v1/` złamie auth | Średnie | Wysokie | Zweryfikuj format przed `wrangler secret put` |
-| Rollback nie cofa migracji Supabase | Niskie | Wysokie | Migracje backward-compatible z poprzednią wersją kodu |
-| `.dev.vars` z realnymi danymi w git | Niskie | Wysokie | Potwierdź że `.dev.vars` jest w `.gitignore` |
+| Ryzyko                                    | Prawdopodobieństwo | Wpływ   | Mitygacja                                                       |
+| ----------------------------------------- | ------------------ | ------- | --------------------------------------------------------------- |
+| Free tier 10ms CPU limit — SSR przekroczy | Wysokie            | Wysokie | Upgrade Workers Paid ($5/mo) przed pierwszym publicznym userem  |
+| `npm run dev` maskuje błędy workerd       | Wysokie            | Średnie | Używaj `wrangler dev` do testowania Cloudflare-specific ścieżek |
+| SUPABASE_URL z `/rest/v1/` złamie auth    | Średnie            | Wysokie | Zweryfikuj format przed `wrangler secret put`                   |
+| Rollback nie cofa migracji Supabase       | Niskie             | Wysokie | Migracje backward-compatible z poprzednią wersją kodu           |
+| `.dev.vars` z realnymi danymi w git       | Niskie             | Wysokie | Potwierdź że `.dev.vars` jest w `.gitignore`                    |
