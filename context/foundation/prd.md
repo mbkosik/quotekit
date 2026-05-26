@@ -142,6 +142,6 @@ Sign-up behavior: standard registration flow. Unauthenticated users cannot acces
 
 ## Open Questions
 
-1. **How many clarifying questions should the AI ask, and what is the stopping rule?** — Surfaced in FR-005 Socratic round. Too few questions = weak quotes; too many = user feels interrogated. The number and stopping condition (fixed count, confidence threshold, user-driven) must be decided before implementing the AI conversation flow. Owner: user. Block: yes (implementation decision).
+1. ~~**How many clarifying questions should the AI ask, and what is the stopping rule?**~~ **RESOLVED 2026-05-26** — User-driven with upper limit (max 5 questions). User can skip at any point via "skip / enough" button. Architecture: multi-turn conversation with explicit skip affordance in UI.
 
-2. **How should the tool handle a very sparse or uninformative paste?** — Surfaced in FR-004 Socratic round. If the inquiry is a single vague sentence, the AI may not have enough signal to generate credible line items. The tool needs an empty-state design or a minimum-quality gate for the input. Owner: user. Block: partial (UX and prompt design).
+2. ~~**How should the tool handle a very sparse or uninformative paste?**~~ **RESOLVED 2026-05-26 (Option B)** — Dual-mode routing: AI assesses inquiry quality and routes to (a) quote generation or (b) questions for the client, with user confirmation before mode switch. Entered into S-01 scope. Motivation: freelancers paste listings from portals (Useme, etc.) where briefs are intentionally brief.

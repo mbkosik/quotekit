@@ -31,7 +31,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | ---- | ----------------------- | --------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
 | F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                | —             | FR-010, FR-011, FR-013                                                                | ready    |
 | F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | —             | FR-005, FR-006                                                                        | ready    |
-| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | blocked  |
+| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | ready    |
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
 
 ## Streams
@@ -94,10 +94,10 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:**
-  - Ile pytań powinno zadawać AI i jaki jest warunek zatrzymania rundy pytań? (fixed count? confidence threshold? user-driven?) — Owner: user. Block: yes.
-  - Co zrobić gdy wklejony tekst jest zbyt lakoniczny, by wygenerować wiarygodne pozycje? (min quality gate, empty-state UX) — Owner: user. Block: no (happy path można zbudować, edge case do dookreślenia przed wdrożeniem do użytkowników).
+  - ~~Ile pytań powinno zadawać AI i jaki jest warunek zatrzymania rundy pytań?~~ **RESOLVED 2026-05-26:** User-driven z górnym limitem — AI zadaje pytania jedno po jednym (max 5), użytkownik może pominąć w dowolnym momencie przyciskiem "pomiń / wystarczy".
+  - ~~Co zrobić gdy wklejony tekst jest zbyt lakoniczny, by wygenerować wiarygodne pozycje?~~ **RESOLVED 2026-05-26 (Opcja B):** Dual-mode w S-01 — AI ocenia jakość treści zapytania i routuje: (a) treść wystarczająca → standardowy przepływ wyceny; (b) treść zbyt lakoniczna → AI generuje pytania DO KLIENTA zamiast pozycji wyceny, z potwierdzeniem usera przed przełączeniem trybu. Jeden prompt, dwie ścieżki wyjścia, minimalne UI. Typowy przypadek: ogłoszenia z portali dla freelancerów (Useme, No Fluff Jobs).
 - **Risk:** Jakość AI-pozycji to jedyna metryka, która ma znaczenie dla hipotezy produktu (PRD NFR: ≥80% pozycji wymaga tylko drobnych edycji); prompt engineering jest tutaj produkcyjny, nie eksperymentalny — wymaga iteracji i oceny przykładów przed wdrożeniem do prawdziwych użytkowników.
-- **Status:** blocked
+- **Status:** ready
 
 ### S-02: Quote management
 
@@ -113,18 +113,18 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID               | Suggested issue title                            | Ready for `/10x-plan` | Notes                                   |
-| ---------- | ----------------------- | ------------------------------------------------ | --------------------- | --------------------------------------- |
-| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS            | yes                   | Run `/10x-plan quotes-schema-rls`       |
-| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint | yes                   | Run `/10x-plan ai-integration-scaffold` |
-| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow       | no                    | Blocked on OQ-1 (AI stopping rule)      |
-| S-02       | quote-management        | Quote list, status management, and delete        | no                    | Awaiting F-01 completion                |
+| Roadmap ID | Change ID               | Suggested issue title                            | Ready for `/10x-plan` | Notes                                                  |
+| ---------- | ----------------------- | ------------------------------------------------ | --------------------- | ------------------------------------------------------ |
+| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS            | yes                   | Run `/10x-plan quotes-schema-rls`                      |
+| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint | yes                   | Run `/10x-plan ai-integration-scaffold`                |
+| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow       | yes                   | OQ-1 + OQ-2 resolved 2026-05-26; run after F-01 + F-02 |
+| S-02       | quote-management        | Quote list, status management, and delete        | no                    | Awaiting F-01 completion                               |
 
 ## Open Roadmap Questions
 
-1. **Ile pytań powinno zadawać AI i jaki jest warunek zatrzymania rundy pytań?** — Skopiowane z PRD §Open Questions OQ-1. Owner: user. Block: S-01 (yes — bez decyzji o stopping rule nie można zaprojektować rundy pytań dla FR-005 i wybrać architektury między single-call a multi-turn).
+1. ~~**Ile pytań powinno zadawać AI i jaki jest warunek zatrzymania rundy pytań?**~~ **RESOLVED 2026-05-26** — User-driven z górnym limitem (max 5 pytań). Użytkownik może pominąć rundę w dowolnym momencie. Architektura: multi-turn z przyciskiem "pomiń / wystarczy" w UI.
 
-2. **Co zrobić gdy wklejony tekst jest zbyt lakoniczny lub nieinformatywny?** — Skopiowane z PRD §Open Questions OQ-2. Owner: user. Block: S-01 (częściowo — happy path można zbudować, ale min-quality gate i empty-state UX muszą być dookreślone przed wdrożeniem do użytkowników).
+2. ~~**Co zrobić gdy wklejony tekst jest zbyt lakoniczny lub nieinformatywny?**~~ **RESOLVED 2026-05-26 (Opcja B)** — Dual-mode: AI routuje między (a) wycena lub (b) pytania do klienta, z potwierdzeniem usera przed przełączeniem. Wchodzi do scope S-01. Motywacja: freelancerzy wklejają ogłoszenia z portali (Useme itp.) gdzie brief jest celowo skrótowy.
 
 ## Parked
 
