@@ -140,7 +140,7 @@ Tworzymy `src/types.ts` z typami dla domeny quote. Typy odzwierciedlają schemat
 **Contract**:
 
 ```typescript
-export type QuoteStatus = 'draft' | 'sent' | 'accepted' | 'rejected';
+export type QuoteStatus = "draft" | "sent" | "accepted" | "rejected";
 
 export interface QuoteItem {
   task: string;
@@ -159,8 +159,8 @@ export interface Quote {
   updated_at: string;
 }
 
-export type QuoteInsert = Omit<Quote, 'id' | 'created_at' | 'updated_at'>;
-export type QuoteUpdate = Partial<Pick<Quote, 'title' | 'status' | 'content'>>;
+export type QuoteInsert = Omit<Quote, "id" | "created_at" | "updated_at">;
+export type QuoteUpdate = Partial<Pick<Quote, "title" | "status" | "content">>;
 ```
 
 ### Success Criteria
@@ -211,23 +211,23 @@ npm run build
 
 #### Automated
 
-- [x] 1.1 `npx supabase db reset` completes without errors
-- [x] 1.2 `npx supabase db diff` shows no pending changes after reset
+- [x] 1.1 `npx supabase db reset` completes without errors — cfa7656
+- [x] 1.2 `npx supabase db diff` shows no pending changes after reset — cfa7656
 
 #### Manual
 
-- [x] 1.3 Tabela `quotes` widoczna w Studio z poprawnymi kolumnami
-- [x] 1.4 Polityki RLS (4) widoczne w Studio → Authentication → Policies
-- [x] 1.5 Trigger `quotes_updated_at` widoczny w Studio → Database → Triggers
-- [x] 1.6 RLS smoke test: user A nie widzi rekordów user B
+- [x] 1.3 Tabela `quotes` widoczna w Studio z poprawnymi kolumnami — cfa7656
+- [x] 1.4 Polityki RLS (4) widoczne w Studio → Authentication → Policies — cfa7656
+- [x] 1.5 Trigger `quotes_updated_at` widoczny w Studio → Database → Triggers — cfa7656
+- [x] 1.6 RLS smoke test: user A nie widzi rekordów user B — cfa7656
 
 ### Phase 2: TypeScript Types
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` przechodzi bez błędów
-- [ ] 2.2 `npm run build` kompiluje bez błędów TypeScript
+- [x] 2.1 `npm run lint` przechodzi bez błędów
+- [x] 2.2 `npm run build` kompiluje bez błędów TypeScript
 
 #### Manual
 
-- [ ] 2.3 Import `Quote` z `@/types` działa bez błędu w IDE
+- [x] 2.3 Import `Quote` z `@/types` działa bez błędu w IDE
