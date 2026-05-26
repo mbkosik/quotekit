@@ -27,4 +27,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# supabase studio local query snapshots
+supabase/snippets/
+
 .claude
