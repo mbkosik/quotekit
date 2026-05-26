@@ -225,9 +225,9 @@ npm run build
 
 #### Automated
 
-- [x] 2.1 `npm run lint` przechodzi bez błędów
-- [x] 2.2 `npm run build` kompiluje bez błędów TypeScript
+- [x] 2.1 `npm run lint` przechodzi bez błędów — 784f12e
+- [x] 2.2 `npm run build` kompiluje bez błędów TypeScript — 784f12e
 
 #### Manual
 
-- [x] 2.3 Import `Quote` z `@/types` działa bez błędu w IDE
+- [x] 2.3 Import `Quote` z `@/types` działa bez błędu w IDE — 784f12e

@@ -1,7 +1,7 @@
 ---
 change_id: quotes-schema-rls
 roadmap_id: F-01
-status: implementing
+status: implemented
 created: 2026-05-26
 updated: 2026-05-26
 ---
