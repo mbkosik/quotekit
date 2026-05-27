@@ -17,5 +17,5 @@ export interface Quote {
   updated_at: string;
 }
 
-export type QuoteInsert = Omit<Quote, "id" | "created_at" | "updated_at">;
+export type QuoteInsert = Omit<Quote, "id" | "user_id" | "created_at" | "updated_at">;
 export type QuoteUpdate = Partial<Pick<Quote, "title" | "status" | "content">>;
