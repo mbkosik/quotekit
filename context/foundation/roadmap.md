@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-25
+updated: 2026-05-28
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -29,7 +29,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 
 | ID   | Change ID               | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                                              | Status   |
 | ---- | ----------------------- | --------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
-| F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                | —             | FR-010, FR-011, FR-013                                                                | ready    |
+| F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                | —             | FR-010, FR-011, FR-013                                                                | done     |
 | F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | —             | FR-005, FR-006                                                                        | ready    |
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | ready    |
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
@@ -70,7 +70,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Unknowns:** —
 - **Schema decisions (2026-05-26, rev. 2026-05-26):** Jedna tabela, jeden typ rekordu. Kolumny: `status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','sent','accepted','rejected'))`, `title TEXT NOT NULL` (generowany przez AI), `inquiry_text TEXT NOT NULL`, `content JSONB NOT NULL DEFAULT '{}'` — struktura: `{ "items": [{ "task": string, "hours": number, "rate": number }] }`. Brak kolumny `type` — pytania do klienta (S-03) będą osobnym slicem z własną decyzją schematową. RLS policies filtrują per `user_id`.
 - **Risk:** Twardy guardrail produktu (per-user isolation) jest zaimplementowany wyłącznie przez polityki RLS tutaj — błąd w polityce to regresja krytyczna niezależnie od stanu pozostałych funkcji; wymagane własne testy polityk przed S-01.
-- **Status:** ready
+- **Status:** done
 
 ### F-02: AI integration scaffold
 
@@ -133,10 +133,10 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 | Roadmap ID | Change ID               | Suggested issue title                            | Ready for `/10x-plan` | Notes                                                  |
 | ---------- | ----------------------- | ------------------------------------------------ | --------------------- | ------------------------------------------------------ |
-| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS            | yes                   | Run `/10x-plan quotes-schema-rls`                      |
+| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS            | done                  | Archived 2026-05-28                                    |
 | F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint | yes                   | Run `/10x-plan ai-integration-scaffold`                |
 | S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow       | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
-| S-02       | quote-management        | Quote list, status management, and delete        | no                    | Awaiting F-01 completion                               |
+| S-02       | quote-management        | Quote list, status management, and delete        | yes                   | F-01 done; run `/10x-plan quote-management`            |
 | S-03       | client-questions-flow   | Client questions for sparse briefs               | no                    | Awaiting S-01 completion; storage approach TBD         |
 
 ## Open Roadmap Questions
@@ -158,4 +158,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 ## Done
 
-(Empty on first generation. `/10x-archive` appends an entry here — and flips the item's `Status` to `done` — when a change whose `Change ID` matches a roadmap item is archived.)
+| F-01 | quotes-schema-rls | Tabela `quotes` + polityki RLS per-user | 2026-05-28 |
