@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
+import type { QuoteItem } from "@/types";
 
 export const prerender = false;
 
@@ -9,6 +10,7 @@ const InputSchema = z.object({
   inquiry_text: z.string().min(20),
 });
 
+// Shape must match QuoteItem in src/types.ts
 const LineItemsSchema = z.object({
   items: z.array(
     z.object({
@@ -72,15 +74,23 @@ export const POST: APIRoute = async (context) => {
 
   const { inquiry_text } = parsed.data;
 
-  const message = await client.messages.parse({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: inquiry_text }],
-    output_config: { format: zodOutputFormat(LineItemsSchema) },
-  });
+  let message;
+  try {
+    message = await client.messages.parse({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 2048,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: inquiry_text }],
+      output_config: { format: zodOutputFormat(LineItemsSchema) },
+    });
+  } catch {
+    return new Response(JSON.stringify({ error: "AI service error" }), {
+      status: 502,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
-  const items = message.parsed_output?.items ?? [];
+  const items: QuoteItem[] = message.parsed_output?.items ?? [];
 
   if (items.length === 0) {
     return new Response(JSON.stringify({ error: "inquiry_too_short" }), {

@@ -104,6 +104,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - Edycja pozycji w LINE_ITEMS inline w tabeli (klik na pole aktywuje input)
   - Tytuł wyceny generowany przez AI z tekstu zapytania — bez ręcznego wpisywania
 - **Risk:** Jakość AI-pozycji to jedyna metryka, która ma znaczenie dla hipotezy produktu (PRD NFR: ≥80% pozycji wymaga tylko drobnych edycji); prompt engineering jest tutaj produkcyjny, nie eksperymentalny — wymaga iteracji i oceny przykładów przed wdrożeniem do prawdziwych użytkowników.
+- **Pre-launch gate (F-02 impl-review):** Per-user rate limiting na `/api/ai/scope` jest wymaganym prerequisite przed udostępnieniem prawdziwym użytkownikom — brak limitu pozwala jednemu użytkownikowi generować nieograniczone koszty API.
 - **Status:** ready
 
 ### S-02: Quote management
