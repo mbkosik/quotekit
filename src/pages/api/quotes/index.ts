@@ -87,7 +87,8 @@ export const GET: APIRoute = async (context) => {
     .from("quotes")
     .select("id, title, status, created_at")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   if (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch quotes" }), {

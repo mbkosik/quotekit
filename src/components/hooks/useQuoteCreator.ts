@@ -1,7 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import type { QuoteItem, Message } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "conversation" | "items" | "saving" | "done";
+export type QuoteItemUI = QuoteItem & { id: string };
+
+const withId = (items: QuoteItem[]): QuoteItemUI[] => items.map((item) => ({ ...item, id: crypto.randomUUID() }));
 
 type ChatResponse =
   | { type: "question"; content: string }
@@ -27,11 +30,19 @@ export function useQuoteCreator() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [questionCount, setQuestionCount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState("");
-  const [items, setItems] = useState<QuoteItem[]>([]);
+  const [items, setItems] = useState<QuoteItemUI[]>([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    },
+    [],
+  );
 
   async function handleInquirySubmit(text: string) {
     setInquiryText(text);
@@ -50,7 +61,7 @@ export function useQuoteCreator() {
         return;
       }
       if (data.type === "complete") {
-        setItems(data.items);
+        setItems(withId(data.items));
         setTitle(data.title);
         setPhase("items");
         return;
@@ -86,7 +97,7 @@ export function useQuoteCreator() {
         }
         if (data.type === "sparse" || data.type === "complete") {
           if (data.type === "complete") {
-            setItems(data.items);
+            setItems(withId(data.items));
             setTitle(data.title);
           }
           setPhase(data.type === "complete" ? "items" : "inquiry");
@@ -119,7 +130,7 @@ export function useQuoteCreator() {
         setError("Nie udało się wygenerować pozycji. Spróbuj ponownie.");
         return;
       }
-      setItems(data.items);
+      setItems(withId(data.items));
       setTitle(data.title);
       setPhase("items");
     } catch {
@@ -128,18 +139,23 @@ export function useQuoteCreator() {
     }
   }, [messages, currentQuestion, inquiryText]);
 
-  async function handleSave(finalItems: QuoteItem[]) {
+  async function handleSave(finalItems: QuoteItemUI[]) {
+    if (phase === "saving") return;
     setPhase("saving");
     try {
       const res = await fetch("/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
+        body: JSON.stringify({
+          title,
+          inquiry_text: inquiryText,
+          content: { items: finalItems.map(({ id: _id, ...rest }) => rest) },
+        }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSavedTitle(title);
       setPhase("done");
-      setTimeout(() => {
+      resetTimerRef.current = setTimeout(() => {
         setPhase("inquiry");
         setInquiryText("");
         setMessages([]);

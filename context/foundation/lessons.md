@@ -31,3 +31,13 @@
 **Rule**: Always write `(select auth.uid())` instead of `auth.uid()` in RLS policy predicates — for all four operations (SELECT, INSERT, UPDATE, DELETE).
 
 **Applies to**: Every RLS policy on every table in this project
+
+## Logika state machine komponentu trafia do hooka, nie do komponentu
+
+**Context**: src/components/hooks/useQuoteCreator.ts — ai-quote-creation-flow (2026-05-29)
+
+**Problem**: Plan specyfikował logikę state machine bezpośrednio w QuoteCreator.tsx. Implementacja wyciągnęła ją do useQuoteCreator.ts — prawidłowa decyzja, ale sprzeczna z planem na papierze. Plan i review traktowały to jako drift zamiast improvement.
+
+**Rule**: Komponenty z non-trivial state (więcej niż 2–3 zmienne stanu lub złożona logika przejść) powinny delegować stan i logikę do dedykowanego hooka w src/components/hooks/. Plan powinien to wprost specyfikować zamiast umieszczać logikę w komponencie.
+
+**Applies to**: Każdy plan komponentu React z non-trivial state machine; plany powinny od razu wskazywać src/components/hooks/ jako docelowe miejsce logiki

@@ -8,13 +8,14 @@ const user = Astro.locals.user;
 if (!user) return Astro.redirect("/auth/signin");
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
-const { data: quotes } = supabase
-  ? await supabase
-      .from("quotes")
-      .select("id, title, status, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-  : { data: null };
+if (!supabase) return new Response("Serwis niedostępny", { status: 503 });
+
+const { data: quotes } = await supabase
+  .from("quotes")
+  .select("id, title, status, created_at")
+  .eq("user_id", user.id)
+  .order("created_at", { ascending: false })
+  .limit(100);
 
 const STATUS_LABELS: Record<QuoteStatus, string> = {
   draft: "Szkic",

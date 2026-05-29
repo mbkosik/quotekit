@@ -35,7 +35,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
-| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                  | S-01          | —                                                                                     | proposed |
+| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
 
 ## Streams
 
@@ -118,6 +118,8 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** FR-013 to hard delete bez undo — świadome trade-off z PRD (Socratic round FR-009); UI powinien potwierdzać akcję przed usunięciem.
+- **Tech notes:**
+  - `GET /api/quotes` w S-01 ma tymczasowy `.limit(100)` — S-02 powinien zastąpić to paginacją (cursor-based lub offset), searchem po tytule i filtrowaniem po statusie.
 - **Status:** proposed
 
 ### S-04: User prompt context
@@ -162,15 +164,15 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID               | Suggested issue title                            | Ready for `/10x-plan` | Notes                                                  |
-| ---------- | ----------------------- | ------------------------------------------------ | --------------------- | ------------------------------------------------------ |
-| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS            | done                  | Archived 2026-05-28                                    |
-| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint | yes                   | Run `/10x-plan ai-integration-scaffold`                |
-| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow       | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
-| S-02       | quote-management        | Quote list, status management, and delete        | yes                   | F-01 done; run `/10x-plan quote-management`            |
-| S-03       | client-questions-flow   | Client questions for sparse briefs               | no                    | Awaiting S-01 completion; storage approach TBD         |
-| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no              | Awaiting S-01 completion; storage + UI placement TBD  |
-| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no              | Scope TBD; start with `/10x-research` + exa/Context7  |
+| Roadmap ID | Change ID               | Suggested issue title                                    | Ready for `/10x-plan` | Notes                                                                             |
+| ---------- | ----------------------- | -------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS                    | done                  | Archived 2026-05-28                                                               |
+| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint         | yes                   | Run `/10x-plan ai-integration-scaffold`                                           |
+| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow               | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
+| S-02       | quote-management        | Quote list, status management, and delete                | yes                   | F-01 done; run `/10x-plan quote-management`                                       |
+| S-03       | client-questions-flow   | Client questions for sparse briefs                       | no                    | Awaiting S-01 completion; storage approach TBD                                    |
+| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
+| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
 
 ## Open Roadmap Questions
 
