@@ -2,6 +2,13 @@ import { z } from "zod";
 
 export type QuoteStatus = "draft" | "sent" | "accepted" | "rejected";
 
+export const MessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string(),
+});
+
+export type Message = z.infer<typeof MessageSchema>;
+
 export const QuoteItemSchema = z.object({
   task: z.string(),
   hours: z.number(),

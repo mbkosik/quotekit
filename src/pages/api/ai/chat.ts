@@ -2,14 +2,9 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
-import { QuoteItemSchema } from "@/types";
+import { QuoteItemSchema, MessageSchema } from "@/types";
 
 export const prerender = false;
-
-const MessageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
-  content: z.string(),
-});
 
 const RequestSchema = z.object({
   inquiry_text: z.string().min(20),

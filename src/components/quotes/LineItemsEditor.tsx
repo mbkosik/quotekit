@@ -1,0 +1,183 @@
+import { useState } from "react";
+import type { QuoteItem } from "@/types";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  items: QuoteItem[];
+  title: string;
+  onItemsChange: (items: QuoteItem[]) => void;
+  onSave: (items: QuoteItem[]) => void;
+  saving: boolean;
+}
+
+type EditingCell = { rowIndex: number; field: "task" | "hours" | "rate" } | null;
+
+export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }: Props) {
+  const [editingCell, setEditingCell] = useState<EditingCell>(null);
+  const [draft, setDraft] = useState("");
+
+  const totalHours = items.reduce((sum, it) => sum + it.hours, 0);
+  const totalAmount = items.reduce((sum, it) => sum + it.hours * it.rate, 0);
+
+  function startEdit(rowIndex: number, field: "task" | "hours" | "rate") {
+    setDraft(String(items[rowIndex][field]));
+    setEditingCell({ rowIndex, field });
+  }
+
+  function commitEdit() {
+    if (!editingCell) return;
+    const { rowIndex, field } = editingCell;
+    const updated = items.map((item, i) => {
+      if (i !== rowIndex) return item;
+      if (field === "task") return { ...item, task: draft };
+      const num = parseFloat(draft);
+      if (isNaN(num) || num < 0) return item;
+      return { ...item, [field]: num };
+    });
+    onItemsChange(updated);
+    setEditingCell(null);
+  }
+
+  function removeRow(rowIndex: number) {
+    onItemsChange(items.filter((_, i) => i !== rowIndex));
+  }
+
+  const cellBase = "cursor-pointer rounded px-2 py-1 text-sm transition-colors";
+
+  return (
+    <div className="flex w-full max-w-4xl flex-col gap-6">
+      <h2 className="text-xl font-semibold text-white">{title}</h2>
+
+      <div className="overflow-x-auto rounded-xl border border-white/10">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-white/10 text-left text-xs text-white/40">
+              <th className="px-4 py-3 font-medium">Zadanie</th>
+              <th className="px-4 py-3 font-medium">Godziny</th>
+              <th className="px-4 py-3 font-medium">Stawka (PLN/h)</th>
+              <th className="px-4 py-3 font-medium">Subtotal</th>
+              <th className="px-4 py-3" />
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, i) => (
+              <tr key={i} className="border-b border-white/5 text-white/80 last:border-0">
+                <td className="px-4 py-2">
+                  {editingCell?.rowIndex === i && editingCell.field === "task" ? (
+                    <input
+                      autoFocus
+                      value={draft}
+                      onChange={(e) => {
+                        setDraft(e.target.value);
+                      }}
+                      onBlur={commitEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") commitEdit();
+                      }}
+                      className="w-full rounded bg-white/10 px-2 py-1 text-sm text-white outline-none"
+                    />
+                  ) : (
+                    <span
+                      className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
+                      onClick={() => {
+                        startEdit(i, "task");
+                      }}
+                    >
+                      {item.task}
+                    </span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {editingCell?.rowIndex === i && editingCell.field === "hours" ? (
+                    <input
+                      autoFocus
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      value={draft}
+                      onChange={(e) => {
+                        setDraft(e.target.value);
+                      }}
+                      onBlur={commitEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") commitEdit();
+                      }}
+                      className="w-20 rounded bg-white/10 px-2 py-1 text-sm text-white outline-none"
+                    />
+                  ) : (
+                    <span
+                      className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
+                      onClick={() => {
+                        startEdit(i, "hours");
+                      }}
+                    >
+                      {item.hours}
+                    </span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {editingCell?.rowIndex === i && editingCell.field === "rate" ? (
+                    <input
+                      autoFocus
+                      type="number"
+                      min="0"
+                      value={draft}
+                      onChange={(e) => {
+                        setDraft(e.target.value);
+                      }}
+                      onBlur={commitEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") commitEdit();
+                      }}
+                      className="w-24 rounded bg-white/10 px-2 py-1 text-sm text-white outline-none"
+                    />
+                  ) : (
+                    <span
+                      className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
+                      onClick={() => {
+                        startEdit(i, "rate");
+                      }}
+                    >
+                      {item.rate}
+                    </span>
+                  )}
+                </td>
+                <td className="px-4 py-2 text-white/60">{(item.hours * item.rate).toLocaleString("pl-PL")} zł</td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => {
+                      removeRow(i);
+                    }}
+                    className="text-white/30 transition-colors hover:text-red-400"
+                    aria-label="Usuń pozycję"
+                  >
+                    ✕
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="border-t border-white/10 text-white/60">
+              <td className="px-4 py-3 text-xs font-medium">SUMA</td>
+              <td className="px-4 py-3 text-xs">{totalHours} h</td>
+              <td className="px-4 py-3" />
+              <td className="px-4 py-3 text-xs font-medium">{totalAmount.toLocaleString("pl-PL")} zł</td>
+              <td />
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <button
+        onClick={() => {
+          onSave(items);
+        }}
+        disabled={saving || items.length === 0}
+        className="self-end rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {saving ? "Zapisuję..." : "Zapisz wycenę"}
+      </button>
+    </div>
+  );
+}

@@ -403,35 +403,35 @@ Haiku przy ~1-2s p50 — akceptowalne per pytanie w konwersacji (max 5 callów).
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes na `src/pages/api/ai/chat.ts`
-- [x] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes na `src/pages/api/ai/chat.ts` — eb255aa
+- [x] 2.2 `npm run build` passes — eb255aa
 
 #### Manual
 
-- [x] 2.3 Unauthenticated → 401
-- [x] 2.4 `inquiry_text` < 20 znaków → 400
-- [x] 2.5 `{ inquiry_text, messages: [], generate: false }` → `{ type: "question", content: "..." }`
-- [x] 2.6 `{ ..., generate: true }` z sensownym briefem → `{ type: "complete", items: [...], title: "..." }`
-- [x] 2.7 Nonsensowny brief + `generate: true` → 422
+- [x] 2.3 Unauthenticated → 401 — eb255aa
+- [x] 2.4 `inquiry_text` < 20 znaków → 400 — eb255aa
+- [x] 2.5 `{ inquiry_text, messages: [], generate: false }` → `{ type: "question", content: "..." }` — eb255aa
+- [x] 2.6 `{ ..., generate: true }` z sensownym briefem → `{ type: "complete", items: [...], title: "..." }` — eb255aa
+- [x] 2.7 Nonsensowny brief + `generate: true` → 422 — eb255aa
 
 ### Phase 3: Quote Creation UI
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes na wszystkich nowych komponentach
-- [ ] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes na wszystkich nowych komponentach
+- [x] 3.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 3.3 Inquiry submit → pierwsze pytanie AI pojawia się
-- [ ] 3.4 Odpowiedź na pytanie → kolejne pytanie
-- [ ] 3.5 "Pomiń / Wystarczy" → generowane pozycje (tabela)
-- [ ] 3.6 Po 5 pytaniach → auto-generacja pozycji
-- [ ] 3.7 Kliknięcie w komórkę → edytowalny input
-- [ ] 3.8 Edycja godzin → subtotal aktualizuje się po blur
-- [ ] 3.9 Usunięcie wiersza → wiersz znika
-- [ ] 3.10 Lakoniczny brief → sparse message pod formularzem
-- [ ] 3.11 AI error mid-conversation → inline error z retry
+- [x] 3.3 Inquiry submit → pierwsze pytanie AI pojawia się
+- [x] 3.4 Odpowiedź na pytanie → kolejne pytanie
+- [x] 3.5 "Pomiń / Wystarczy" → generowane pozycje (tabela)
+- [x] 3.6 Po 5 pytaniach → auto-generacja pozycji
+- [x] 3.7 Kliknięcie w komórkę → edytowalny input
+- [x] 3.8 Edycja godzin → subtotal aktualizuje się po blur
+- [x] 3.9 Usunięcie wiersza → wiersz znika
+- [x] 3.10 Lakoniczny brief → sparse message pod formularzem
+- [x] 3.11 AI error mid-conversation → inline error z retry
 
 ### Phase 4: Quotes API & Save Flow
 

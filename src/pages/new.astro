@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
+import { QuoteCreator } from "@/components/quotes/QuoteCreator";
 ---
 
 <Layout title="New Quote — QuoteKit">
   <div class="flex min-h-screen flex-col bg-gray-950 text-white">
     <Topbar />
     <main class="flex flex-1 flex-col items-center px-4 py-10">
-      {/* QuoteCreator island will be mounted here in Phase 3 */}
+      <QuoteCreator client:load />
     </main>
   </div>
 </Layout>
