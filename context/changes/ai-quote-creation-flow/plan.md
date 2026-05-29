@@ -418,32 +418,32 @@ Haiku przy ~1-2s p50 — akceptowalne per pytanie w konwersacji (max 5 callów).
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes na wszystkich nowych komponentach
-- [x] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes na wszystkich nowych komponentach — 6b1d06e
+- [x] 3.2 `npm run build` passes — 6b1d06e
 
 #### Manual
 
-- [x] 3.3 Inquiry submit → pierwsze pytanie AI pojawia się
-- [x] 3.4 Odpowiedź na pytanie → kolejne pytanie
-- [x] 3.5 "Pomiń / Wystarczy" → generowane pozycje (tabela)
-- [x] 3.6 Po 5 pytaniach → auto-generacja pozycji
-- [x] 3.7 Kliknięcie w komórkę → edytowalny input
-- [x] 3.8 Edycja godzin → subtotal aktualizuje się po blur
-- [x] 3.9 Usunięcie wiersza → wiersz znika
-- [x] 3.10 Lakoniczny brief → sparse message pod formularzem
-- [x] 3.11 AI error mid-conversation → inline error z retry
+- [x] 3.3 Inquiry submit → pierwsze pytanie AI pojawia się — 6b1d06e
+- [x] 3.4 Odpowiedź na pytanie → kolejne pytanie — 6b1d06e
+- [x] 3.5 "Pomiń / Wystarczy" → generowane pozycje (tabela) — 6b1d06e
+- [x] 3.6 Po 5 pytaniach → auto-generacja pozycji — 6b1d06e
+- [x] 3.7 Kliknięcie w komórkę → edytowalny input — 6b1d06e
+- [x] 3.8 Edycja godzin → subtotal aktualizuje się po blur — 6b1d06e
+- [x] 3.9 Usunięcie wiersza → wiersz znika — 6b1d06e
+- [x] 3.10 Lakoniczny brief → sparse message pod formularzem — 6b1d06e
+- [x] 3.11 AI error mid-conversation → inline error z retry — 6b1d06e
 
 ### Phase 4: Quotes API & Save Flow
 
 #### Automated
 
-- [ ] 4.1 `npm run lint` passes na `src/pages/api/quotes/index.ts`
-- [ ] 4.2 `npm run build` passes
+- [x] 4.1 `npm run lint` passes na `src/pages/api/quotes/index.ts`
+- [x] 4.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 4.3 Pełny flow: inquiry → konwersacja → pozycje → zapis → toast
-- [ ] 4.4 Toast zawiera tytuł wyceny i link do `/quotes`
-- [ ] 4.5 Po 3 sekundach formularz resetuje się
-- [ ] 4.6 `/quotes` pokazuje zapisaną wycenę ze statusem "draft"
-- [ ] 4.7 Unauthenticated GET/POST → 401
+- [x] 4.3 Pełny flow: inquiry → konwersacja → pozycje → zapis → toast
+- [x] 4.4 Toast zawiera tytuł wyceny i link do `/quotes`
+- [x] 4.5 Po 3 sekundach formularz resetuje się
+- [x] 4.6 `/quotes` pokazuje zapisaną wycenę ze statusem "draft"
+- [x] 4.7 Unauthenticated GET/POST → 401

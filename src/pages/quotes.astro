@@ -1,13 +1,52 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
+import { createClient } from "@/lib/supabase";
+import type { QuoteStatus } from "@/types";
+
+const user = Astro.locals.user;
+if (!user) return Astro.redirect("/auth/signin");
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+const { data: quotes } = supabase
+  ? await supabase
+      .from("quotes")
+      .select("id, title, status, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+  : { data: null };
+
+const STATUS_LABELS: Record<QuoteStatus, string> = {
+  draft: "Szkic",
+  sent: "Wysłana",
+  accepted: "Zaakceptowana",
+  rejected: "Odrzucona",
+};
 ---
 
 <Layout title="Twoje wyceny — QuoteKit">
   <div class="flex min-h-screen flex-col bg-gray-950 text-white">
     <Topbar />
     <main class="flex flex-1 flex-col items-center px-4 py-10">
-      <h1 class="text-2xl font-bold">Twoje wyceny — wkrótce</h1>
+      <div class="w-full max-w-3xl">
+        <h1 class="mb-6 text-2xl font-bold">Twoje wyceny</h1>
+        {
+          quotes && quotes.length > 0 ? (
+            <ul class="flex flex-col gap-3">
+              {quotes.map((q) => (
+                <li class="flex items-center justify-between rounded-xl border border-white/10 px-5 py-4">
+                  <span class="text-sm font-medium text-white">{q.title}</span>
+                  <span class="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">
+                    {STATUS_LABELS[q.status as QuoteStatus]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-sm text-white/40">Nie masz jeszcze żadnych wycen.</p>
+          )
+        }
+      </div>
     </main>
   </div>
 </Layout>
