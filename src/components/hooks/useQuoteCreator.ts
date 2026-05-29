@@ -2,10 +2,6 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import type { QuoteItem, Message } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "conversation" | "items" | "saving" | "done";
-export type QuoteItemUI = QuoteItem & { id: string };
-
-const withId = (items: QuoteItem[]): QuoteItemUI[] => items.map((item) => ({ ...item, id: crypto.randomUUID() }));
-
 type ChatResponse =
   | { type: "question"; content: string }
   | { type: "sparse" }
@@ -30,7 +26,7 @@ export function useQuoteCreator() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [questionCount, setQuestionCount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState("");
-  const [items, setItems] = useState<QuoteItemUI[]>([]);
+  const [items, setItems] = useState<QuoteItem[]>([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
@@ -61,7 +57,7 @@ export function useQuoteCreator() {
         return;
       }
       if (data.type === "complete") {
-        setItems(withId(data.items));
+        setItems(data.items);
         setTitle(data.title);
         setPhase("items");
         return;
@@ -97,7 +93,7 @@ export function useQuoteCreator() {
         }
         if (data.type === "sparse" || data.type === "complete") {
           if (data.type === "complete") {
-            setItems(withId(data.items));
+            setItems(data.items);
             setTitle(data.title);
           }
           setPhase(data.type === "complete" ? "items" : "inquiry");
@@ -130,7 +126,7 @@ export function useQuoteCreator() {
         setError("Nie udało się wygenerować pozycji. Spróbuj ponownie.");
         return;
       }
-      setItems(withId(data.items));
+      setItems(data.items);
       setTitle(data.title);
       setPhase("items");
     } catch {
@@ -139,18 +135,14 @@ export function useQuoteCreator() {
     }
   }, [messages, currentQuestion, inquiryText]);
 
-  async function handleSave(finalItems: QuoteItemUI[]) {
+  async function handleSave(finalItems: QuoteItem[]) {
     if (phase === "saving") return;
     setPhase("saving");
     try {
       const res = await fetch("/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          inquiry_text: inquiryText,
-          content: { items: finalItems.map(({ id: _id, ...rest }) => rest) },
-        }),
+        body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSavedTitle(title);

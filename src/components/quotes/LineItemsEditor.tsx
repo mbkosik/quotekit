@@ -1,12 +1,12 @@
 import { useState } from "react";
-import type { QuoteItemUI } from "@/components/hooks/useQuoteCreator";
+import type { QuoteItem } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  items: QuoteItemUI[];
+  items: QuoteItem[];
   title: string;
-  onItemsChange: (items: QuoteItemUI[]) => void;
-  onSave: (items: QuoteItemUI[]) => void;
+  onItemsChange: (items: QuoteItem[]) => void;
+  onSave: (items: QuoteItem[]) => void;
   saving: boolean;
 }
 
@@ -39,6 +39,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }:
   }
 
   function removeRow(rowIndex: number) {
+    setEditingCell(null);
     onItemsChange(items.filter((_, i) => i !== rowIndex));
   }
 
@@ -61,7 +62,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }:
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={item.id} className="border-b border-white/5 text-white/80 last:border-0">
+              <tr key={i} className="border-b border-white/5 text-white/80 last:border-0">
                 <td className="px-4 py-2">
                   {editingCell?.rowIndex === i && editingCell.field === "task" ? (
                     <input
