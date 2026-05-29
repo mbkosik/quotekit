@@ -437,13 +437,13 @@ Haiku przy ~1-2s p50 — akceptowalne per pytanie w konwersacji (max 5 callów).
 
 #### Automated
 
-- [x] 4.1 `npm run lint` passes na `src/pages/api/quotes/index.ts`
-- [x] 4.2 `npm run build` passes
+- [x] 4.1 `npm run lint` passes na `src/pages/api/quotes/index.ts` — 4f0af1a
+- [x] 4.2 `npm run build` passes — 4f0af1a
 
 #### Manual
 
-- [x] 4.3 Pełny flow: inquiry → konwersacja → pozycje → zapis → toast
-- [x] 4.4 Toast zawiera tytuł wyceny i link do `/quotes`
-- [x] 4.5 Po 3 sekundach formularz resetuje się
-- [x] 4.6 `/quotes` pokazuje zapisaną wycenę ze statusem "draft"
-- [x] 4.7 Unauthenticated GET/POST → 401
+- [x] 4.3 Pełny flow: inquiry → konwersacja → pozycje → zapis → toast — 4f0af1a
+- [x] 4.4 Toast zawiera tytuł wyceny i link do `/quotes` — 4f0af1a
+- [x] 4.5 Po 3 sekundach formularz resetuje się — 4f0af1a
+- [x] 4.6 `/quotes` pokazuje zapisaną wycenę ze statusem "draft" — 4f0af1a
+- [x] 4.7 Unauthenticated GET/POST → 401 — 4f0af1a
