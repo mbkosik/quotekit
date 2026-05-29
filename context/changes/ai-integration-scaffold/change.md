@@ -1,9 +1,9 @@
 ---
 change_id: ai-integration-scaffold
 title: Ai integration scaffold
-status: planned
+status: implementing
 created: 2026-05-28
-updated: 2026-05-28
+updated: 2026-05-29
 
 archived_at: null
 ---

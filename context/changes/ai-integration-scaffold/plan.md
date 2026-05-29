@@ -268,13 +268,13 @@ The user identified a future need: allow users to configure their domain context
 
 #### Automated
 
-- [ ] 1.1 Packages installed: `node -e "require('@anthropic-ai/sdk'); require('zod')"` exits 0
-- [ ] 1.2 Build passes without ANTHROPIC_KEY (optional: true): `npm run build` succeeds
+- [x] 1.1 Packages installed: `node -e "require('@anthropic-ai/sdk'); require('zod')"` exits 0
+- [x] 1.2 Build passes without ANTHROPIC_KEY (optional: true): `npm run build` succeeds
 
 #### Manual
 
-- [ ] 1.3 `.dev.vars` contains real `ANTHROPIC_KEY` for local testing
-- [ ] 1.4 `astro.config.mjs` env schema has `ANTHROPIC_KEY` alongside Supabase entries
+- [x] 1.3 `.dev.vars` contains real `ANTHROPIC_KEY` for local testing
+- [x] 1.4 `astro.config.mjs` env schema has `ANTHROPIC_KEY` alongside Supabase entries
 
 ### Phase 2: Anthropic Client Factory
 
