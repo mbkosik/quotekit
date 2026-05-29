@@ -389,30 +389,30 @@ Haiku przy ~1-2s p50 — akceptowalne per pytanie w konwersacji (max 5 callów).
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes
-- [x] 1.2 `npm run build` passes
+- [x] 1.1 `npm run lint` passes — 21be8ce
+- [x] 1.2 `npm run build` passes — 21be8ce
 
 #### Manual
 
-- [x] 1.3 `/new` ładuje się (pusta strona z topbarem)
-- [x] 1.4 `/dashboard` zwraca 404
-- [x] 1.5 `/quotes` ładuje się ze stubem
-- [x] 1.6 Niezalogowany użytkownik na `/new` jest redirectowany do `/auth/signin`
+- [x] 1.3 `/new` ładuje się (pusta strona z topbarem) — 21be8ce
+- [x] 1.4 `/dashboard` zwraca 404 — 21be8ce
+- [x] 1.5 `/quotes` ładuje się ze stubem — 21be8ce
+- [x] 1.6 Niezalogowany użytkownik na `/new` jest redirectowany do `/auth/signin` — 21be8ce
 
 ### Phase 2: AI Conversation Endpoint
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes na `src/pages/api/ai/chat.ts`
-- [ ] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes na `src/pages/api/ai/chat.ts`
+- [x] 2.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 2.3 Unauthenticated → 401
-- [ ] 2.4 `inquiry_text` < 20 znaków → 400
-- [ ] 2.5 `{ inquiry_text, messages: [], generate: false }` → `{ type: "question", content: "..." }`
-- [ ] 2.6 `{ ..., generate: true }` z sensownym briefem → `{ type: "complete", items: [...], title: "..." }`
-- [ ] 2.7 Nonsensowny brief + `generate: true` → 422
+- [x] 2.3 Unauthenticated → 401
+- [x] 2.4 `inquiry_text` < 20 znaków → 400
+- [x] 2.5 `{ inquiry_text, messages: [], generate: false }` → `{ type: "question", content: "..." }`
+- [x] 2.6 `{ ..., generate: true }` z sensownym briefem → `{ type: "complete", items: [...], title: "..." }`
+- [x] 2.7 Nonsensowny brief + `generate: true` → 422
 
 ### Phase 3: Quote Creation UI
 

@@ -35,6 +35,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
+| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                  | S-01          | —                                                                                     | proposed |
 
 ## Streams
 
@@ -133,6 +134,20 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Risk:** Użytkownik może wpisać kontekst, który wprowadza AI w błąd (sprzeczne instrukcje, bardzo lakoniczny tekst) — edge case do obsłużenia w prompt engineering przy implementacji.
 - **Status:** proposed
 
+### S-05: UI enhancements
+
+- **Outcome:** TBD — zakres do ustalenia po fazie badawczej; potencjalny scope: wizualny polish, poprawki UX flow i ulepszenia na poziomie komponentów w przepływach quote creation i quote management.
+- **Change ID:** ui-enhancements
+- **PRD refs:** — (poza scope PRD v1; motywacja: jakość UX jest czynnikiem retencji i pierwsze wrażenie dla testowych użytkowników)
+- **Prerequisites:** S-01 (core flow musi istnieć, żeby było co polepszać)
+- **Parallel with:** S-02, S-03, S-04
+- **Blockers:** —
+- **Unknowns:**
+  - Które konkretnie elementy UI wymagają poprawy? Do zbadania przez `/10x-research ui-enhancements` (istniejące komponenty, shadcn/ui coverage, wzorce Tailwind) + exa/Context7 (best practices, biblioteki).
+  - Czy potrzebne nowe shadcn/ui komponenty czy wystarczy dopracowanie istniejących?
+- **Risk:** Zbyt szeroki scope — "UI enhancements" bez granic łatwo puchnie; badania mają zawęzić zakres do konkretnych, mierzalnych poprawek przed planowaniem.
+- **Status:** proposed
+
 ### S-03: Client questions for sparse briefs
 
 - **Outcome:** gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.
@@ -155,6 +170,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-02       | quote-management        | Quote list, status management, and delete        | yes                   | F-01 done; run `/10x-plan quote-management`            |
 | S-03       | client-questions-flow   | Client questions for sparse briefs               | no                    | Awaiting S-01 completion; storage approach TBD         |
 | S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no              | Awaiting S-01 completion; storage + UI placement TBD  |
+| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no              | Scope TBD; start with `/10x-research` + exa/Context7  |
 
 ## Open Roadmap Questions
 
