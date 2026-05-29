@@ -32,6 +32,16 @@
 
 **Applies to**: Every RLS policy on every table in this project
 
+## "Quote" oznacza wycenę, nie cytat
+
+**Context**: QuoteKit — terminologia domenowa projektu
+
+**Problem**: Słowo "quote" tłumaczone jako "cytat" zamiast "wycena" prowadzi do błędnych komentarzy, opisów i komunikatów w UI.
+
+**Rule**: W tym projekcie `quote` = **wycena** (oferta cenowa dla klienta). Nigdy nie tłumaczyć jako "cytat". Analogicznie: `quotes` = wyceny, `quote item` = pozycja wyceny.
+
+**Applies to**: Komentarze w kodzie, opisy zmian, komunikaty UI, dokumentacja — wszędzie gdzie pojawia się słowo "quote" w kontekście domenowym
+
 ## Logika state machine komponentu trafia do hooka, nie do komponentu
 
 **Context**: src/components/hooks/useQuoteCreator.ts — ai-quote-creation-flow (2026-05-29)
