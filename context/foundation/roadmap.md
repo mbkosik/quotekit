@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-29
+updated: 2026-05-30
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -36,6 +36,8 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
+| S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | proposed |
+| S-07 | prompt-attachments      | dołączyć plik (obraz/PDF) do promptu AI, by model uwzględnił go przy generowaniu pozycji | S-01          | —                                                                                     | proposed |
 
 ## Streams
 
@@ -162,6 +164,34 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Risk:** —
 - **Status:** proposed
 
+### S-06: Manual line item addition
+
+- **Outcome:** użytkownik może dodać nową, pustą pozycję do tabeli wyceny bez angażowania AI — wypełnia ją ręcznie (nazwa zadania, godziny, stawka) i edytuje tak samo jak AI-pozycje.
+- **Change ID:** manual-line-items
+- **PRD refs:** FR-008 (ręczne dodanie pozycji — previously parked as nice-to-have; promoted based on user feedback)
+- **Prerequisites:** S-01 (`LineItemsEditor` już istnieje — wystarczy przycisk "Dodaj pozycję" dodający pustą pozycję do stanu)
+- **Parallel with:** S-02, S-03, S-04, S-05, S-07
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Minimal — zmiana dotyczy tylko stanu React po stronie klienta; żadnych zmian schematu DB ani API.
+- **Status:** proposed
+
+### S-07: Attachment to AI prompt
+
+- **Outcome:** użytkownik może dołączyć plik (obraz lub PDF z designem/mockupem) do promptu AI — model otrzymuje go jako kontekst wizualny przy zadawaniu pytań i generowaniu pozycji.
+- **Change ID:** prompt-attachments
+- **PRD refs:** — (poza scope PRD v1; motywacja: freelancerzy często dostają projekty z załączonym designem lub brief w PDF — wizualny kontekst poprawia trafność AI-pozycji)
+- **Prerequisites:** S-01 (przepływ promptu musi istnieć; generowanie pozycji musi działać end-to-end)
+- **Parallel with:** S-02, S-03, S-04, S-05, S-06
+- **Blockers:** —
+- **Unknowns:**
+  - Cloudflare Workers + `multipart/form-data`: czy wrangler runtime obsługuje `request.formData()` dla plików binarnych? Do zweryfikowania przed planem.
+  - Anthropic Vision API: wspierane formaty to JPEG, PNG, GIF, WebP — PDF wymaga konwersji po stronie klienta lub serwera (np. do obrazu) albo oddzielnej biblioteki. Decyzja do podjęcia przy `/10x-plan prompt-attachments`.
+  - Limity rozmiaru: Cloudflare Workers ma limit 100 MB na request body, ale Anthropic Vision ma limit ~20 MB per obraz — do skonfrontowania przy planie.
+  - Gdzie przechowywać pliki? Supabase Storage vs. Cloudflare R2 vs. base64 inline (tylko dla małych plików) — do zdecydowania przy planie.
+- **Risk:** Największa techniczna niewiadoma w roadmapie — stack (Cloudflare Workers + Anthropic Vision + plik binarny) wymaga research spike przed planem. Niepotwierdzony pdf→image pipeline może zmniejszyć zakres do "obrazy only" w v1.
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID               | Suggested issue title                                    | Ready for `/10x-plan` | Notes                                                                             |
@@ -173,6 +203,8 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-03       | client-questions-flow   | Client questions for sparse briefs                       | no                    | Awaiting S-01 completion; storage approach TBD                                    |
 | S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
 | S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
+| S-06       | manual-line-items       | Manual line item addition (no AI)                        | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
+| S-07       | prompt-attachments      | Attach image/PDF to AI prompt for visual context         | no                    | Research spike wymagany: CF Workers formData + Anthropic Vision + storage         |
 
 ## Open Roadmap Questions
 
@@ -187,10 +219,11 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Fakturowanie i billing** — Why parked: PRD §Non-Goals — inna domena produktowa.
 - **Integracje z zewnętrznymi narzędziami** — Why parked: PRD §Non-Goals — QuoteKit jest standalone w v1.
 - **Multi-currency** — Why parked: PRD §Non-Goals — jeden symbol waluty, bez konwersji.
-- **FR-008: Ręczne dodawanie pozycji** — Why parked: PRD demoted to nice-to-have; użytkownicy edytują AI-pozycje w v1; nowe pozycje od zera trafiają do v2.
+- ~~**FR-008: Ręczne dodawanie pozycji**~~ — Promoted to **S-06** (2026-05-30) na podstawie feedback użytkownika; implementacja tania (tylko UI, brak zmian DB).
 - **Undo / historia edycji pozycji** — Why parked: PRD §Non-Goals — kompleksowość undo nieuzasadniona w MVP; usunięcie jest permanentne i świadome.
 - **Tryb offline** — Why parked: PRD §Non-Goals — wymaga live network connection.
 
 ## Done
 
-| F-01 | quotes-schema-rls | Tabela `quotes` + polityki RLS per-user | 2026-05-28 |
+| F-01 | quotes-schema-rls      | Tabela `quotes` + polityki RLS per-user                                            | 2026-05-28 |
+| S-01 | ai-quote-creation-flow | AI-assisted quote creation end-to-end (inquiry → rozmowa AI → edycja → zapis draft) | 2026-05-29 |
