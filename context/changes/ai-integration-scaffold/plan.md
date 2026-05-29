@@ -280,24 +280,24 @@ The user identified a future need: allow users to configure their domain context
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes on `src/lib/anthropic.ts`
-- [x] 2.2 Return type is `Anthropic | null` (no `any`)
+- [x] 2.1 `npm run lint` passes on `src/lib/anthropic.ts` — d2d46a5
+- [x] 2.2 Return type is `Anthropic | null` (no `any`) — d2d46a5
 
 #### Manual
 
-- [x] 2.3 Factory structure mirrors `src/lib/supabase.ts` (import pattern, null guard, single export)
+- [x] 2.3 Factory structure mirrors `src/lib/supabase.ts` (import pattern, null guard, single export) — d2d46a5
 
 ### Phase 3: Scope Endpoint
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes on `src/pages/api/ai/scope.ts`
-- [ ] 3.2 `npm run build` produces no type errors
+- [x] 3.1 `npm run lint` passes on `src/pages/api/ai/scope.ts`
+- [x] 3.2 `npm run build` produces no type errors
 
 #### Manual
 
-- [ ] 3.3 Unauthenticated request → 401
-- [ ] 3.4 Short input (< 20 chars) → 400
-- [ ] 3.5 Real inquiry → 200 + `{ items: [...] }` with ≥ 3 items
-- [ ] 3.6 Nonsensical brief → 422 + `{ error: "inquiry_too_short" }`
-- [ ] 3.7 Endpoint verified under `npm run dev` (workerd runtime, not Node.js dev mode)
+- [x] 3.3 Unauthenticated request → 401
+- [x] 3.4 Short input (< 20 chars) → 400
+- [x] 3.5 Real inquiry → 200 + `{ items: [...] }` with ≥ 3 items
+- [x] 3.6 Nonsensical brief → 422 + `{ error: "inquiry_too_short" }`
+- [x] 3.7 Endpoint verified under `npm run dev` (workerd runtime, not Node.js dev mode)
