@@ -268,24 +268,24 @@ The user identified a future need: allow users to configure their domain context
 
 #### Automated
 
-- [x] 1.1 Packages installed: `node -e "require('@anthropic-ai/sdk'); require('zod')"` exits 0
-- [x] 1.2 Build passes without ANTHROPIC_KEY (optional: true): `npm run build` succeeds
+- [x] 1.1 Packages installed: `node -e "require('@anthropic-ai/sdk'); require('zod')"` exits 0 — e36dc8c
+- [x] 1.2 Build passes without ANTHROPIC_KEY (optional: true): `npm run build` succeeds — e36dc8c
 
 #### Manual
 
-- [x] 1.3 `.dev.vars` contains real `ANTHROPIC_KEY` for local testing
-- [x] 1.4 `astro.config.mjs` env schema has `ANTHROPIC_KEY` alongside Supabase entries
+- [x] 1.3 `.dev.vars` contains real `ANTHROPIC_KEY` for local testing — e36dc8c
+- [x] 1.4 `astro.config.mjs` env schema has `ANTHROPIC_KEY` alongside Supabase entries — e36dc8c
 
 ### Phase 2: Anthropic Client Factory
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes on `src/lib/anthropic.ts`
-- [ ] 2.2 Return type is `Anthropic | null` (no `any`)
+- [x] 2.1 `npm run lint` passes on `src/lib/anthropic.ts`
+- [x] 2.2 Return type is `Anthropic | null` (no `any`)
 
 #### Manual
 
-- [ ] 2.3 Factory structure mirrors `src/lib/supabase.ts` (import pattern, null guard, single export)
+- [x] 2.3 Factory structure mirrors `src/lib/supabase.ts` (import pattern, null guard, single export)
 
 ### Phase 3: Scope Endpoint
 
