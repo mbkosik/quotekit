@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-28
+updated: 2026-05-29
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -34,6 +34,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | ready    |
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
+| S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
 
 ## Streams
 
@@ -117,6 +118,20 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Risk:** FR-013 to hard delete bez undo — świadome trade-off z PRD (Socratic round FR-009); UI powinien potwierdzać akcję przed usunięciem.
 - **Status:** proposed
 
+### S-04: User prompt context
+
+- **Outcome:** użytkownik może zapisać własny kontekst w postaci dowolnego tekstu (free-text), który jest dołączany do każdego promptu AI przy generowaniu pozycji — pozwala przekazać AI informacje o specjalizacji, rynku, stylu pracy lub dowolnym tle, które poprawia trafność wyceny.
+- **Change ID:** user-prompt-context
+- **PRD refs:** — (roadmap addition, poza scope PRD v1; motywacja: jakość AI-pozycji jest kluczową metryką NFR PRD — personalizacja promptu to najtańszy mechanizm podniesienia tej jakości bez zmiany modelu)
+- **Prerequisites:** S-01 (core hypothesis musi być zwalidowana przed inwestycją w poprawę jakości AI; storage context wymaga działającego przepływu quote creation)
+- **Parallel with:** S-02, S-03
+- **Blockers:** —
+- **Unknowns:**
+  - Gdzie przechowywać kontekst? Nowa tabela `user_profiles` / `user_settings` w Supabase (własna migracja + RLS) vs kolumna w istniejącym schemacie — do zdecydowania przy `/10x-plan user-prompt-context`.
+  - Gdzie w UI edytować kontekst? Dedykowana strona `/settings` vs modal w dashboardzie — do zdecydowania przy planie.
+- **Risk:** Użytkownik może wpisać kontekst, który wprowadza AI w błąd (sprzeczne instrukcje, bardzo lakoniczny tekst) — edge case do obsłużenia w prompt engineering przy implementacji.
+- **Status:** proposed
+
 ### S-03: Client questions for sparse briefs
 
 - **Outcome:** gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.
@@ -138,6 +153,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow       | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
 | S-02       | quote-management        | Quote list, status management, and delete        | yes                   | F-01 done; run `/10x-plan quote-management`            |
 | S-03       | client-questions-flow   | Client questions for sparse briefs               | no                    | Awaiting S-01 completion; storage approach TBD         |
+| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no              | Awaiting S-01 completion; storage + UI placement TBD  |
 
 ## Open Roadmap Questions
 
