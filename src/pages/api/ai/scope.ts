@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
+import { QuoteItemSchema } from "@/types";
 import type { QuoteItem } from "@/types";
 
 export const prerender = false;
@@ -10,15 +11,8 @@ const InputSchema = z.object({
   inquiry_text: z.string().min(20),
 });
 
-// Shape must match QuoteItem in src/types.ts
 const LineItemsSchema = z.object({
-  items: z.array(
-    z.object({
-      task: z.string(),
-      hours: z.number(),
-      rate: z.number(),
-    }),
-  ),
+  items: z.array(QuoteItemSchema),
 });
 
 const SYSTEM_PROMPT = `Jesteś asystentem wyceny dla junior freelancera na polskim rynku.
@@ -90,7 +84,8 @@ export const POST: APIRoute = async (context) => {
     });
   }
 
-  const items: QuoteItem[] = message.parsed_output?.items ?? [];
+  const parsed_output = LineItemsSchema.safeParse(message.parsed_output);
+  const items: QuoteItem[] = parsed_output.success ? parsed_output.data.items : [];
 
   if (items.length === 0) {
     return new Response(JSON.stringify({ error: "inquiry_too_short" }), {

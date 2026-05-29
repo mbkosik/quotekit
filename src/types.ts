@@ -1,10 +1,14 @@
+import { z } from "zod";
+
 export type QuoteStatus = "draft" | "sent" | "accepted" | "rejected";
 
-export interface QuoteItem {
-  task: string;
-  hours: number;
-  rate: number;
-}
+export const QuoteItemSchema = z.object({
+  task: z.string(),
+  hours: z.number(),
+  rate: z.number(),
+});
+
+export type QuoteItem = z.infer<typeof QuoteItemSchema>;
 
 export interface Quote {
   id: string;
