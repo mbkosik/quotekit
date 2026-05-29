@@ -1,7 +1,7 @@
 ---
 change_id: ai-quote-creation-flow
 title: AI-assisted quote creation flow
-status: implementing
+status: impl_reviewed
 created: 2026-05-29
 updated: 2026-05-29
 

@@ -31,7 +31,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | ---- | ----------------------- | --------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
 | F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                | —             | FR-010, FR-011, FR-013                                                                | done     |
 | F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | —             | FR-005, FR-006                                                                        | ready    |
-| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | ready    |
+| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać cytat jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
 | S-02 | quote-management        | zobaczyć pełną listę cytatów, zmienić status, usunąć cytat                              | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
@@ -44,7 +44,7 @@ Navigation aid — grupuje pozycje, które dzielą wspólny łańcuch warunków 
 | Stream | Temat                          | Łańcuch         | Nota                                                                                 |
 | ------ | ------------------------------ | --------------- | ------------------------------------------------------------------------------------ |
 | A      | Schemat i zarządzanie cytatami | `F-01` → `S-02` | F-01 jest też warunkiem wstępnym S-01 (Stream B) — uruchom ten tor jak najwcześniej. |
-| B      | AI i tworzenie cytatów         | `F-02` → `S-01` | Gwiazda przewodnia; S-01 wymaga też F-01 z Stream A. Zablokowany przez OQ-1.         |
+| B      | AI i tworzenie cytatów         | `F-02` → `S-01` | Gwiazda przewodnia; S-01 wymaga też F-01 z Stream A.                                  |
 
 ## Baseline
 
@@ -106,7 +106,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - Tytuł wyceny generowany przez AI z tekstu zapytania — bez ręcznego wpisywania
 - **Risk:** Jakość AI-pozycji to jedyna metryka, która ma znaczenie dla hipotezy produktu (PRD NFR: ≥80% pozycji wymaga tylko drobnych edycji); prompt engineering jest tutaj produkcyjny, nie eksperymentalny — wymaga iteracji i oceny przykładów przed wdrożeniem do prawdziwych użytkowników.
 - **Pre-launch gate (F-02 impl-review):** Per-user rate limiting na `/api/ai/scope` jest wymaganym prerequisite przed udostępnieniem prawdziwym użytkownikom — brak limitu pozwala jednemu użytkownikowi generować nieograniczone koszty API.
-- **Status:** ready
+- **Status:** done
 
 ### S-02: Quote management
 
