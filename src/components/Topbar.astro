@@ -7,6 +7,9 @@ const { user } = Astro.locals;
   {
     user ? (
       <div class="flex items-center gap-4">
+        <a href="/quotes" class="text-white/60 transition-colors hover:text-white">
+          Wyceny
+        </a>
         <span class="text-blue-100/70">{user.email}</span>
         <form method="POST" action="/api/auth/signout">
           <button type="submit" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
