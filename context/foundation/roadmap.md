@@ -38,16 +38,16 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                    | S-01          | —                                                                                     | proposed |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                              | S-01          | FR-008                                                                                | proposed |
 | S-07 | prompt-attachments      | dołączyć plik (obraz/PDF) do promptu AI, by model uwzględnił go przy generowaniu pozycji | S-01          | —                                                                                     | proposed |
-| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)           | S-02          | FR-011                                                                                | proposed |
+| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)          | S-02          | FR-011                                                                                | proposed |
 
 ## Streams
 
 Navigation aid — grupuje pozycje, które dzielą wspólny łańcuch warunków wstępnych. Kanoniczne porządkowanie tkwi w grafie zależności poniżej; ta tabela to proponowany porządek czytania ponad równoległymi torami.
 
-| Stream | Temat                          | Łańcuch         | Nota                                                                                 |
-| ------ | ------------------------------ | --------------- | ------------------------------------------------------------------------------------ |
-| A      | Schemat i zarządzanie cytatami | `F-01` → `S-02` | F-01 jest też warunkiem wstępnym S-01 (Stream B) — uruchom ten tor jak najwcześniej. |
-| B      | AI i tworzenie cytatów         | `F-02` → `S-01` | Gwiazda przewodnia; S-01 wymaga też F-01 z Stream A.                                 |
+| Stream | Temat                       | Łańcuch         | Nota                                                                                 |
+| ------ | --------------------------- | --------------- | ------------------------------------------------------------------------------------ |
+| A      | Schemat i zarządzanie wycen | `F-01` → `S-02` | F-01 jest też warunkiem wstępnym S-01 (Stream B) — uruchom ten tor jak najwcześniej. |
+| B      | AI i tworzenie wycen        | `F-02` → `S-01` | Gwiazda przewodnia; S-01 wymaga też F-01 z Stream A.                                 |
 
 ## Baseline
 
@@ -163,6 +163,11 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Blockers:** —
 - **Unknowns:** Czy pytania do klienta są zapisywane w bazie (własna tabela / kolumna w quotes) czy tylko clipboard — do zdecydowania przy `/10x-plan client-questions-flow`.
 - **Risk:** —
+- **Design decision — dwa typy pytań:**
+  - **Pytania doprecyzowujące AI (S-01, FR-005)** — AI pyta freelancera w toku rozmowy; cel: zebrać kontekst, by wygenerować pozycje; ephemeral, wewnętrzne, UX: chat turn-by-turn.
+  - **Pytania do klienta (S-03, FR-004)** — AI generuje listę pytań, które freelancer wysyła klientowi gdy brief jest zbyt lakoniczny; cel: uzupełnić brief przed wejściem do flow S-01; external, do przekazania, UX: lista do skopiowania.
+  - Konsekwencja dla promptu: S-03 wymaga osobnego promptu nastawionego na pytania *klient-facing* (profesjonalny ton, konkretne, bez żargonu AI). Nie wolno reużyć promptu doprecyzowującego z S-01.
+  - Konsekwencja dla UX: brak interfejsu chat; jeden request → lista pytań → przycisk kopiowania → użytkownik wraca z odpowiedziami do flow S-01.
 - **Status:** proposed
 
 ### S-06: Manual line item addition
@@ -211,17 +216,17 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID               | Suggested issue title                                    | Ready for `/10x-plan` | Notes                                                                             |
-| ---------- | ----------------------- | -------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------- |
-| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS                    | done                  | Archived 2026-05-28                                                               |
-| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint         | yes                   | Run `/10x-plan ai-integration-scaffold`                                           |
-| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow               | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
-| S-02       | quote-management        | Quote list, status management, and delete                | done                  | Completed 2026-05-30                                                              |
-| S-03       | client-questions-flow   | Client questions for sparse briefs                       | no                    | Awaiting S-01 completion; storage approach TBD                                    |
-| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
-| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
-| S-06       | manual-line-items       | Manual line item addition (no AI)                        | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
-| S-07       | prompt-attachments      | Attach image/PDF to AI prompt for visual context         | no                    | Research spike wymagany: CF Workers formData + Anthropic Vision + storage         |
+| Roadmap ID | Change ID               | Suggested issue title                                     | Ready for `/10x-plan` | Notes                                                                             |
+| ---------- | ----------------------- | --------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| F-01       | quotes-schema-rls       | Create quotes table with per-user RLS                     | done                  | Archived 2026-05-28                                                               |
+| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint          | yes                   | Run `/10x-plan ai-integration-scaffold`                                           |
+| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow                | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
+| S-02       | quote-management        | Quote list, status management, and delete                 | done                  | Completed 2026-05-30                                                              |
+| S-03       | client-questions-flow   | Client questions for sparse briefs                        | no                    | Awaiting S-01 completion; storage approach TBD                                    |
+| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts  | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
+| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management   | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
+| S-06       | manual-line-items       | Manual line item addition (no AI)                         | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
+| S-07       | prompt-attachments      | Attach image/PDF to AI prompt for visual context          | no                    | Research spike wymagany: CF Workers formData + Anthropic Vision + storage         |
 | S-08       | quote-list-filters      | Server-side filter by status + title search on quote list | no                    | Awaiting S-02 completion; run `/10x-plan quote-list-filters`                      |
 
 ## Open Roadmap Questions
