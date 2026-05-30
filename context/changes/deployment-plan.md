@@ -4,12 +4,12 @@
 
 - [x] Poprawki w `wrangler.jsonc` (nazwa + flaga zgodności)
 - [x] Szablon `.dev.vars.example`
-- [ ] Logowanie do Cloudflare CLI
-- [ ] Pierwsze ręczne wdrożenie
-- [ ] Sekrety produkcyjne ustawione
-- [ ] Cloudflare GitHub Integration skonfigurowana
-- [ ] Smoke test na żywym URL
-- [ ] Weryfikacja auto-deploy po pushu do main
+- [x] Logowanie do Cloudflare CLI
+- [x] Pierwsze ręczne wdrożenie
+- [x] Sekrety produkcyjne ustawione
+- [x] Cloudflare GitHub Integration skonfigurowana
+- [x] Smoke test na żywym URL
+- [x] Weryfikacja auto-deploy po pushu do main
 
 ---
 
