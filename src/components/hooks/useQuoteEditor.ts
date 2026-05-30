@@ -6,6 +6,7 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
   const [status, _setStatus] = useState<QuoteStatus>(initial.status);
   const [items, _setItems] = useState<QuoteItem[]>(initial.content.items);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -49,6 +50,8 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
   }
 
   async function handleDelete() {
+    if (deleting) return;
+    setDeleting(true);
     setError(null);
     try {
       const res = await fetch(`/api/quotes/${initial.id}`, { method: "DELETE" });
@@ -56,6 +59,8 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
       window.location.href = "/quotes";
     } catch {
       setError("Nie udało się usunąć wyceny. Spróbuj ponownie.");
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -64,6 +69,7 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
     status,
     items,
     saving,
+    deleting,
     isDirty,
     error,
     success,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +27,8 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
   const [total, setTotal] = useState(initialTotal);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const pageLoadingRef = useRef(false);
 
   const totalPages = Math.ceil(total / pageSize);
 
@@ -46,17 +48,24 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
   }
 
   async function handleDelete(id: string) {
+    setError(null);
     try {
       const res = await fetch(`/api/quotes/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setQuotes((qs) => qs.filter((q) => q.id !== id));
-      setTotal((t) => t - 1);
+      if (quotes.length === 1 && currentPage > 1) {
+        void handlePageChange(currentPage - 1);
+      } else {
+        setQuotes((qs) => qs.filter((q) => q.id !== id));
+        setTotal((t) => t - 1);
+      }
     } catch {
-      // deletion failed — leave list unchanged
+      setError("Nie udało się usunąć wyceny. Spróbuj ponownie.");
     }
   }
 
   async function handlePageChange(page: number) {
+    if (pageLoadingRef.current) return;
+    pageLoadingRef.current = true;
     setLoading(true);
     try {
       const res = await fetch(`/api/quotes?page=${page}&limit=${pageSize}`);
@@ -68,6 +77,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
     } catch {
       // page change failed — stay on current page
     } finally {
+      pageLoadingRef.current = false;
       setLoading(false);
     }
   }
@@ -78,6 +88,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
+      {error && <p className="text-sm text-red-400">{error}</p>}
       <ul className={`flex flex-col gap-3 transition-opacity ${loading ? "opacity-50" : ""}`}>
         {quotes.map((q) => (
           <li

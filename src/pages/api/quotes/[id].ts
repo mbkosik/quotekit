@@ -5,6 +5,8 @@ import { QuoteItemSchema, QUOTE_STATUSES, type Quote } from "@/types";
 
 export const prerender = false;
 
+const idSchema = z.uuid();
+
 const PatchSchema = z.object({
   title: z.string().min(1).optional(),
   status: z.enum(QUOTE_STATUSES).optional(),
@@ -28,7 +30,14 @@ export const GET: APIRoute = async (context) => {
     });
   }
 
-  const { id } = context.params;
+  const parsedId = idSchema.safeParse(context.params.id);
+  if (!parsedId.success) {
+    return new Response(JSON.stringify({ error: "Invalid id" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const id = parsedId.data;
   const result = (await supabase.from("quotes").select("*").eq("id", id).eq("user_id", user.id).single()) as
     | { data: Quote; error: null }
     | { data: null; error: Error };
@@ -88,7 +97,14 @@ export const PATCH: APIRoute = async (context) => {
     });
   }
 
-  const { id } = context.params;
+  const parsedId = idSchema.safeParse(context.params.id);
+  if (!parsedId.success) {
+    return new Response(JSON.stringify({ error: "Invalid id" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const id = parsedId.data;
   const result = (await supabase
     .from("quotes")
     .update(parsed.data)
@@ -127,7 +143,14 @@ export const DELETE: APIRoute = async (context) => {
     });
   }
 
-  const { id } = context.params;
+  const parsedId = idSchema.safeParse(context.params.id);
+  if (!parsedId.success) {
+    return new Response(JSON.stringify({ error: "Invalid id" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  const id = parsedId.data;
   const { error, count } = await supabase.from("quotes").delete({ count: "exact" }).eq("id", id).eq("user_id", user.id);
 
   if (error) {
