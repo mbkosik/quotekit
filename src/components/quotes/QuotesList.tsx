@@ -14,13 +14,13 @@ import type { Quote, QuoteStatus } from "@/types";
 import { QUOTE_STATUSES } from "@/types";
 import { STATUS_LABELS } from "@/lib/quotes";
 
+type QuoteRow = Pick<Quote, "id" | "title" | "status" | "created_at">;
+
 interface Props {
-  initialQuotes: Pick<Quote, "id" | "title" | "status" | "created_at">[];
+  initialQuotes: QuoteRow[];
   initialTotal: number;
   pageSize: number;
 }
-
-type QuoteRow = Pick<Quote, "id" | "title" | "status" | "created_at">;
 
 export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
   const [quotes, setQuotes] = useState<QuoteRow[]>(initialQuotes);
