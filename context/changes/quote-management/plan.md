@@ -308,34 +308,34 @@ No database schema changes. No data migrations required. The existing `quotes` t
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes on new/modified API files
-- [x] 1.2 `npm run build` completes without type errors
+- [x] 1.1 `npm run lint` passes on new/modified API files — f4120bc
+- [x] 1.2 `npm run build` completes without type errors — f4120bc
 
 #### Manual
 
-- [x] 1.3 GET /api/quotes/:id returns 200 with full quote for own record
-- [x] 1.4 GET /api/quotes/:id returns 404 for another user's record
-- [x] 1.5 PATCH /api/quotes/:id with `{ "status": "sent" }` returns 200 with updated quote
-- [x] 1.6 PATCH /api/quotes/:id with invalid status returns 400
-- [x] 1.7 DELETE /api/quotes/:id returns 204; subsequent GET returns 404
-- [x] 1.8 GET /api/quotes?page=1&limit=2 returns at most 2 quotes with correct total and totalPages
+- [x] 1.3 GET /api/quotes/:id returns 200 with full quote for own record — f4120bc
+- [x] 1.4 GET /api/quotes/:id returns 404 for another user's record — f4120bc
+- [x] 1.5 PATCH /api/quotes/:id with `{ "status": "sent" }` returns 200 with updated quote — f4120bc
+- [x] 1.6 PATCH /api/quotes/:id with invalid status returns 400 — f4120bc
+- [x] 1.7 DELETE /api/quotes/:id returns 204; subsequent GET returns 404 — f4120bc
+- [x] 1.8 GET /api/quotes?page=1&limit=2 returns at most 2 quotes with correct total and totalPages — f4120bc
 
 ### Phase 2: Quote Edit Page
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes on all modified/new files
-- [ ] 2.2 `npm run build` completes without type errors
-- [ ] 2.3 `src/pages/quotes/index.astro` exists
+- [x] 2.1 `npm run lint` passes on all modified/new files
+- [x] 2.2 `npm run build` completes without type errors
+- [x] 2.3 `src/pages/quotes/index.astro` exists
 
 #### Manual
 
-- [ ] 2.4 /quotes still loads after the file move
-- [ ] 2.5 /quotes/:id shows edit page with correct title, status, and line items
-- [ ] 2.6 /quotes/:unknown-id returns 404
-- [ ] 2.7 Title input updates heading in real-time
-- [ ] 2.8 Save button calls PATCH and persists all changes
-- [ ] 2.9 Delete button opens AlertDialog; confirming deletes and redirects to /quotes
+- [x] 2.4 /quotes still loads after the file move
+- [x] 2.5 /quotes/:id shows edit page with correct title, status, and line items
+- [x] 2.6 /quotes/:unknown-id returns 404
+- [x] 2.7 Title input updates heading in real-time
+- [x] 2.8 Save button calls PATCH and persists all changes
+- [x] 2.9 Delete button opens AlertDialog; confirming deletes and redirects to /quotes
 
 ### Phase 3: Quote List Interactivity
 

@@ -8,11 +8,13 @@ interface Props {
   onItemsChange: (items: QuoteItem[]) => void;
   onSave: (items: QuoteItem[]) => void;
   saving: boolean;
+  onTitleChange?: (title: string) => void;
+  saveDisabled?: boolean;
 }
 
 type EditingCell = { rowIndex: number; field: "task" | "hours" | "rate" } | null;
 
-export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }: Props) {
+export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, onTitleChange, saveDisabled }: Props) {
   const [editingCell, setEditingCell] = useState<EditingCell>(null);
   const [draft, setDraft] = useState("");
 
@@ -47,7 +49,17 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }:
 
   return (
     <div className="flex w-full max-w-4xl flex-col gap-6">
-      <h2 className="text-xl font-semibold text-white">{title}</h2>
+      {onTitleChange ? (
+        <input
+          value={title}
+          onChange={(e) => {
+            onTitleChange(e.target.value);
+          }}
+          className="border-b border-white/20 bg-transparent pb-1 text-xl font-semibold text-white outline-none focus:border-white/60"
+        />
+      ) : (
+        <h2 className="text-xl font-semibold text-white">{title}</h2>
+      )}
 
       <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full text-sm">
@@ -174,7 +186,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving }:
         onClick={() => {
           onSave(items);
         }}
-        disabled={saving || items.length === 0}
+        disabled={saving || items.length === 0 || saveDisabled}
         className="self-end rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {saving ? "Zapisuję..." : "Zapisz wycenę"}

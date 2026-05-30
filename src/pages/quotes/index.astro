@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { createClient } from "@/lib/supabase";
 import type { QuoteStatus } from "@/types";
+import { STATUS_LABELS } from "@/lib/quotes";
 
 const user = Astro.locals.user;
 if (!user) return Astro.redirect("/auth/signin");
@@ -16,13 +17,6 @@ const { data: quotes } = await supabase
   .eq("user_id", user.id)
   .order("created_at", { ascending: false })
   .limit(100);
-
-const STATUS_LABELS: Record<QuoteStatus, string> = {
-  draft: "Szkic",
-  sent: "Wysłana",
-  accepted: "Zaakceptowana",
-  rejected: "Odrzucona",
-};
 ---
 
 <Layout title="Twoje wyceny — QuoteKit">
