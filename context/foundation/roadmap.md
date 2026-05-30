@@ -38,6 +38,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                    | S-01          | —                                                                                     | proposed |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                              | S-01          | FR-008                                                                                | proposed |
 | S-07 | prompt-attachments      | dołączyć plik (obraz/PDF) do promptu AI, by model uwzględnił go przy generowaniu pozycji | S-01          | —                                                                                     | proposed |
+| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)           | S-02          | FR-011                                                                                | proposed |
 
 ## Streams
 
@@ -192,6 +193,22 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Risk:** Największa techniczna niewiadoma w roadmapie — stack (Cloudflare Workers + Anthropic Vision + plik binarny) wymaga research spike przed planem. Niepotwierdzony pdf→image pipeline może zmniejszyć zakres do "obrazy only" w v1.
 - **Status:** proposed
 
+### S-08: Quote list filters
+
+- **Outcome:** użytkownik może filtrować listę wycen po statusie (draft / sent / accepted / rejected / wszystkie) i przeszukiwać wyceny po tytule — obie operacje server-side przez rozszerzone `GET /api/quotes`.
+- **Change ID:** quote-list-filters
+- **PRD refs:** FR-011 (full quote list with status display — rozszerzenie o filtering/search)
+- **Prerequisites:** S-02 (lista z paginacją musi istnieć; `GET /api/quotes` z paginacją jest bazą do rozszerzenia o `?status=` i `?search=`)
+- **Parallel with:** S-03, S-04, S-05, S-06, S-07
+- **Blockers:** —
+- **Unknowns:** —
+- **Tech notes:**
+  - `GET /api/quotes` dostaje opcjonalne query params: `?status=draft|sent|accepted|rejected` i `?search=<string>` (ILIKE na `title`)
+  - UI: filter chips lub tabs dla statusu + input tekstowy dla search; zmiany triggerują nowe zapytanie API (bez przeładowania strony)
+  - `QuotesList` po stronie React zarządza stanem filtrów i odpytuje `GET /api/quotes` z odpowiednimi params
+- **Risk:** ILIKE na nieuindeksowanej kolumnie `title` może być wolne przy dużych zbiorach — akceptowalne przy docelowej skali (solo freelancer, small data volume per PRD).
+- **Status:** proposed
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID               | Suggested issue title                                    | Ready for `/10x-plan` | Notes                                                                             |
@@ -205,6 +222,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
 | S-06       | manual-line-items       | Manual line item addition (no AI)                        | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
 | S-07       | prompt-attachments      | Attach image/PDF to AI prompt for visual context         | no                    | Research spike wymagany: CF Workers formData + Anthropic Vision + storage         |
+| S-08       | quote-list-filters      | Server-side filter by status + title search on quote list | no                    | Awaiting S-02 completion; run `/10x-plan quote-list-filters`                      |
 
 ## Open Roadmap Questions
 

@@ -83,12 +83,22 @@ export const GET: APIRoute = async (context) => {
     });
   }
 
-  const { data: quotes, error } = await supabase
+  const url = new URL(context.request.url);
+  const page = Math.max(1, Number(url.searchParams.get("page") ?? "1"));
+  const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit") ?? "20")));
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const {
+    data: quotes,
+    error,
+    count,
+  } = await supabase
     .from("quotes")
-    .select("id, title, status, created_at")
+    .select("id, title, status, created_at", { count: "exact" })
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
-    .limit(100);
+    .range(from, to);
 
   if (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch quotes" }), {
@@ -97,7 +107,8 @@ export const GET: APIRoute = async (context) => {
     });
   }
 
-  return new Response(JSON.stringify({ quotes }), {
+  const total = count ?? 0;
+  return new Response(JSON.stringify({ quotes, total, page, totalPages: Math.ceil(total / limit) }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });

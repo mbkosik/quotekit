@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export type QuoteStatus = "draft" | "sent" | "accepted" | "rejected";
+export const QUOTE_STATUSES = ["draft", "sent", "accepted", "rejected"] as const;
+export type QuoteStatus = (typeof QUOTE_STATUSES)[number];
 
 export const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
