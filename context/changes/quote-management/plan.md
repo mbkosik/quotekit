@@ -341,14 +341,14 @@ No database schema changes. No data migrations required. The existing `quotes` t
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes
-- [x] 3.2 `npm run build` completes without type errors
+- [x] 3.1 `npm run lint` passes — 03e681a
+- [x] 3.2 `npm run build` completes without type errors — 03e681a
 
 #### Manual
 
-- [x] 3.3 Status dropdown change saves via PATCH without page reload
-- [x] 3.4 Delete from list removes row via DELETE without page reload
-- [x] 3.5 Pagination controls appear with 20+ quotes and navigate correctly
-- [x] 3.6 Empty state message shown with 0 quotes
-- [x] 3.7 Row title links to /quotes/:id
-- [x] 3.8 Full regression: S-01 creation flow still works end-to-end
+- [x] 3.3 Status dropdown change saves via PATCH without page reload — 03e681a
+- [x] 3.4 Delete from list removes row via DELETE without page reload — 03e681a
+- [x] 3.5 Pagination controls appear with 20+ quotes and navigate correctly — 03e681a
+- [x] 3.6 Empty state message shown with 0 quotes — 03e681a
+- [x] 3.7 Row title links to /quotes/:id — 03e681a
+- [x] 3.8 Full regression: S-01 creation flow still works end-to-end — 03e681a
