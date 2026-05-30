@@ -68,6 +68,7 @@ The moment: a client inquiry arrives. It's vague, promising, and slightly intimi
 
 - FR-002: User can sign in with email and password or OAuth. Priority: must-have
   > Socrates: Counter-argument considered: "GitHub or Google OAuth alone covers the persona." Resolution: kept as-is for now; the Supabase scaffold supports both. OAuth-only simplification is a valid v1 decision to revisit when building the auth UI — the FR does not mandate both, it permits both.
+  > **v1 decision (2026-05-29):** Email + password only implemented in S-01. OAuth deferred — the FR permits this per the Socratic note above.
 
 - FR-003: User can sign out. Priority: must-have
   > Socrates: Counter-argument considered: "Trivially required; this challenge adds noise." Resolution: kept; it stands.
@@ -136,7 +137,7 @@ Sign-up behavior: standard registration flow. Unauthenticated users cannot acces
 - **No invoicing or billing**: Quotes only. The moment a quote becomes a financial document (invoice, contract, receipt), that's a different product domain.
 - **No integrations with external tools** (Notion, Jira, Cal.com, Slack, etc.): QuoteKit is standalone in v1. No import or export to external productivity tools.
 - **No multi-currency support**: Each quote assumes a single currency. There is no currency selection, no conversion, and no locale-aware formatting beyond a basic currency symbol.
-- **No manual line item creation in MVP** (FR-008, deferred to v2): Adding new line items from scratch is out of scope. The editing surface covers only AI-generated items.
+- ~~**No manual line item creation in MVP** (FR-008, deferred to v2)~~ — **Promoted to S-06** (2026-05-30) based on user feedback. Implementation cost is minimal (UI-only, no DB/API changes); `LineItemsEditor` already exists and only needs an "Add item" button.
 - **No undo or edit history for line items**: Deletion is permanent. The complexity of undo is not justified for MVP.
 - **No offline-first guarantee**: The product requires a live network connection. No offline data access or background sync is provided.
 
@@ -144,4 +145,4 @@ Sign-up behavior: standard registration flow. Unauthenticated users cannot acces
 
 1. ~~**How many clarifying questions should the AI ask, and what is the stopping rule?**~~ **RESOLVED 2026-05-26** — User-driven with upper limit (max 5 questions). User can skip at any point via "skip / enough" button. Architecture: multi-turn conversation with explicit skip affordance in UI.
 
-2. ~~**How should the tool handle a very sparse or uninformative paste?**~~ **RESOLVED 2026-05-26 (Option B)** — Dual-mode routing: AI assesses inquiry quality and routes to (a) quote generation or (b) questions for the client, with user confirmation before mode switch. Entered into S-01 scope. Motivation: freelancers paste listings from portals (Useme, etc.) where briefs are intentionally brief.
+2. ~~**How should the tool handle a very sparse or uninformative paste?**~~ **REVISED 2026-05-26** — Dual-mode routing moved to S-03 (`client-questions-flow`). S-01 handles sparse input with a simple guard only: AI returns a "brief too short, add more context" message — no separate UX path, no DB record. Full client-questions feature (S-03) ships after core hypothesis (S-01) is validated with real users.
