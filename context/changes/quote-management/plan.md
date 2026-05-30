@@ -324,31 +324,31 @@ No database schema changes. No data migrations required. The existing `quotes` t
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes on all modified/new files
-- [x] 2.2 `npm run build` completes without type errors
-- [x] 2.3 `src/pages/quotes/index.astro` exists
+- [x] 2.1 `npm run lint` passes on all modified/new files — 2609be0
+- [x] 2.2 `npm run build` completes without type errors — 2609be0
+- [x] 2.3 `src/pages/quotes/index.astro` exists — 2609be0
 
 #### Manual
 
-- [x] 2.4 /quotes still loads after the file move
-- [x] 2.5 /quotes/:id shows edit page with correct title, status, and line items
-- [x] 2.6 /quotes/:unknown-id returns 404
-- [x] 2.7 Title input updates heading in real-time
-- [x] 2.8 Save button calls PATCH and persists all changes
-- [x] 2.9 Delete button opens AlertDialog; confirming deletes and redirects to /quotes
+- [x] 2.4 /quotes still loads after the file move — 2609be0
+- [x] 2.5 /quotes/:id shows edit page with correct title, status, and line items — 2609be0
+- [x] 2.6 /quotes/:unknown-id returns 404 — 2609be0
+- [x] 2.7 Title input updates heading in real-time — 2609be0
+- [x] 2.8 Save button calls PATCH and persists all changes — 2609be0
+- [x] 2.9 Delete button opens AlertDialog; confirming deletes and redirects to /quotes — 2609be0
 
 ### Phase 3: Quote List Interactivity
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run build` completes without type errors
+- [x] 3.1 `npm run lint` passes
+- [x] 3.2 `npm run build` completes without type errors
 
 #### Manual
 
-- [ ] 3.3 Status dropdown change saves via PATCH without page reload
-- [ ] 3.4 Delete from list removes row via DELETE without page reload
-- [ ] 3.5 Pagination controls appear with 20+ quotes and navigate correctly
-- [ ] 3.6 Empty state message shown with 0 quotes
-- [ ] 3.7 Row title links to /quotes/:id
-- [ ] 3.8 Full regression: S-01 creation flow still works end-to-end
+- [x] 3.3 Status dropdown change saves via PATCH without page reload
+- [x] 3.4 Delete from list removes row via DELETE without page reload
+- [x] 3.5 Pagination controls appear with 20+ quotes and navigate correctly
+- [x] 3.6 Empty state message shown with 0 quotes
+- [x] 3.7 Row title links to /quotes/:id
+- [x] 3.8 Full regression: S-01 creation flow still works end-to-end

@@ -1,9 +1,10 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
+import { QuotesList } from "@/components/quotes/QuotesList";
 import { createClient } from "@/lib/supabase";
-import type { QuoteStatus } from "@/types";
-import { STATUS_LABELS } from "@/lib/quotes";
+
+const PAGE_SIZE = 20;
 
 const user = Astro.locals.user;
 if (!user) return Astro.redirect("/auth/signin");
@@ -11,12 +12,12 @@ if (!user) return Astro.redirect("/auth/signin");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 if (!supabase) return new Response("Serwis niedostępny", { status: 503 });
 
-const { data: quotes } = await supabase
+const { data: quotes, count } = await supabase
   .from("quotes")
-  .select("id, title, status, created_at")
+  .select("id, title, status, created_at", { count: "exact" })
   .eq("user_id", user.id)
   .order("created_at", { ascending: false })
-  .limit(100);
+  .range(0, PAGE_SIZE - 1);
 ---
 
 <Layout title="Twoje wyceny — QuoteKit">
@@ -24,23 +25,16 @@ const { data: quotes } = await supabase
     <Topbar />
     <main class="flex flex-1 flex-col items-center px-4 py-10">
       <div class="w-full max-w-3xl">
-        <h1 class="mb-6 text-2xl font-bold">Twoje wyceny</h1>
-        {
-          quotes && quotes.length > 0 ? (
-            <ul class="flex flex-col gap-3">
-              {quotes.map((q) => (
-                <li class="flex items-center justify-between rounded-xl border border-white/10 px-5 py-4">
-                  <span class="text-sm font-medium text-white">{q.title}</span>
-                  <span class="rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">
-                    {STATUS_LABELS[q.status as QuoteStatus]}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p class="text-sm text-white/40">Nie masz jeszcze żadnych wycen.</p>
-          )
-        }
+        <div class="mb-6 flex items-center justify-between">
+          <h1 class="text-2xl font-bold">Twoje wyceny</h1>
+          <a
+            href="/new"
+            class="rounded-xl bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+          >
+            + Nowa wycena
+          </a>
+        </div>
+        <QuotesList initialQuotes={quotes ?? []} initialTotal={count ?? 0} pageSize={PAGE_SIZE} client:load />
       </div>
     </main>
   </div>
