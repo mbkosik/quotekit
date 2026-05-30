@@ -32,7 +32,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                 | —             | FR-010, FR-011, FR-013                                                                | done     |
 | F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON  | —             | FR-005, FR-006                                                                        | ready    |
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft   | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
-| S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                                | F-01          | FR-011, FR-012, FR-013                                                                | proposed |
+| S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                                | F-01          | FR-011, FR-012, FR-013                                                                | done     |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je                | S-01          | FR-004                                                                                | proposed |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji    | S-01          | —                                                                                     | proposed |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                    | S-01          | —                                                                                     | proposed |
@@ -123,7 +123,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Risk:** FR-013 to hard delete bez undo — świadome trade-off z PRD (Socratic round FR-009); UI powinien potwierdzać akcję przed usunięciem.
 - **Tech notes:**
   - `GET /api/quotes` w S-01 ma tymczasowy `.limit(100)` — S-02 powinien zastąpić to paginacją (cursor-based lub offset), searchem po tytule i filtrowaniem po statusie.
-- **Status:** proposed
+- **Status:** done
 
 ### S-04: User prompt context
 
@@ -216,7 +216,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | F-01       | quotes-schema-rls       | Create quotes table with per-user RLS                    | done                  | Archived 2026-05-28                                                               |
 | F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint         | yes                   | Run `/10x-plan ai-integration-scaffold`                                           |
 | S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow               | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
-| S-02       | quote-management        | Quote list, status management, and delete                | yes                   | F-01 done; run `/10x-plan quote-management`                                       |
+| S-02       | quote-management        | Quote list, status management, and delete                | done                  | Completed 2026-05-30                                                              |
 | S-03       | client-questions-flow   | Client questions for sparse briefs                       | no                    | Awaiting S-01 completion; storage approach TBD                                    |
 | S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
 | S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management  | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
@@ -245,3 +245,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 | F-01 | quotes-schema-rls | Tabela `quotes` + polityki RLS per-user | 2026-05-28 |
 | S-01 | ai-quote-creation-flow | AI-assisted quote creation end-to-end (inquiry → rozmowa AI → edycja → zapis draft) | 2026-05-29 |
+| S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |
