@@ -1,0 +1,139 @@
+---
+project: QuoteKit
+created: 2026-06-01
+prd_version: 1
+roadmap_version: 1
+test_base_profile: none
+status: active
+---
+
+# QuoteKit — Quality Contract
+
+## §1 Strategy
+
+Three principles every rollout phase must obey:
+
+1. **Cost × signal.** Every test added — classic or AI-native — must answer: *what is the cheapest test that gives a real signal for this risk?* Do not promote to e2e because it "feels safer"; do not layer a model on a deterministic diff that already catches the regression.
+
+2. **User concerns are evidence.** Risks the user has lived through — or explicitly fears — carry the same weight as PRD lines or hot-spot data.
+
+3. **Risks are scenarios, not code locations.** §2 cites evidence that raised the risk (PRD lines, interview answers, hot-spot directories). It never asserts a file as "where the failure lives." That anchor is `/10x-research`'s output, produced per rollout phase against current code. The plan is a QA spec, not a code audit.
+
+---
+
+## §2 Risk Map
+
+### Top Risks
+
+| # | Risk (failure scenario — user/business terms) | Impact | Likelihood | Source — evidence, not anchors |
+|---|---|---|---|---|
+| 1 | Core CRUD regression: user cannot list, view, or save their quotes | High | Medium | Interview Q1 (primary stated fear: "wyceny nie działają, user traci dostęp do swojej pracy"); PRD US-01 acceptance criteria; hot-spot dir `src/pages/api` — 7 commits/30d |
+| 2 | IDOR (read): authenticated user reads another user's quote by guessing/knowing its ID | High | Medium | PRD §NFR data isolation: "signed-in freelancer must never be able to view, edit, or reach quote data belonging to another account — a data-visibility failure here is a critical regression regardless of any other feature state"; roadmap F-01 risk note; hot-spot dir `src/pages/api` — 7 commits/30d |
+| 3 | AI creation flow state machine fails: hook enters invalid state mid-conversation (stuck loading, wrong phase transition, lost line items) | High | Medium | Interview Q3 (explicit: "przepływ tworzenia wyceny — komunikacja z AI, proces wyceniania (pytania, aktualny stan, zatwierdzenie) — najniższa pewność"); hot-spot dirs `src/components/hooks` — 3 commits/30d, `src/pages/api` — 7 commits/30d |
+| 4 | Broken change reaches production: CI gate not running on main branch — defect discovered post-push | High | High | Interview Q2: "działało lokalnie, wysypało się na produkcji — błąd znaleziony już po spushowaniu"; health-check (CI targets `master`, default branch is `main` — CI is effectively disabled; no test step; no type-check step) |
+| 5 | AI endpoint without rate limiting: one authenticated user generates unlimited Anthropic API spend | High | Medium | Roadmap S-01 pre-launch gate (explicit: "per-user rate limiting na `/api/ai/scope` jest wymaganym prerequisite przed udostępnieniem prawdziwym użytkownikom — brak limitu pozwala jednemu użytkownikowi generować nieograniczone koszty API"); hot-spot dir `src/pages/api` — 7 commits/30d |
+| 6 | RLS write-path gap: UPDATE or DELETE policy does not enforce resource ownership — another user's quote is modified or deleted | High | Low | PRD §NFR data isolation (same guardrail as Risk 2 — applies to all operations); lessons.md RLS auth.uid() wrap pattern (evidence of prior RLS policy bugs in this codebase); roadmap F-01 risk note: "błąd w polityce to regresja krytyczna" |
+| 7 | API key leakage: Anthropic SDK error propagated to client response exposes the API key or internal stack trace | High | Low | tech-stack.md (has_ai: true — Anthropic SDK in production runtime); hot-spot dir `src/pages/api` — 7 commits/30d (AI endpoint actively modified) |
+
+### Risk Response Guidance
+
+| Risk # | What would prove protection | Must challenge | Context needed (for `/10x-research`) | Likely cheapest layer | Anti-pattern to avoid |
+|---|---|---|---|---|---|
+| 1 | `GET /api/quotes` returns the correct list for the authenticated user; `POST /api/quotes` saves and returns the new quote; `DELETE /api/quotes/[id]` removes the correct quote | "The endpoint returned 200" does NOT imply the data is correct — verify payload shape and DB state | How each CRUD endpoint resolves the authenticated user; what Zod schemas validate input/output; what Supabase error responses look like when save fails | Integration test against real Supabase (local) | Testing only the status code; mocking Supabase and bypassing RLS |
+| 2 | `GET /api/quotes/[id]` authenticated as User B for a quote owned by User A returns 403 or 404, never the quote payload | "User is authenticated" does NOT mean "user owns this resource" — the auth check and the ownership check are separate concerns | How the `[id]` endpoint resolves ownership — does it rely solely on RLS, or does it also filter by user in the query? Whether RLS SELECT policy covers direct-by-id access | Integration test with two real test users, two owned quotes, cross-access assertion — against real local Supabase | Mocking Supabase; testing SELECT RLS only; asserting authentication without asserting ownership |
+| 3 | Hook transitions correctly through: idle → inquiry-entered → clarifying → line-items-ready → saving → saved; a simulated API timeout leaves the hook in an error state with line items preserved (not reset) | "The happy path works" does NOT mean error/edge transitions are correct — test failure paths and state boundaries explicitly | The state machine in the hook: what states exist, how API errors are handled, whether line items survive a failed save | Unit tests on the hook state machine (mocked API calls for error scenarios) + one integration smoke test for the golden path | Testing only the golden path; asserting `console.error` instead of user-visible hook state |
+| 4 | Every push to `main` triggers CI; CI runs lint + test + type-check; a deliberate type error or failing test blocks the merge | "CI is configured" does NOT mean "CI is running on the right branch" — verify the trigger branch matches the actual default branch | Current `.github/workflows/ci.yml` trigger configuration; which steps exist; what the test and type-check commands are once tests are installed | CI configuration fix + smoke: push a deliberate error and confirm CI catches it | Fixing CI config without verifying it actually runs; adding a test step before tests exist |
+| 5 | Making N+1 sequential POST requests to `/api/ai/scope` (or `/api/ai/chat`) from the same authenticated user within the rate window results in HTTP 429 — and the response body is a clean error, not an Anthropic SDK exception | "Rate limiting is configured" does NOT mean both AI endpoints are covered — scope and chat may be separate surfaces | Whether rate limiting will be implemented at app middleware level or Cloudflare WAF level; which endpoints are in scope; whether `/api/ai/chat` is a separate attack surface | Integration test (if app-level middleware) — send N+1 requests, assert 429; assert error body is clean | Testing rate limiting by mocking the rate-limiter itself; testing only `/api/ai/scope` and missing `/api/ai/chat` |
+| 6 | `DELETE /api/quotes/[id]` authenticated as User B for User A's quote ID returns 404/403 and leaves User A's record intact in the DB; `PATCH /api/quotes/[id]` with User B's token does not modify User A's record | "RLS SELECT policy is correct" does NOT imply RLS DELETE/UPDATE `WITH CHECK` is also correct — each operation has its own policy | Which Supabase RLS policies exist for INSERT/UPDATE/DELETE operations and whether they use the `WITH CHECK` clause with `(select auth.uid())` as per lessons.md pattern | Integration test: two test users, two quotes, cross-user write operations, assert no mutation and correct HTTP status | Checking only the SELECT policy and declaring the table secured; testing only with the record owner |
+| 7 | A request to `/api/ai/scope` that triggers an Anthropic SDK error returns a client response whose body contains no API key substring, no environment variable name/value, and no internal stack trace | "Error handling exists" does NOT mean it scrubs sensitive data — a bare `catch (e) { return Response.json({ error: e.message }) }` leaks SDK error messages that may contain key prefixes | How the AI endpoints catch and translate Anthropic SDK errors; whether `console.log`/`console.error` in Cloudflare Workers logs the full error object | Unit test: mock Anthropic client throwing an error with a fake key string in the message; assert response body does not contain the string | Testing only that the response status is 500; asserting response structure without checking body content for credential patterns |
+
+### Negative Space (§7)
+
+The following are **deliberately not tested** in this rollout:
+
+- **UI / component snapshot tests** — User explicitly excluded: "UI." Solo MVP, small user base, low blast radius for visual regressions. No Storybook, no Playwright screenshot comparisons, no React Testing Library for component markup.
+- **Marketing pages / static content** — No user-facing value in testing unchanging static content.
+- **Generated TypeScript types / Supabase client types** — The generator is the test; checking its output is redundant.
+- **Internal admin tooling** — No admin panel exists in this product.
+- **AI output quality / hallucination rate** — PRD NFR targets ≥80% line items needing only minor corrections. This is a human-evaluated product metric, not an automated test gate. Covered by real-user feedback, not a test suite.
+- **Offline behavior** — PRD §Non-Goals: no offline-first guarantee.
+
+---
+
+## §3 Phased Rollout
+
+| # | Phase name | Goal | Risks covered | Test types | Status | Change folder |
+|---|---|---|---|---|---|---|
+| 1 | Access control coverage | Prove per-user data isolation holds at DB and API layers before any real users arrive | #2 (IDOR read), #6 (RLS write-path) | Integration — real local Supabase | change opened | context/changes/testing-access-control |
+| 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | not started | — |
+| 3 | AI endpoint safety | Implement and test rate limiting; prove error responses don't leak credentials | #5 (rate limiting), #7 (key leakage) | Integration (rate limit), unit (error response) | not started | — |
+| 4 | Quality gates wiring | Wire lint + test + type-check into CI on the correct branch; lock all prior tests into the gate | #4 (CI gate), all | CI configuration + smoke | not started | — |
+
+---
+
+## §4 Stack
+
+| Layer | Technology | Test runner / tool | Notes |
+|---|---|---|---|
+| Language | TypeScript 5.x (strict) | — | `tsconfig.json` extends `astro/tsconfigs/strict`; type errors not caught in CI yet (Phase 4 wires this) |
+| Framework | Astro 6 SSR + React 19 islands | Vitest (to be installed in Phase 1) | No test runner installed. Vitest is the recommended fit for this Vite/Astro stack (per health-check) |
+| Database / Auth | Supabase (PostgreSQL + RLS + `@supabase/ssr`) | Real local Supabase via `npx supabase start` | Access control tests MUST run against real Supabase — mocking bypasses the RLS layer that provides the isolation guarantee |
+| Runtime | Cloudflare Workers (workerd) | `wrangler dev` for local dev | workerd ≠ Node.js; SDK compatibility must be verified under `wrangler dev`, not `npm run dev` (per roadmap F-02 risk note) |
+| AI | `@anthropic-ai/sdk` (Anthropic) | Mocked for unit tests; real endpoint for rate-limit integration tests | No Claude tool use in current prompts — prompt injection risk is limited to output manipulation |
+| CI | GitHub Actions (`.github/workflows/ci.yml`) | — | Currently targets `master`; default branch is `main` — CI is effectively disabled (health-check finding; Phase 4 fixes) |
+| Pre-commit | Husky + lint-staged | ESLint + Prettier | Already running; does not run tests (no test runner yet) |
+
+**Test-base profile: `none`** — no test config, no test files in `src/`. Health check (2026-05-20) confirms. Phase 1 bootstraps Vitest.
+
+**Stack grounding tools (current session):**
+- Docs: Context7 MCP — available; can be used in research phases to fetch Vitest, Supabase, Cloudflare Workers, and Astro testing documentation; checked: 2026-06-01
+- Search: Exa.ai MCP (`web_search_exa`) — available; can be used to find current testing patterns, Cloudflare Workers test setups, and Supabase RLS testing approaches; checked: 2026-06-01
+- Runtime/browser: Playwright MCP (`browser_*`) — available; not used in this rollout (UI excluded per negative space §7); could be used for critical-path smoke in future phases
+- Provider/platform: IDE MCP (`getDiagnostics`, `executeCode`) — available; useful for verifying type correctness during implementation phases
+
+---
+
+## §5 Quality Gates
+
+| Gate | Type | Current state | Required by | Wired in CI |
+|---|---|---|---|---|
+| Lint | Required | Running (ESLint + lint-staged pre-commit) | Always | Yes — but CI targets wrong branch (Phase 4 fix) |
+| Type-check | Required | Not in CI | Required after §3 Phase 4 | No — Phase 4 wires `npx astro check` |
+| Unit + integration tests | Required | Not installed | Required after §3 Phase 1 | No — Phase 4 wires `npm test` |
+| E2e on critical flows | Not planned | — | Not applicable (UI excluded; access-control covered by integration) | — |
+| Post-edit hook (pre-commit test run) | Recommended local | Not configured | Optional — consider after Phase 1 installs Vitest | — |
+| Multimodal visual review | Not applicable | — | UI excluded per §7 | — |
+
+---
+
+## §6 Cookbook (fills in as phases ship)
+
+### 6.1 Access control test (per-user data isolation)
+
+TBD — see §3 Phase 1. Will document: Vitest setup, local Supabase test client pattern, two-user fixture setup, cross-access assertion pattern for both read and write operations.
+
+### 6.2 Quote CRUD integration test
+
+TBD — see §3 Phase 2. Will document: API endpoint test pattern for Astro SSR routes, Zod payload validation approach, save-failure simulation.
+
+### 6.3 React hook state machine unit test
+
+TBD — see §3 Phase 2. Will document: hook testing pattern with Vitest + React Testing Library (or vitest-browser-react), API mock strategy for error/edge state transitions.
+
+### 6.4 Rate limiting integration test
+
+TBD — see §3 Phase 3. Will document: test strategy for Cloudflare Workers rate limiting (app-level vs WAF), N+1 request assertion pattern, endpoint coverage checklist (scope + chat).
+
+### 6.5 Error response sanitization test
+
+TBD — see §3 Phase 3. Will document: Anthropic SDK error mock pattern, response body content assertion (no credential string leakage), test location and naming convention.
+
+### 6.6 CI gate verification
+
+TBD — see §3 Phase 4. Will document: CI YAML changes (branch fix, test step, type-check step), how to verify CI runs on a PR, gate order and failure modes.
+
+---
+
+## §7 Negative Space
+
+*(Moved inline to §2 for readability — see "Negative Space" block after the Risk Response Guidance table.)*
