@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-30
+updated: 2026-06-03
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -30,7 +30,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | ID   | Change ID               | Outcome (user can …)                                                                     | Prerequisites | PRD refs                                                                              | Status   |
 | ---- | ----------------------- | ---------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
 | F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                 | —             | FR-010, FR-011, FR-013                                                                | done     |
-| F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON  | —             | FR-005, FR-006                                                                        | ready    |
+| F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON  | —             | FR-005, FR-006                                                                        | done     |
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft   | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
 | S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                                | F-01          | FR-011, FR-012, FR-013                                                                | done     |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je                | S-01          | FR-004                                                                                | proposed |
@@ -88,7 +88,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** workerd runtime ≠ Node.js — @anthropic-ai/sdk musi być przetestowany pod `wrangler dev`, nie `npm run dev`; szczegóły w infrastructure.md §Pre-Mortem (risk: nodejs_compat gap). Scaffold weryfikuje to ryzyko wcześnie, zanim S-01 je odziedzicy.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -249,5 +249,6 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 ## Done
 
 | F-01 | quotes-schema-rls | Tabela `quotes` + polityki RLS per-user | 2026-05-28 |
+| F-02 | ai-integration-scaffold | @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | 2026-06-03 |
 | S-01 | ai-quote-creation-flow | AI-assisted quote creation end-to-end (inquiry → rozmowa AI → edycja → zapis draft) | 2026-05-29 |
 | S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |

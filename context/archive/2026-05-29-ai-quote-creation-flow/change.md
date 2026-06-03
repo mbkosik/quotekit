@@ -1,10 +1,10 @@
 ---
-change_id: quote-management
-title: Quote management
-status: impl_reviewed
+change_id: ai-quote-creation-flow
+title: AI-assisted quote creation flow
+status: archived
 created: 2026-05-29
-updated: 2026-05-30
-archived_at: null
+updated: 2026-06-03
+archived_at: 2026-06-03T10:54:52Z
 ---
 
 ## Notes

@@ -1,9 +1,10 @@
 ---
 change_id: quotes-schema-rls
 roadmap_id: F-01
-status: impl_reviewed
+status: archived
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-06-03
+archived_at: 2026-06-03T10:54:52Z
 ---
 
 # Change: Quotes Schema + RLS

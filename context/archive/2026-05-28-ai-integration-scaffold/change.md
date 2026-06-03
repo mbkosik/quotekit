@@ -1,11 +1,10 @@
 ---
 change_id: ai-integration-scaffold
 title: Ai integration scaffold
-status: impl_reviewed
+status: archived
 created: 2026-05-28
-updated: 2026-05-29
-
-archived_at: null
+updated: 2026-06-03
+archived_at: 2026-06-03T10:54:52Z
 ---
 
 ## Notes
