@@ -1,7 +1,7 @@
 ---
 change_id: testing-ai-state-machine
 title: Testing AI state machine
-status: implemented
+status: impl_reviewed
 created: 2026-06-03
 updated: 2026-06-03
 archived_at: null

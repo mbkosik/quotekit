@@ -118,7 +118,7 @@ TBD — see §3 Phase 2. Will document: API endpoint test pattern for Astro SSR 
 
 ### 6.3 React hook state machine unit test
 
-Implemented in `context/changes/testing-ai-state-machine` (2026-06-03). Reference: `src/components/hooks/useQuoteCreator.test.tsx`.
+Implemented in `context/changes/testing-ai-state-machine` (2026-06-03). Reference: `src/components/hooks/useQuoteCreator.test.ts`.
 
 **Deps installed** (all in `devDependencies`):
 
@@ -200,7 +200,7 @@ expect(result.current.state.phase).toBe("inquiry"); // reset fired
 vi.useRealTimers();
 ```
 
-**Test file location**: colocate with the hook — `src/components/hooks/useQuoteCreator.test.tsx`.
+**Test file location**: colocate with the hook — `src/components/hooks/useQuoteCreator.test.ts`.
 
 ### 6.4 Rate limiting integration test
 

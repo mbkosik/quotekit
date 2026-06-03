@@ -24,6 +24,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.useRealTimers();
 });
 
 // ---------------------------------------------------------------------------
@@ -166,7 +167,5 @@ describe("Golden path", () => {
     expect(result.current.state.phase).toBe("inquiry");
     expect(result.current.state.items).toEqual([]);
     expect(result.current.state.messages).toEqual([]);
-
-    vi.useRealTimers();
   });
 });
