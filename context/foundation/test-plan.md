@@ -118,7 +118,89 @@ TBD — see §3 Phase 2. Will document: API endpoint test pattern for Astro SSR 
 
 ### 6.3 React hook state machine unit test
 
-TBD — see §3 Phase 2. Will document: hook testing pattern with Vitest + React Testing Library (or vitest-browser-react), API mock strategy for error/edge state transitions.
+Implemented in `context/changes/testing-ai-state-machine` (2026-06-03). Reference: `src/components/hooks/useQuoteCreator.test.tsx`.
+
+**Deps installed** (all in `devDependencies`):
+
+```
+npm install -D vitest jsdom @testing-library/react
+```
+
+Do NOT install `@vitejs/plugin-react` — it requires Vite `^8` but this project pins Vite 7. Tests that use no JSX work without it; Vitest's built-in esbuild handles TypeScript.
+
+**Config** — `vitest.config.ts` at project root:
+
+```ts
+import { defineConfig } from "vitest/config";
+import { resolve } from "path";
+
+export default defineConfig({
+  test: { environment: "jsdom" },
+  resolve: { alias: { "@": resolve(__dirname, "./src") } },
+});
+```
+
+**Mock strategy — `vi.stubGlobal("fetch", fetchMock)`**
+
+Use when the hook under test reaches the network through the module-private `callChat` helper (which wraps `fetch` directly and is not exported). Stub the global `fetch` per-test; restore in `afterEach`:
+
+```ts
+const fetchMock = vi.fn();
+
+beforeEach(() => {
+  vi.stubGlobal("fetch", fetchMock);
+  fetchMock.mockReset();
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+```
+
+Sequence calls with `mockReturnValueOnce` in the order the hook makes them (AI chat first, `/api/quotes` save last). Response factory:
+
+```ts
+function jsonResponse(body: unknown, status = 200) {
+  return Promise.resolve(
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
+}
+```
+
+**State setup pattern — drive through real actions**
+
+To reach a non-initial hook state, call the hook's own `actions` with sequenced fetch mocks. Do not attempt to inject state directly (internal state setters are not exported beyond `setItems`/`setError`):
+
+```ts
+// Reach "conversation" state
+fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "Q?" }));
+await act(() => result.current.actions.handleInquirySubmit("inquiry text…"));
+
+// Reach "items" state from "conversation"
+fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items: [...], title: "T" }));
+await act(() => result.current.actions.handleAnswer("my answer"));
+```
+
+**Async pattern**
+
+Wrap every action call in `await act(() => ...)`. Assert `phase !== "loading"` after every `act()` — this is the Behavior C contract: any `catch` block that forgets to reset `phase` will leave `"loading"` and the assertion catches it.
+
+**Timer pattern — golden path / auto-reset**
+
+`handleSave` on success schedules a 3 s `setTimeout` to reset the form. Use fake timers in the test and advance them inside `act()`:
+
+```ts
+vi.useFakeTimers();
+// … run test …
+await act(() => { vi.runAllTimers(); });
+expect(result.current.state.phase).toBe("inquiry"); // reset fired
+vi.useRealTimers();
+```
+
+**Test file location**: colocate with the hook — `src/components/hooks/useQuoteCreator.test.tsx`.
 
 ### 6.4 Rate limiting integration test
 

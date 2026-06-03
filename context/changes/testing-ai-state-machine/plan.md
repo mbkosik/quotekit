@@ -278,20 +278,20 @@ Fill in `test-plan.md §6.3` with the patterns established in Phases 1 and 2. Th
 
 #### Automated
 
-- [x] 2.1 `npm test` exits 0 (all test groups pass, `--passWithNoTests` removed)
-- [x] 2.2 Test output shows 4 `describe` groups, all green, no skipped
+- [x] 2.1 `npm test` exits 0 (all test groups pass, `--passWithNoTests` removed) — 05007e9
+- [x] 2.2 Test output shows 4 `describe` groups, all green, no skipped — 05007e9
 
 #### Manual
 
-- [x] 2.3 `npm run test:watch` shows live re-run on hook file changes
-- [x] 2.4 No console warnings about React state updates outside `act()`
+- [x] 2.3 `npm run test:watch` shows live re-run on hook file changes — 05007e9
+- [x] 2.4 No console warnings about React state updates outside `act()` — 05007e9
 
 ### Phase 3: Cookbook §6.3 Update
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` exits 0 after `test-plan.md` update
+- [x] 3.1 `npm run lint` exits 0 after `test-plan.md` update
 
 #### Manual
 
-- [ ] 3.2 `test-plan.md §6.3` answers: deps, fetch mock strategy, state setup pattern, timer pattern
+- [x] 3.2 `test-plan.md §6.3` answers: deps, fetch mock strategy, state setup pattern, timer pattern
