@@ -290,8 +290,8 @@ Fill in `test-plan.md §6.3` with the patterns established in Phases 1 and 2. Th
 
 #### Automated
 
-- [x] 3.1 `npm run lint` exits 0 after `test-plan.md` update
+- [x] 3.1 `npm run lint` exits 0 after `test-plan.md` update — 07a3966
 
 #### Manual
 
-- [x] 3.2 `test-plan.md §6.3` answers: deps, fetch mock strategy, state setup pattern, timer pattern
+- [x] 3.2 `test-plan.md §6.3` answers: deps, fetch mock strategy, state setup pattern, timer pattern — 07a3966
