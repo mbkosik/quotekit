@@ -266,25 +266,25 @@ Fill in `test-plan.md §6.3` with the patterns established in Phases 1 and 2. Th
 
 #### Automated
 
-- [x] 1.1 `npm install` completes; `node_modules/vitest` exists
-- [x] 1.2 `npm test` exits 0 (`--passWithNoTests` flag)
-- [x] 1.3 `npx astro check` exits 0 after adding `vitest.config.ts`
+- [x] 1.1 `npm install` completes; `node_modules/vitest` exists — 88bed27
+- [x] 1.2 `npm test` exits 0 (`--passWithNoTests` flag) — 88bed27
+- [x] 1.3 `npx astro check` exits 0 after adding `vitest.config.ts` — 88bed27
 
 #### Manual
 
-- [x] 1.4 `npm run test:watch` starts and shows "No test files found" without crashing
+- [x] 1.4 `npm run test:watch` starts and shows "No test files found" without crashing — 88bed27
 
 ### Phase 2: Hook Unit Tests
 
 #### Automated
 
-- [ ] 2.1 `npm test` exits 0 (all test groups pass, `--passWithNoTests` removed)
-- [ ] 2.2 Test output shows 4 `describe` groups, all green, no skipped
+- [x] 2.1 `npm test` exits 0 (all test groups pass, `--passWithNoTests` removed)
+- [x] 2.2 Test output shows 4 `describe` groups, all green, no skipped
 
 #### Manual
 
-- [ ] 2.3 `npm run test:watch` shows live re-run on hook file changes
-- [ ] 2.4 No console warnings about React state updates outside `act()`
+- [x] 2.3 `npm run test:watch` shows live re-run on hook file changes
+- [x] 2.4 No console warnings about React state updates outside `act()`
 
 ### Phase 3: Cookbook §6.3 Update
 
