@@ -65,7 +65,7 @@ The following are **deliberately not tested** in this rollout:
 | # | Phase name | Goal | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
 | 1 | Access control coverage | Prove per-user data isolation holds at DB and API layers before any real users arrive | #2 (IDOR read), #6 (RLS write-path) | Integration — real local Supabase | change opened | context/changes/testing-access-control |
-| 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | not started | — |
+| 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | not started | Risk #3 done: context/changes/testing-ai-state-machine; Risk #1 pending |
 | 3 | AI endpoint safety | Implement and test rate limiting; prove error responses don't leak credentials | #5 (rate limiting), #7 (key leakage) | Integration (rate limit), unit (error response) | not started | — |
 | 4 | Quality gates wiring | Wire lint + test + type-check into CI on the correct branch; lock all prior tests into the gate | #4 (CI gate), all | CI configuration + smoke | not started | — |
 
@@ -76,14 +76,14 @@ The following are **deliberately not tested** in this rollout:
 | Layer | Technology | Test runner / tool | Notes |
 |---|---|---|---|
 | Language | TypeScript 5.x (strict) | — | `tsconfig.json` extends `astro/tsconfigs/strict`; type errors not caught in CI yet (Phase 4 wires this) |
-| Framework | Astro 6 SSR + React 19 islands | Vitest (to be installed in Phase 1) | No test runner installed. Vitest is the recommended fit for this Vite/Astro stack (per health-check) |
+| Framework | Astro 6 SSR + React 19 islands | Vitest 4.x | Installed (testing-ai-state-machine, 2026-06-03). Config: `vitest.config.ts`. No `@vitejs/plugin-react` — incompatible with Vite 7 (tests use no JSX; esbuild handles TypeScript) |
 | Database / Auth | Supabase (PostgreSQL + RLS + `@supabase/ssr`) | Real local Supabase via `npx supabase start` | Access control tests MUST run against real Supabase — mocking bypasses the RLS layer that provides the isolation guarantee |
 | Runtime | Cloudflare Workers (workerd) | `wrangler dev` for local dev | workerd ≠ Node.js; SDK compatibility must be verified under `wrangler dev`, not `npm run dev` (per roadmap F-02 risk note) |
 | AI | `@anthropic-ai/sdk` (Anthropic) | Mocked for unit tests; real endpoint for rate-limit integration tests | No Claude tool use in current prompts — prompt injection risk is limited to output manipulation |
 | CI | GitHub Actions (`.github/workflows/ci.yml`) | — | Currently targets `master`; default branch is `main` — CI is effectively disabled (health-check finding; Phase 4 fixes) |
 | Pre-commit | Husky + lint-staged | ESLint + Prettier | Already running; does not run tests (no test runner yet) |
 
-**Test-base profile: `none`** — no test config, no test files in `src/`. Health check (2026-05-20) confirms. Phase 1 bootstraps Vitest.
+**Test-base profile: `sparse`** — Vitest configured; 1 test file (`src/components/hooks/useQuoteCreator.test.ts`), 4 tests. Coverage clusters in hooks only; API layer and access control have no tests yet. Bootstrapped via testing-ai-state-machine (2026-06-03).
 
 **Stack grounding tools (current session):**
 - Docs: Context7 MCP — available; can be used in research phases to fetch Vitest, Supabase, Cloudflare Workers, and Astro testing documentation; checked: 2026-06-01
@@ -99,7 +99,7 @@ The following are **deliberately not tested** in this rollout:
 |---|---|---|---|---|
 | Lint | Required | Running (ESLint + lint-staged pre-commit) | Always | Yes — but CI targets wrong branch (Phase 4 fix) |
 | Type-check | Required | Not in CI | Required after §3 Phase 4 | No — Phase 4 wires `npx astro check` |
-| Unit + integration tests | Required | Not installed | Required after §3 Phase 1 | No — Phase 4 wires `npm test` |
+| Unit + integration tests | Required | Vitest installed; 4 hook unit tests passing (`npm test`) | Required after §3 Phase 1 | No — Phase 4 wires `npm test` |
 | E2e on critical flows | Not planned | — | Not applicable (UI excluded; access-control covered by integration) | — |
 | Post-edit hook (pre-commit test run) | Recommended local | Not configured | Optional — consider after Phase 1 installs Vitest | — |
 | Multimodal visual review | Not applicable | — | UI excluded per §7 | — |
@@ -154,6 +154,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.useRealTimers(); // no-op for tests that never called useFakeTimers; safe always
 });
 ```
 
@@ -197,7 +198,7 @@ vi.useFakeTimers();
 // … run test …
 await act(() => { vi.runAllTimers(); });
 expect(result.current.state.phase).toBe("inquiry"); // reset fired
-vi.useRealTimers();
+// vi.useRealTimers() lives in afterEach — do not call it inline
 ```
 
 **Test file location**: colocate with the hook — `src/components/hooks/useQuoteCreator.test.ts`.
