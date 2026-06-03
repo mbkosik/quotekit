@@ -31,3 +31,7 @@ pnpm-debug.log*
 supabase/snippets/
 
 .claude
+
+# stryker
+reports/
+.stryker-tmp/
