@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useQuoteCreator } from "@/components/hooks/useQuoteCreator";
+import { useQuoteCreator, MAX_QUESTIONS } from "@/components/hooks/useQuoteCreator";
 
 // Behavior C: every await act() below asserts phase !== "loading"
 // (implicitly via the specific phase assertion that follows each act).
@@ -51,8 +51,10 @@ describe("Behavior A: mid-conversation error stays in conversation", () => {
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("conversation");
-    // [{ role: "assistant", content: "What is the deadline?" }, { role: "user", content: "In 2 months" }]
-    expect(result.current.state.messages.length).toBe(2);
+    expect(result.current.state.messages).toEqual([
+      { role: "assistant", content: "What is the deadline?" },
+      { role: "user", content: "In 2 months" },
+    ]);
     expect(result.current.state.error).toBeTruthy();
   });
 
@@ -72,7 +74,10 @@ describe("Behavior A: mid-conversation error stays in conversation", () => {
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("conversation");
-    expect(result.current.state.messages.length).toBe(2); // optimistic append preserved
+    expect(result.current.state.messages).toEqual([
+      { role: "assistant", content: "What is the deadline?" },
+      { role: "user", content: "In 2 months" },
+    ]);
     expect(result.current.state.error).toBeTruthy();
   });
 });
@@ -167,5 +172,154 @@ describe("Golden path", () => {
     expect(result.current.state.phase).toBe("inquiry");
     expect(result.current.state.items).toEqual([]);
     expect(result.current.state.messages).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// handleInquirySubmit error paths (L5)
+// Oracle: three non-happy branches in handleInquirySubmit — API error, sparse
+// response, and immediate complete — each must set the correct phase/sparseMessage.
+// ---------------------------------------------------------------------------
+
+describe("handleInquirySubmit error and edge paths", () => {
+  it("returns to inquiry with sparseMessage on API error response", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ error: "AI service unavailable" }));
+    await act(() => result.current.actions.handleInquirySubmit("Build me a website"));
+
+    expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.sparseMessage).toBeTruthy();
+  });
+
+  it("returns to inquiry with sparseMessage on sparse response", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "sparse" }));
+    await act(() => result.current.actions.handleInquirySubmit("Something"));
+
+    expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.sparseMessage).toBeTruthy();
+  });
+
+  it("goes directly to items on complete response without entering conversation", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    const items = [{ task: "Dev", hours: 10, rate: 100 }];
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items, title: "Direct Quote" }));
+    await act(() => result.current.actions.handleInquirySubmit("Very detailed project description with full spec"));
+
+    expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+    expect(result.current.state.phase).toBe("items");
+    expect(result.current.state.items).toEqual(items);
+    expect(result.current.state.title).toBe("Direct Quote");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Behavior D: MAX_QUESTIONS threshold triggers generation (L1)
+// Oracle: after MAX_QUESTIONS answers, callChat is invoked with generate: true;
+// a complete response must move the hook to "items". Without this test, mutations
+// on the > operator and arithmetic around questionCount survive undetected.
+// ---------------------------------------------------------------------------
+
+describe("Behavior D: MAX_QUESTIONS answers trigger generation", () => {
+  it("reaches items after MAX_QUESTIONS answers", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    // handleInquirySubmit sets questionCount = 1
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "Q1?" }));
+    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    expect(result.current.state.phase).toBe("conversation");
+
+    // Answers 1 to MAX_QUESTIONS-1: newCount stays ≤ MAX_QUESTIONS → generate: false
+    for (let i = 0; i < MAX_QUESTIONS - 1; i++) {
+      fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: `Q${i + 2}?` }));
+      await act(() => result.current.actions.handleAnswer(`Answer ${i + 1}`));
+      expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+      expect(result.current.state.phase).toBe("conversation");
+    }
+
+    // MAX_QUESTIONS-th answer: newCount = MAX_QUESTIONS + 1 → generate: true → complete
+    const items = [{ task: "Dev", hours: 10, rate: 100 }];
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items, title: "App" }));
+    await act(() => result.current.actions.handleAnswer("Final answer"));
+
+    expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+    expect(result.current.state.phase).toBe("items");
+    expect(result.current.state.items).toEqual(items);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Behavior E: sparse response in handleAnswer resets to inquiry (L2)
+// Oracle: a sparse response mid-conversation means the AI cannot proceed;
+// the hook must return to "inquiry" so the user can refine their input.
+// ---------------------------------------------------------------------------
+
+describe("Behavior E: sparse response in handleAnswer resets to inquiry", () => {
+  it("returns to inquiry on sparse response during conversation", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "What is the budget?" }));
+    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    expect(result.current.state.phase).toBe("conversation");
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "sparse" }));
+    await act(() => result.current.actions.handleAnswer("I don't know"));
+
+    expect(result.current.state.phase).not.toBe("loading"); // Behavior C
+    expect(result.current.state.phase).toBe("inquiry");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// handleSave re-entry guard (L3)
+// Oracle: double-submit while a save is in flight must not issue a second
+// fetch call — the guard (if phase === "saving") return; exists specifically
+// for this scenario.
+// ---------------------------------------------------------------------------
+
+describe("handleSave re-entry guard", () => {
+  it("second handleSave while saving is a no-op", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    // Reach items state
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "Q?" }));
+    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    const items = [{ task: "Dev", hours: 5, rate: 100 }];
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items, title: "App" }));
+    await act(() => result.current.actions.handleAnswer("Yes"));
+    expect(result.current.state.phase).toBe("items");
+
+    // Controlled promise keeps the save fetch in flight
+    let resolveSave!: (v: Response) => void;
+    fetchMock.mockReturnValueOnce(new Promise<Response>((r) => (resolveSave = r)));
+
+    // Void pattern: act() sees a synchronous callback and flushes only the
+    // synchronous setPhase("saving") — the awaited fetch() stays pending.
+    act(() => {
+      void result.current.actions.handleSave(items);
+    });
+    expect(result.current.state.phase).toBe("saving");
+
+    // Second call while phase === "saving" — guard returns early, no new fetch
+    await act(() => result.current.actions.handleSave(items));
+    // fetchMock calls: 2 setup + 1 save attempt (not 4)
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+
+    // Resolve the pending save; await Promise.resolve() lets the handleSave
+    // continuation run inside act so React flushes the resulting state updates.
+    await act(async () => {
+      resolveSave(
+        new Response(JSON.stringify({ id: "q1" }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+      await Promise.resolve();
+    });
   });
 });
