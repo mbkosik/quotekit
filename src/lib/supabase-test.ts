@@ -1,19 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Falls back to well-known local Supabase defaults so tests work after `npx supabase start`
-// without any extra env setup. Override via SUPABASE_URL / SUPABASE_KEY /
-// SUPABASE_SERVICE_ROLE_KEY for a non-standard or CI environment.
+// Keys are read from env — no hardcoded fallbacks because Supabase keys are
+// project-specific and vary between local instances (new sb_* format).
+// Required vars: SUPABASE_URL, SUPABASE_KEY (or SUPABASE_ANON_KEY),
+//                SUPABASE_SERVICE_KEY (or SUPABASE_SERVICE_ROLE_KEY).
+// Add them to .env for local dev (`npx supabase status` prints all values).
 const TEST_URL = process.env.SUPABASE_URL ?? "http://127.0.0.1:54321";
 
-const TEST_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY ??
-  process.env.SUPABASE_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRFA0NiK7kyqt8_CV6kSxTByIXW62Z86g_4V8OW3Gr4";
+const TEST_ANON_KEY = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_KEY;
+if (!TEST_ANON_KEY) throw new Error("Missing env var: SUPABASE_KEY (anon/publishable key)");
 
-// Service role key bypasses RLS — used only for test setup and teardown.
-const TEST_SERVICE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hj04zWl196z2-SBc0";
+// Service role JWT — bypasses RLS, used only for test setup and teardown.
+const TEST_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY;
+if (!TEST_SERVICE_KEY) throw new Error("Missing env var: SUPABASE_SERVICE_ROLE_KEY (from `npx supabase status --output json`)");
 
 /** Service-role client — bypasses RLS. Use only for test setup and teardown. */
 export function createAdminClient() {
