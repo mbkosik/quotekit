@@ -15,8 +15,8 @@ import { createAdminClient } from "@/lib/supabase-test";
 import { createTestUser, cleanupTestUser, type TestUser } from "@/lib/test-helpers";
 
 describe("Risk #6: RLS write-path — UPDATE/DELETE on quotes", () => {
-  let userA: TestUser;
-  let userB: TestUser;
+  let userA: TestUser | undefined;
+  let userB: TestUser | undefined;
   let quoteAId: string;
 
   beforeAll(async () => {
@@ -39,26 +39,34 @@ describe("Risk #6: RLS write-path — UPDATE/DELETE on quotes", () => {
   }, 20_000);
 
   afterAll(async () => {
-    await Promise.all([cleanupTestUser(userA.id), cleanupTestUser(userB.id)]);
+    // Guard: userA/userB may be undefined if createTestUser threw before Promise.all resolved.
+    await Promise.allSettled([
+      userA ? cleanupTestUser(userA.id) : Promise.resolve(),
+      userB ? cleanupTestUser(userB.id) : Promise.resolve(),
+    ]);
     // ON DELETE CASCADE removes the quote when userA is deleted
   }, 10_000);
 
   // Sanity: owner can update their own quote — confirms RLS ALLOW path works.
   it("owner updates their own quote", async () => {
-    const { data, error } = await userA.client
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await userA!.client
       .from("quotes")
       .update({ title: "Owner-updated title" })
       .eq("id", quoteAId)
       .select("id, title");
 
     expect(error).toBeNull();
-    expect(data ?? []).not.toHaveLength(0);
+    expect(data).toHaveLength(1);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expect(data![0].title).toBe("Owner-updated title");
   });
 
   // Core assertion: RLS UPDATE policy filters out the foreign row.
   // update().select() returns [] (not an error) when RLS blocks.
   it("cross-user UPDATE by id returns empty data — RLS UPDATE enforced", async () => {
-    const { data, error } = await userB.client
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await userB!.client
       .from("quotes")
       .update({ title: "HACKED" })
       .eq("id", quoteAId)
@@ -76,13 +84,15 @@ describe("Risk #6: RLS write-path — UPDATE/DELETE on quotes", () => {
       .single();
 
     expect(adminError).toBeNull();
-    expect(adminRow).toMatchObject({ title: "Owner-updated title" });
+    // The attack value must not have been written — independent of Test 1's title.
+    expect(adminRow?.title).not.toBe("HACKED");
   });
 
   // Core assertion: RLS DELETE policy filters out the foreign row.
   // delete({ count: "exact" }) returns count=0 (not an error) when RLS blocks.
   it("cross-user DELETE by id returns count 0 — RLS DELETE enforced", async () => {
-    const { count, error } = await userB.client.from("quotes").delete({ count: "exact" }).eq("id", quoteAId);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { count, error } = await userB!.client.from("quotes").delete({ count: "exact" }).eq("id", quoteAId);
 
     expect(error).toBeNull();
     expect(count).toBe(0);

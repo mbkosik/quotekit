@@ -13,8 +13,8 @@ import { createAdminClient } from "@/lib/supabase-test";
 import { createTestUser, cleanupTestUser, type TestUser } from "@/lib/test-helpers";
 
 describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
-  let userA: TestUser;
-  let userB: TestUser;
+  let userA: TestUser | undefined;
+  let userB: TestUser | undefined;
   let quoteAId: string;
 
   beforeAll(async () => {
@@ -37,13 +37,18 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
   }, 20_000);
 
   afterAll(async () => {
-    await Promise.all([cleanupTestUser(userA.id), cleanupTestUser(userB.id)]);
+    // Guard: userA/userB may be undefined if createTestUser threw before Promise.all resolved.
+    await Promise.allSettled([
+      userA ? cleanupTestUser(userA.id) : Promise.resolve(),
+      userB ? cleanupTestUser(userB.id) : Promise.resolve(),
+    ]);
     // ON DELETE CASCADE removes the quote when userA is deleted
   }, 10_000);
 
   // Sanity: owner can always read their own quote.
   it("owner reads their own quote by id", async () => {
-    const { data, error } = await userA.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await userA!.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
 
     expect(error).toBeNull();
     expect(data?.id).toBe(quoteAId);
@@ -52,7 +57,8 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
   // Core assertion: RLS SELECT policy filters out the foreign row.
   // maybeSingle() returns null (not an error) when 0 rows are returned.
   it("cross-user read by id returns null — RLS SELECT enforced", async () => {
-    const { data, error } = await userB.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await userB!.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
 
     expect(error).toBeNull();
     expect(data).toBeNull();
@@ -60,7 +66,8 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
 
   // Belt-and-suspenders: the foreign quote must not appear in User B's list.
   it("cross-user list does not expose foreign quote id", async () => {
-    const { data, error } = await userB.client.from("quotes").select("id");
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await userB!.client.from("quotes").select("id");
 
     expect(error).toBeNull();
     const ids = (data ?? []).map((r: { id: string }) => r.id);
