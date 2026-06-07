@@ -25,9 +25,7 @@ export async function createTestUser(prefix: string): Promise<TestUser> {
     password: TEST_PASSWORD,
     email_confirm: true,
   });
-  if (createError || !userData.user) {
-    throw createError ?? new Error(`createUser failed for ${prefix}`);
-  }
+  if (createError) throw createError;
 
   // Sign in with anon client to get a real JWT — needed to drive RLS.
   const signinClient = createClient(TEST_URL, TEST_ANON_KEY, {
@@ -37,9 +35,7 @@ export async function createTestUser(prefix: string): Promise<TestUser> {
     email,
     password: TEST_PASSWORD,
   });
-  if (signinError || !session.session) {
-    throw signinError ?? new Error(`signIn failed for ${prefix}`);
-  }
+  if (signinError) throw signinError;
 
   return {
     id: userData.user.id,

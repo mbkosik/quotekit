@@ -5,14 +5,24 @@ import { createClient } from "@supabase/supabase-js";
 // Required vars: SUPABASE_URL, SUPABASE_KEY (or SUPABASE_ANON_KEY),
 //                SUPABASE_SERVICE_KEY (or SUPABASE_SERVICE_ROLE_KEY).
 // Add them to .env for local dev (`npx supabase status` prints all values).
+
+// TypeScript doesn't narrow module-level variables inside function bodies, so
+// we use a helper that returns string (or throws) to get a non-optional type.
+function requireEnv(label: string, value: string | undefined): string {
+  if (!value) throw new Error(`Missing env var: ${label}`);
+  return value;
+}
+
 const TEST_URL = process.env.SUPABASE_URL ?? "http://127.0.0.1:54321";
-
-const TEST_ANON_KEY = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_KEY;
-if (!TEST_ANON_KEY) throw new Error("Missing env var: SUPABASE_KEY (anon/publishable key)");
-
+const TEST_ANON_KEY = requireEnv(
+  "SUPABASE_KEY (anon/publishable key)",
+  process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_KEY,
+);
 // Service role JWT — bypasses RLS, used only for test setup and teardown.
-const TEST_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY;
-if (!TEST_SERVICE_KEY) throw new Error("Missing env var: SUPABASE_SERVICE_ROLE_KEY (from `npx supabase status --output json`)");
+const TEST_SERVICE_KEY = requireEnv(
+  "SUPABASE_SERVICE_ROLE_KEY (from `npx supabase status --output json`)",
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY,
+);
 
 /** Service-role client — bypasses RLS. Use only for test setup and teardown. */
 export function createAdminClient() {

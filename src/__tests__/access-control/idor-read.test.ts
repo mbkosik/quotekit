@@ -32,8 +32,8 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
       .select("id")
       .single();
 
-    if (error || !data) throw error ?? new Error("Quote insert failed in beforeAll");
-    quoteAId = data.id;
+    if (error) throw error;
+    quoteAId = data.id as string;
   }, 20_000);
 
   afterAll(async () => {
@@ -43,11 +43,7 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
 
   // Sanity: owner can always read their own quote.
   it("owner reads their own quote by id", async () => {
-    const { data, error } = await userA.client
-      .from("quotes")
-      .select("id, title")
-      .eq("id", quoteAId)
-      .maybeSingle();
+    const { data, error } = await userA.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
 
     expect(error).toBeNull();
     expect(data?.id).toBe(quoteAId);
@@ -56,11 +52,7 @@ describe("Risk #2: IDOR read — SELECT RLS on quotes", () => {
   // Core assertion: RLS SELECT policy filters out the foreign row.
   // maybeSingle() returns null (not an error) when 0 rows are returned.
   it("cross-user read by id returns null — RLS SELECT enforced", async () => {
-    const { data, error } = await userB.client
-      .from("quotes")
-      .select("id, title")
-      .eq("id", quoteAId)
-      .maybeSingle();
+    const { data, error } = await userB.client.from("quotes").select("id, title").eq("id", quoteAId).maybeSingle();
 
     expect(error).toBeNull();
     expect(data).toBeNull();

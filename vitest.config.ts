@@ -7,7 +7,7 @@ import { resolve } from "path";
 export default defineConfig(({ mode }) => {
   // Merge .env (and .env.local, .env.test, etc.) into process.env so that
   // integration tests can read SUPABASE_* vars via process.env without dotenv.
-  const env = loadEnv(mode ?? "test", process.cwd(), "");
+  const env = loadEnv(mode, process.cwd(), "");
   Object.assign(process.env, env);
 
   return {
