@@ -122,6 +122,6 @@ All three tests run directly against local Supabase via `npx supabase start`. No
 
 #### Automated
 
-- [x] 1.1 `npx tsc --noEmit` exits 0
-- [x] 1.2 `npx eslint src/__tests__/access-control/idor-write.test.ts` exits 0
-- [x] 1.3 `npm test src/__tests__/access-control/idor-write.test.ts -- --reporter=verbose` — 3 tests green (requires `npx supabase start`)
+- [x] 1.1 `npx tsc --noEmit` exits 0 — 80bc855
+- [x] 1.2 `npx eslint src/__tests__/access-control/idor-write.test.ts` exits 0 — 80bc855
+- [x] 1.3 `npm test src/__tests__/access-control/idor-write.test.ts -- --reporter=verbose` — 3 tests green (requires `npx supabase start`) — 80bc855

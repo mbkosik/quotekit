@@ -1,7 +1,7 @@
 ---
 change_id: rls-write-path
 title: Integration tests for risk #6 — RLS write-path enforcement
-status: implementing
+status: implemented
 created: 2026-06-07
 updated: 2026-06-07
 archived_at: null
