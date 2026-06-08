@@ -263,8 +263,8 @@ Testy 1-3 kumulują eventy dla `user1` (3 eventy po teście 1, blokada po teści
 
 #### Automated
 
-- [x] 2.1 `npx tsc --noEmit` exits 0
-- [x] 2.2 `npx eslint src/middleware.ts` exits 0
+- [x] 2.1 `npx tsc --noEmit` exits 0 — d7125d1
+- [x] 2.2 `npx eslint src/middleware.ts` exits 0 — d7125d1
 
 #### Manual
 
@@ -275,6 +275,6 @@ Testy 1-3 kumulują eventy dla `user1` (3 eventy po teście 1, blokada po teści
 
 #### Automated
 
-- [ ] 3.1 `npx tsc --noEmit` exits 0
-- [ ] 3.2 `npx eslint src/__tests__/rate-limiting/rate-limit.test.ts` exits 0
-- [ ] 3.3 `npm test src/__tests__/rate-limiting/rate-limit.test.ts -- --reporter=verbose` — 6 tests green
+- [x] 3.1 `npx tsc --noEmit` exits 0
+- [x] 3.2 `npx eslint src/__tests__/rate-limiting/rate-limit.test.ts` exits 0
+- [x] 3.3 `npm test src/__tests__/rate-limiting/rate-limit.test.ts -- --reporter=verbose` — 6 tests green
