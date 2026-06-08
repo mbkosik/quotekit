@@ -251,20 +251,20 @@ Testy 1-3 kumulują eventy dla `user1` (3 eventy po teście 1, blokada po teści
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly (`npx supabase migration up` or `npx supabase db reset`)
-- [x] 1.2 `npx tsc --noEmit` exits 0
-- [x] 1.3 `npx eslint src/lib/rate-limit.ts` exits 0
+- [x] 1.1 Migration applies cleanly (`npx supabase migration up` or `npx supabase db reset`) — bfccc84
+- [x] 1.2 `npx tsc --noEmit` exits 0 — bfccc84
+- [x] 1.3 `npx eslint src/lib/rate-limit.ts` exits 0 — bfccc84
 
 #### Manual
 
-- [x] 1.4 Table `rate_limit_events` visible in local Supabase Studio with SELECT and INSERT policies
+- [x] 1.4 Table `rate_limit_events` visible in local Supabase Studio with SELECT and INSERT policies — bfccc84
 
 ### Phase 2: Wire into middleware
 
 #### Automated
 
-- [ ] 2.1 `npx tsc --noEmit` exits 0
-- [ ] 2.2 `npx eslint src/middleware.ts` exits 0
+- [x] 2.1 `npx tsc --noEmit` exits 0
+- [x] 2.2 `npx eslint src/middleware.ts` exits 0
 
 #### Manual
 
