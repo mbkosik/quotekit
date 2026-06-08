@@ -1,10 +1,10 @@
 ---
 change_id: rate-limiting-test
 title: Rate limiting integration tests for Risk #5 (AI endpoint spend cap)
-status: impl_reviewed
+status: archived
 created: 2026-06-08
 updated: 2026-06-08
-archived_at: null
+archived_at: 2026-06-08T13:47:36Z
 ---
 
 ## Notes
