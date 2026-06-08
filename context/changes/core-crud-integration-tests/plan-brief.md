@@ -16,13 +16,13 @@ Vitest 4.x is installed; `vitest.config.ts` auto-loads `.env`. Two integration t
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| Test layer | Supabase client (no HTTP) | Consistent with existing idor tests; risk lives at DB/RLS layer; no server startup required |
-| Operations covered | INSERT + SELECT list + SELECT single + DELETE | Matches Risk #1 scope: list, save, fetch by ID, delete |
-| Error paths | Unauthenticated INSERT/SELECT + delete non-existent | Proves RLS blocks anon access and misses are signalled cleanly |
-| File location | `src/__tests__/core-crud/crud.test.ts` | Mirrors access-control/ subfolder layout; clean risk-category separation |
-| Fixture strategy | One test user + one admin-seeded fixture quote; INSERT/DELETE tests supply their own data | Avoids test ordering dependencies; each destructive test uses a fresh row |
+| Decision           | Choice                                                                                    | Why (1 sentence)                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Test layer         | Supabase client (no HTTP)                                                                 | Consistent with existing idor tests; risk lives at DB/RLS layer; no server startup required |
+| Operations covered | INSERT + SELECT list + SELECT single + DELETE                                             | Matches Risk #1 scope: list, save, fetch by ID, delete                                      |
+| Error paths        | Unauthenticated INSERT/SELECT + delete non-existent                                       | Proves RLS blocks anon access and misses are signalled cleanly                              |
+| File location      | `src/__tests__/core-crud/crud.test.ts`                                                    | Mirrors access-control/ subfolder layout; clean risk-category separation                    |
+| Fixture strategy   | One test user + one admin-seeded fixture quote; INSERT/DELETE tests supply their own data | Avoids test ordering dependencies; each destructive test uses a fresh row                   |
 
 ## Scope
 
@@ -36,8 +36,8 @@ Single describe block, one real test user provisioned in `beforeAll`, one admin-
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
+| Phase                 | What it delivers                        | Key risk                                                                                             |
+| --------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | 1. Write crud.test.ts | 7 passing integration tests for Risk #1 | `npx supabase start` must be running; anon-client behaviour must match expected RLS null-uid outcome |
 
 **Prerequisites:** `npx supabase start` (local Supabase running); `.env` or `.env.local` populated with `SUPABASE_URL`, `SUPABASE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (run `npx supabase status` to get values).
