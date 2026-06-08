@@ -275,6 +275,6 @@ Testy 1-3 kumulują eventy dla `user1` (3 eventy po teście 1, blokada po teści
 
 #### Automated
 
-- [x] 3.1 `npx tsc --noEmit` exits 0
-- [x] 3.2 `npx eslint src/__tests__/rate-limiting/rate-limit.test.ts` exits 0
-- [x] 3.3 `npm test src/__tests__/rate-limiting/rate-limit.test.ts -- --reporter=verbose` — 6 tests green
+- [x] 3.1 `npx tsc --noEmit` exits 0 — f45eca1
+- [x] 3.2 `npx eslint src/__tests__/rate-limiting/rate-limit.test.ts` exits 0 — f45eca1
+- [x] 3.3 `npm test src/__tests__/rate-limiting/rate-limit.test.ts -- --reporter=verbose` — 6 tests green — f45eca1
