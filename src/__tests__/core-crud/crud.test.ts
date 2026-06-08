@@ -58,6 +58,12 @@ describe("Risk #1: Core CRUD — quote list, save, fetch, and delete", () => {
     expect(error).toBeNull();
     expect(data?.id).toBeTruthy();
     expect(data?.status).toBe("draft");
+
+    if (data)
+      await u.client
+        .from("quotes")
+        .delete()
+        .eq("id", data.id as string);
   });
 
   // Core: owner sees their own quotes in a list.
@@ -81,10 +87,10 @@ describe("Risk #1: Core CRUD — quote list, save, fetch, and delete", () => {
 
     expect(error).toBeNull();
     expect(data?.id).toBe(fixtureId);
-    expect(data?.title).toBeDefined();
-    expect(data?.inquiry_text).toBeDefined();
-    expect(data?.content).toBeDefined();
-    expect(data?.status).toBeDefined();
+    expect(data?.title).toBe("Fixture quote for CRUD tests");
+    expect(data?.inquiry_text).toBe("Build a landing page");
+    expect(data?.content).toEqual({ items: [] });
+    expect(data?.status).toBe("draft");
     expect(data?.created_at).toBeDefined();
   });
 
