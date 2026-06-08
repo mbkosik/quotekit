@@ -151,6 +151,6 @@ All seven tests run directly against local Supabase via `npx supabase start`. No
 
 #### Automated
 
-- [x] 1.1 `npx tsc --noEmit` exits 0
-- [x] 1.2 `npx eslint src/__tests__/core-crud/crud.test.ts` exits 0
-- [x] 1.3 `npm test src/__tests__/core-crud/crud.test.ts -- --reporter=verbose` — 7 tests green (requires `npx supabase start`)
+- [x] 1.1 `npx tsc --noEmit` exits 0 — bff9c65
+- [x] 1.2 `npx eslint src/__tests__/core-crud/crud.test.ts` exits 0 — bff9c65
+- [x] 1.3 `npm test src/__tests__/core-crud/crud.test.ts -- --reporter=verbose` — 7 tests green (requires `npx supabase start`) — bff9c65
