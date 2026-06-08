@@ -9,6 +9,8 @@ CREATE INDEX rate_limit_events_user_window_idx
 
 ALTER TABLE rate_limit_events ENABLE ROW LEVEL SECURITY;
 
+-- No UPDATE/DELETE policies: append-only by design.
+-- Allowing users to delete events would let them bypass the rate limit.
 CREATE POLICY "rate_limit_events_select_own"
   ON rate_limit_events
   FOR SELECT

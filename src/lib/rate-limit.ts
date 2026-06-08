@@ -5,6 +5,7 @@ export interface RateLimitResult {
   retryAfterSecs: number;
 }
 
+// SELECT + INSERT are non-atomic; burst concurrency can exceed the limit by (concurrency - 1). Accepted MVP tradeoff — fail-open.
 export async function checkRateLimit(
   supabase: SupabaseClient,
   userId: string,
@@ -15,7 +16,7 @@ export async function checkRateLimit(
 
   const { count, error: selectError } = await supabase
     .from("rate_limit_events")
-    .select("*", { count: "exact", head: true })
+    .select("id", { count: "exact", head: true })
     .eq("user_id", userId)
     .gt("created_at", threshold);
 

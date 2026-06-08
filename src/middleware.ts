@@ -21,7 +21,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (!allowed) {
       return new Response(JSON.stringify({ error: "rate_limit_exceeded", retry_after: retryAfterSecs }), {
         status: 429,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Retry-After": String(retryAfterSecs) },
       });
     }
   }
