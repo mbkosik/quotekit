@@ -209,7 +209,90 @@ TBD — see §3 Phase 3. Will document: test strategy for Cloudflare Workers rat
 
 ### 6.5 Error response sanitization test
 
-TBD — see §3 Phase 3. Will document: Anthropic SDK error mock pattern, response body content assertion (no credential string leakage), test location and naming convention.
+Implemented in `context/changes/error-response-sanitization` (2026-06-09). Reference: `src/__tests__/error-sanitization/error-sanitization.test.ts`.
+
+**Deps installed** — none new. Vitest, jsdom, and @testing-library/react are already present from §6.3.
+
+**Config** — `// @vitest-environment node` docblock at the top of the test file. Consistent with all other `src/__tests__/` files; no DOM needed. `Request` is available as a global in Node.js 22.
+
+**Mock strategy — `vi.hoisted` + `vi.mock` factory**
+
+`vi.mock` calls are hoisted by Vite's transform step, so a module-level `vi.fn()` declaration is not safely referenceable from the factory closure. Use `vi.hoisted` to create the mock functions before hoisting runs:
+
+```ts
+const { mockCreate, mockParse } = vi.hoisted(() => ({
+  mockCreate: vi.fn(),
+  mockParse: vi.fn(),
+}));
+
+vi.mock("@/lib/anthropic", () => ({
+  createAnthropicClient: () => ({
+    messages: { create: mockCreate, parse: mockParse },
+  }),
+}));
+```
+
+Mocking `@/lib/anthropic` (the factory) rather than `@anthropic-ai/sdk` directly prevents the `astro:env/server` virtual module from executing (it is only imported inside `anthropic.ts`, which the mock replaces).
+
+**FAKE_KEY pattern**
+
+```ts
+const FAKE_KEY = "sk-ant-api03-test-fake-key";
+```
+
+Inject it into the thrown `Error` message to simulate a realistic Anthropic SDK auth error:
+
+```ts
+mockParse.mockRejectedValue(
+  new Error(`401 {"error":{"message":"invalid x-api-key ${FAKE_KEY}","type":"authentication_error"}}`),
+);
+```
+
+**Context builder**
+
+```ts
+function makeContext(body: Record<string, unknown>): APIContext {
+  return {
+    locals: { user: { id: "test-user-1" } },
+    request: new Request("http://localhost/api/ai/scope", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }),
+  } as unknown as APIContext;
+}
+```
+
+**Assertion recipe — three assertions per test**
+
+```ts
+const body = (await res.json()) as { error: unknown };
+expect(res.status).toBe(502);                              // correct protocol status
+expect(body.error).toBe("AI service error");               // safe generic message
+expect(JSON.stringify(body)).not.toContain(FAKE_KEY);      // no credential in body
+```
+
+The third assertion is the core of Risk #7 — it catches the specific regression of a bare `catch {}` being refactored to `catch (e) { return Response.json({ error: e.message }) }`.
+
+**Covered surfaces** (4 tests total):
+
+| Test | Endpoint | Throw point |
+|---|---|---|
+| scope.ts POST | `/api/ai/scope` | `messages.parse` |
+| chat.ts question mode | `/api/ai/chat` | `messages.create` (`generate: false`) |
+| chat.ts generate mode | `/api/ai/chat` | `messages.parse` (`generate: true`) |
+| chat.ts DONE path | `/api/ai/chat` | `messages.create` → resolves "DONE", then `messages.parse` throws |
+
+**DONE-path setup** (the only non-trivial case): `mockCreate` must resolve with a valid Anthropic-like response before `mockParse` is configured to reject:
+
+```ts
+mockCreate.mockResolvedValue({
+  content: [{ type: "text", text: "DONE" }],
+});
+mockParse.mockRejectedValue(new Error(`... ${FAKE_KEY} ...`));
+```
+
+**Test file location**: `src/__tests__/error-sanitization/error-sanitization.test.ts`
 
 ### 6.6 CI gate verification
 

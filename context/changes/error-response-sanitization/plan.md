@@ -149,12 +149,12 @@ Fill in the "TBD" placeholder in §6.5 of `context/foundation/test-plan.md` with
 
 #### Automated
 
-- [x] 1.1 All 4 new tests pass: `npm test`
-- [x] 1.2 No lint errors: `npm run lint`
+- [x] 1.1 All 4 new tests pass: `npm test` — ceffb1f
+- [x] 1.2 No lint errors: `npm run lint` — ceffb1f
 
 ### Phase 2: §6.5 documentation
 
 #### Manual
 
-- [ ] 2.1 §6.5 in test-plan.md no longer contains "TBD"
-- [ ] 2.2 Documented pattern matches the test file written in Phase 1
+- [x] 2.1 §6.5 in test-plan.md no longer contains "TBD"
+- [x] 2.2 Documented pattern matches the test file written in Phase 1
