@@ -64,10 +64,10 @@ The following are **deliberately not tested** in this rollout:
 
 | # | Phase name | Goal | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
-| 1 | Access control coverage | Prove per-user data isolation holds at DB and API layers before any real users arrive | #2 (IDOR read), #6 (RLS write-path) | Integration — real local Supabase | change opened | context/changes/testing-access-control |
-| 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | not started | Risk #3 done: context/changes/testing-ai-state-machine; Risk #1 pending |
-| 3 | AI endpoint safety | Implement and test rate limiting; prove error responses don't leak credentials | #5 (rate limiting), #7 (key leakage) | Integration (rate limit), unit (error response) | not started | — |
-| 4 | Quality gates wiring | Wire lint + test + type-check into CI on the correct branch; lock all prior tests into the gate | #4 (CI gate), all | CI configuration + smoke | not started | — |
+| 1 | Access control coverage | Prove per-user data isolation holds at DB and API layers before any real users arrive | #2 (IDOR read), #6 (RLS write-path) | Integration — real local Supabase | done | Risk #2: src/__tests__/access-control/idor-read.test.ts; Risk #6: src/__tests__/access-control/idor-write.test.ts |
+| 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | done | Risk #1: src/__tests__/core-crud/crud.test.ts; Risk #3: src/components/hooks/useQuoteCreator.test.ts |
+| 3 | AI endpoint safety | Implement and test rate limiting; prove error responses don't leak credentials | #5 (rate limiting), #7 (key leakage) | Integration (rate limit), unit (error response) | done | Risk #5: src/lib/rate-limit.ts + src/__tests__/rate-limiting/rate-limit.test.ts; Risk #7: context/changes/error-response-sanitization |
+| 4 | Quality gates wiring | Wire lint + test + type-check into CI on the correct branch; lock all prior tests into the gate | #4 (CI gate), all | CI configuration + smoke | done | ci.yml commit 6beab3c on main; smoke PR #2 confirmed gate blocks |
 
 ---
 
@@ -75,13 +75,13 @@ The following are **deliberately not tested** in this rollout:
 
 | Layer | Technology | Test runner / tool | Notes |
 |---|---|---|---|
-| Language | TypeScript 5.x (strict) | — | `tsconfig.json` extends `astro/tsconfigs/strict`; type errors not caught in CI yet (Phase 4 wires this) |
+| Language | TypeScript 5.x (strict) | — | `tsconfig.json` extends `astro/tsconfigs/strict`; type errors caught by `npx astro check` in CI (Phase 4) |
 | Framework | Astro 6 SSR + React 19 islands | Vitest 4.x | Installed (testing-ai-state-machine, 2026-06-03). Config: `vitest.config.ts`. No `@vitejs/plugin-react` — incompatible with Vite 7 (tests use no JSX; esbuild handles TypeScript) |
 | Database / Auth | Supabase (PostgreSQL + RLS + `@supabase/ssr`) | Real local Supabase via `npx supabase start` | Access control tests MUST run against real Supabase — mocking bypasses the RLS layer that provides the isolation guarantee |
 | Runtime | Cloudflare Workers (workerd) | `wrangler dev` for local dev | workerd ≠ Node.js; SDK compatibility must be verified under `wrangler dev`, not `npm run dev` (per roadmap F-02 risk note) |
 | AI | `@anthropic-ai/sdk` (Anthropic) | Mocked for unit tests; real endpoint for rate-limit integration tests | No Claude tool use in current prompts — prompt injection risk is limited to output manipulation |
-| CI | GitHub Actions (`.github/workflows/ci.yml`) | — | Currently targets `master`; default branch is `main` — CI is effectively disabled (health-check finding; Phase 4 fixes) |
-| Pre-commit | Husky + lint-staged | ESLint + Prettier | Already running; does not run tests (no test runner yet) |
+| CI | GitHub Actions (`.github/workflows/ci.yml`) | — | Targets `main`; runs lint → `npm test` → `npx astro check` → build (Phase 4) |
+| Pre-commit | Husky + lint-staged | ESLint + Prettier + Vitest | Runs lint-staged, `tsc --noEmit`, and `vitest run --related` on staged files |
 
 **Test-base profile: `sparse`** — Vitest configured; 1 test file (`src/components/hooks/useQuoteCreator.test.ts`), 4 tests. Coverage clusters in hooks only; API layer and access control have no tests yet. Bootstrapped via testing-ai-state-machine (2026-06-03).
 
@@ -97,11 +97,11 @@ The following are **deliberately not tested** in this rollout:
 
 | Gate | Type | Current state | Required by | Wired in CI |
 |---|---|---|---|---|
-| Lint | Required | Running (ESLint + lint-staged pre-commit) | Always | Yes — but CI targets wrong branch (Phase 4 fix) |
-| Type-check | Required | Not in CI | Required after §3 Phase 4 | No — Phase 4 wires `npx astro check` |
-| Unit + integration tests | Required | Vitest installed; 4 hook unit tests passing (`npm test`) | Required after §3 Phase 1 | No — Phase 4 wires `npm test` |
+| Lint | Required | Running (ESLint + lint-staged pre-commit + CI) | Always | Yes |
+| Type-check | Required | `npx astro check` in CI; `tsc --noEmit` in pre-commit | Always | Yes |
+| Unit + integration tests | Required | Vitest; `npm test` in CI; `vitest run --related` in pre-commit | Always | Yes |
 | E2e on critical flows | Not planned | — | Not applicable (UI excluded; access-control covered by integration) | — |
-| Post-edit hook (pre-commit test run) | Recommended local | Not configured | Optional — consider after Phase 1 installs Vitest | — |
+| Post-edit hook (pre-commit test run) | Recommended local | Configured — `vitest run --related $STAGED --passWithNoTests` | Active | N/A (pre-commit) |
 | Multimodal visual review | Not applicable | — | UI excluded per §7 | — |
 
 ---
@@ -296,7 +296,22 @@ mockParse.mockRejectedValue(new Error(`... ${FAKE_KEY} ...`));
 
 ### 6.6 CI gate verification
 
-TBD — see §3 Phase 4. Will document: CI YAML changes (branch fix, test step, type-check step), how to verify CI runs on a PR, gate order and failure modes.
+Implemented in `.github/workflows/ci.yml` (commit 6beab3c on main). Smoke-tested via PR #2 (2026-06-09).
+
+**Gate order:**
+```
+npm ci → npx astro sync → npm run lint → npm test → npx astro check → npm run build
+```
+
+`npx astro check` requires `SUPABASE_URL` / `SUPABASE_KEY` env vars — Astro type-checks server files that import `astro:env/server`; set these as repository secrets.
+
+**How to verify CI runs on a PR:**
+1. Create a branch with a deliberate failing test (`expect(true).toBe(false)`)
+2. Push and open a PR targeting `main`
+3. CI triggers on `pull_request: branches: [main]`; `npm test` step must show `fail`
+4. Close PR without merging; delete branch
+
+**Smoke result:** PR #2 — CI failed in 51s on `npm test` step as expected. Gate confirmed.
 
 ---
 
