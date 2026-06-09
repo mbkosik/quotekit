@@ -156,5 +156,5 @@ Fill in the "TBD" placeholder in §6.5 of `context/foundation/test-plan.md` with
 
 #### Manual
 
-- [x] 2.1 §6.5 in test-plan.md no longer contains "TBD"
-- [x] 2.2 Documented pattern matches the test file written in Phase 1
+- [x] 2.1 §6.5 in test-plan.md no longer contains "TBD" — acf4174
+- [x] 2.2 Documented pattern matches the test file written in Phase 1 — acf4174
