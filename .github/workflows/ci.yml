@@ -21,10 +21,11 @@ jobs:
       - run: supabase start
       - name: Export Supabase local credentials
         run: |
+          STATUS=$(supabase status --output json)
           echo "SUPABASE_URL=http://127.0.0.1:54321" >> $GITHUB_ENV
-          supabase status -o env | grep "^ANON_KEY=" | sed 's/ANON_KEY/SUPABASE_ANON_KEY/' >> $GITHUB_ENV
-          supabase status -o env | grep "^ANON_KEY=" | sed 's/ANON_KEY/SUPABASE_KEY/' >> $GITHUB_ENV
-          supabase status -o env | grep "^SERVICE_ROLE_KEY=" | sed 's/SERVICE_ROLE_KEY/SUPABASE_SERVICE_ROLE_KEY/' >> $GITHUB_ENV
+          echo "SUPABASE_ANON_KEY=$(echo "$STATUS" | jq -r '.ANON_KEY')" >> $GITHUB_ENV
+          echo "SUPABASE_KEY=$(echo "$STATUS" | jq -r '.ANON_KEY')" >> $GITHUB_ENV
+          echo "SUPABASE_SERVICE_ROLE_KEY=$(echo "$STATUS" | jq -r '.SERVICE_ROLE_KEY')" >> $GITHUB_ENV
       - run: npm ci
       - run: npx astro sync
       - run: npm run lint
