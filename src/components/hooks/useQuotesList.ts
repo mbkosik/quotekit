@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Quote, QuoteStatus } from "@/types";
 
 export type QuoteRow = Pick<Quote, "id" | "title" | "status" | "created_at">;
@@ -52,19 +52,25 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
   const totalPages = Math.ceil(total / pageSize);
   const hasActiveFilters = statusFilter.length > 0 || searchFilter !== "" || sortOrder !== "desc";
 
+  useEffect(() => {
+    return () => {
+      if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    };
+  }, []);
+
   async function fetchQuotes(page: number, filters: FilterState) {
     if (pageLoadingRef.current) return;
-    pageLoadingRef.current = true;
     setLoading(true);
     try {
+      pageLoadingRef.current = true;
       const res = await fetch(buildAPIURL(page, pageSize, filters));
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = (await res.json()) as { quotes: QuoteRow[]; total: number; page: number };
       setQuotes(data.quotes);
       setTotal(data.total);
       setCurrentPage(data.page);
-    } catch {
-      // fetch failed — stay on current state
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Nie udało się pobrać wycen. Spróbuj ponownie.");
     } finally {
       pageLoadingRef.current = false;
       setLoading(false);

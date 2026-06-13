@@ -109,7 +109,8 @@ export const GET: APIRoute = async (context) => {
     query = query.in("status", statusFilter);
   }
   if (searchFilter) {
-    query = query.ilike("title", `%${searchFilter}%`);
+    const escaped = searchFilter.replace(/%/g, "\\%").replace(/_/g, "\\_");
+    query = query.ilike("title", `%${escaped}%`);
   }
 
   const {

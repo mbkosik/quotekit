@@ -32,12 +32,17 @@ if (initialStatusFilter.length > 0) {
   query = query.in("status", initialStatusFilter);
 }
 if (initialSearchFilter) {
-  query = query.ilike("title", `%${initialSearchFilter}%`);
+  const escaped = initialSearchFilter.replace(/%/g, "\\%").replace(/_/g, "\\_");
+  query = query.ilike("title", `%${escaped}%`);
 }
 
-const { data: quotes, count } = await query
-  .order("created_at", { ascending: initialSortOrder === "asc" })
-  .range(0, PAGE_SIZE - 1);
+const {
+  data: quotes,
+  count,
+  error: quotesError,
+} = await query.order("created_at", { ascending: initialSortOrder === "asc" }).range(0, PAGE_SIZE - 1);
+
+if (quotesError) return new Response("Nie udało się pobrać wycen", { status: 500 });
 
 const initialFilters = {
   statusFilter: initialStatusFilter,
@@ -61,7 +66,7 @@ const initialFilters = {
           </a>
         </div>
         <QuotesList
-          initialQuotes={quotes ?? []}
+          initialQuotes={quotes}
           initialTotal={count ?? 0}
           pageSize={PAGE_SIZE}
           initialFilters={initialFilters}
