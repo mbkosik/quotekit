@@ -205,8 +205,8 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint          | done                  | Run `/10x-plan ai-integration-scaffold`                                           |
 | S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow                | done                  | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
 | S-02       | quote-management        | Quote list, status management, and delete                 | done                  | Completed 2026-05-30                                                              |
-| S-03       | client-questions-flow   | Client questions for sparse briefs                        | yes                   | Awaiting S-01 completion; storage approach TBD                                    |
-| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts  | tes                   | Awaiting S-01 completion; storage + UI placement TBD                              |
+| S-03       | client-questions-flow   | Client questions for sparse briefs                        | done                  | Awaiting S-01 completion; storage approach TBD                                    |
+| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts  | yes                   | Awaiting S-01 completion; storage + UI placement TBD                              |
 | S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management   | yes                   | Scope TBD; start with `/10x-research` + exa/Context7                              |
 | S-06       | manual-line-items       | Manual line item addition (no AI)                         | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
 | S-08       | quote-list-filters      | Server-side filter by status + title search on quote list | yes                   | Awaiting S-02 completion; run `/10x-plan quote-list-filters`                      |
@@ -234,4 +234,5 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | F-02 | ai-integration-scaffold | @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | 2026-06-03 |
 | S-01 | ai-quote-creation-flow | AI-assisted quote creation end-to-end (inquiry → rozmowa AI → edycja → zapis draft) | 2026-05-29 |
 | S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |
+
 - **S-03: gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.** — Archived 2026-06-13 → `context/archive/2026-06-13-client-questions-flow/`. Lesson: —.
