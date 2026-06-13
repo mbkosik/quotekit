@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { QuotesList } from "@/components/quotes/QuotesList";
 import { createClient } from "@/lib/supabase";
+import { QUOTE_STATUSES, type QuoteStatus } from "@/types";
 
 const PAGE_SIZE = 20;
 
@@ -12,12 +13,37 @@ if (!user) return Astro.redirect("/auth/signin");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 if (!supabase) return new Response("Serwis niedostępny", { status: 503 });
 
-const { data: quotes, count } = await supabase
-  .from("quotes")
-  .select("id, title, status, created_at", { count: "exact" })
-  .eq("user_id", user.id)
-  .order("created_at", { ascending: false })
+const params = Astro.url.searchParams;
+
+const rawStatus = params.get("status") ?? "";
+const initialStatusFilter = rawStatus
+  .split(",")
+  .map((s) => s.trim())
+  .filter((s): s is QuoteStatus => (QUOTE_STATUSES as readonly string[]).includes(s));
+
+const initialSearchFilter = (params.get("search") ?? "").trim();
+
+const sortRaw = params.get("sort");
+const initialSortOrder: "asc" | "desc" = sortRaw === "asc" ? "asc" : "desc";
+
+let query = supabase.from("quotes").select("id, title, status, created_at", { count: "exact" }).eq("user_id", user.id);
+
+if (initialStatusFilter.length > 0) {
+  query = query.in("status", initialStatusFilter);
+}
+if (initialSearchFilter) {
+  query = query.ilike("title", `%${initialSearchFilter}%`);
+}
+
+const { data: quotes, count } = await query
+  .order("created_at", { ascending: initialSortOrder === "asc" })
   .range(0, PAGE_SIZE - 1);
+
+const initialFilters = {
+  statusFilter: initialStatusFilter,
+  searchFilter: initialSearchFilter,
+  sortOrder: initialSortOrder,
+};
 ---
 
 <Layout title="Twoje wyceny — QuoteKit">
@@ -34,7 +60,13 @@ const { data: quotes, count } = await supabase
             + Nowa wycena
           </a>
         </div>
-        <QuotesList initialQuotes={quotes ?? []} initialTotal={count ?? 0} pageSize={PAGE_SIZE} client:load />
+        <QuotesList
+          initialQuotes={quotes ?? []}
+          initialTotal={count ?? 0}
+          pageSize={PAGE_SIZE}
+          initialFilters={initialFilters}
+          client:load
+        />
       </div>
     </main>
   </div>

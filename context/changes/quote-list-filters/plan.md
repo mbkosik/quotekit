@@ -256,45 +256,45 @@ Layout: horizontal flex row with three groups — status pills (`STATUS_LABELS` 
 
 - [x] 1.1 `npm run lint` passes — 8fe544d
 - [x] 1.2 `npm run build` passes — 8fe544d
-- [ ] 1.3 `GET /api/quotes?status=sent` returns only sent quotes
-- [ ] 1.4 `GET /api/quotes?status=sent,draft` returns quotes with status in [sent, draft]
-- [ ] 1.5 `GET /api/quotes?search=acme` returns only title-matching quotes
-- [ ] 1.6 `GET /api/quotes?sort=asc` returns quotes oldest-first
-- [ ] 1.7 `GET /api/quotes` (no params) behaves identically to current
+- [x] 1.3 `GET /api/quotes?status=sent` returns only sent quotes
+- [x] 1.4 `GET /api/quotes?status=sent,draft` returns quotes with status in [sent, draft]
+- [x] 1.5 `GET /api/quotes?search=acme` returns only title-matching quotes
+- [x] 1.6 `GET /api/quotes?sort=asc` returns quotes oldest-first
+- [x] 1.7 `GET /api/quotes` (no params) behaves identically to current
 
 #### Manual
 
-- [ ] 1.8 Verify all filter combinations via browser dev tools or curl
+- [x] 1.8 Verify all filter combinations via browser dev tools or curl
 
 ### Phase 2: Extract useQuotesList Hook
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npm run build` passes
-- [x] 2.3 QuotesList renders without errors with default initialFilters
+- [x] 2.1 `npm run lint` passes — 030fe59
+- [x] 2.2 `npm run build` passes — 030fe59
+- [x] 2.3 QuotesList renders without errors with default initialFilters — 030fe59
 
 #### Manual
 
-- [ ] 2.4 Filter changes reset to page 1 in URL
-- [ ] 2.5 URL updates on every filter interaction
-- [ ] 2.6 Reloading `/quotes?status=sent` preserves filter state without flash
-- [ ] 2.7 Debounce: quick typing does not fire a request per keystroke
+- [x] 2.4 Filter changes reset to page 1 in URL
+- [x] 2.5 URL updates on every filter interaction
+- [x] 2.6 Reloading `/quotes?status=sent` preserves filter state without flash
+- [x] 2.7 Debounce: quick typing does not fire a request per keystroke
 
 ### Phase 3: Filter Bar UI + SSR Alignment
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes
+- [x] 3.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 3.3 Status pills toggle correctly; list updates after each toggle
-- [ ] 3.4 Multi-pill OR semantics work correctly
-- [ ] 3.5 Search filters by title with ~300 ms debounce
-- [ ] 3.6 Sort toggle changes order; label updates
-- [ ] 3.7 Clear filters resets all three dimensions
-- [ ] 3.8 Empty-with-filters shows correct message and working clear link
-- [ ] 3.9 Direct navigation to filtered URL shows correct SSR state
-- [ ] 3.10 Pagination works correctly while filters are active
+- [x] 3.3 Status pills toggle correctly; list updates after each toggle
+- [x] 3.4 Multi-pill OR semantics work correctly
+- [x] 3.5 Search filters by title with ~300 ms debounce
+- [x] 3.6 Sort toggle changes order; label updates
+- [x] 3.7 Clear filters resets all three dimensions
+- [x] 3.8 Empty-with-filters shows correct message and working clear link
+- [x] 3.9 Direct navigation to filtered URL shows correct SSR state
+- [x] 3.10 Pagination works correctly while filters are active
