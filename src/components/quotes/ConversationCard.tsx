@@ -38,7 +38,9 @@ export function ConversationCard({
         </span>
       </div>
 
-      <p className="text-base text-white/90">{question}</p>
+      <p id={`question-${questionNumber}`} className="text-base text-white/90">
+        {question}
+      </p>
 
       {loading ? (
         <div className="flex items-center gap-2 text-sm text-white/50">
@@ -54,6 +56,7 @@ export function ConversationCard({
             }}
             rows={3}
             placeholder="Twoja odpowiedź..."
+            aria-labelledby={`question-${questionNumber}`}
             className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/40"
           />
           <div className="flex gap-3">

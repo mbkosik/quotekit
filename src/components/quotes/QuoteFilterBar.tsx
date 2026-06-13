@@ -34,6 +34,7 @@ export function QuoteFilterBar({
               onClick={() => {
                 onStatusFilterToggle(s);
               }}
+              aria-pressed={active}
               className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
                 active
                   ? "bg-purple-600 text-white"
@@ -53,11 +54,17 @@ export function QuoteFilterBar({
           onSearchChange(e.target.value);
         }}
         placeholder="Szukaj po tytule…"
+        aria-label="Szukaj po tytule wyceny"
         className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white placeholder-white/30 outline-none focus:border-white/30"
       />
 
       <button
         onClick={onSortChange}
+        aria-label={
+          sortOrder === "desc"
+            ? "Sortuj: najnowsze. Kliknij, by sortować od najstarszych"
+            : "Sortuj: najstarsze. Kliknij, by sortować od najnowszych"
+        }
         className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white"
       >
         {sortOrder === "desc" ? "Najnowsze ↓" : "Najstarsze ↑"}

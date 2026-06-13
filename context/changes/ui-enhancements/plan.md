@@ -563,25 +563,25 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [x] 2.1 Brak `bg-cosmic` / `backdrop-blur-xl` w `src/pages/auth/` (grep)
-- [x] 2.2 `npm run build` — bez błędów
-- [x] 2.3 `npm run lint` — bez błędów
+- [x] 2.1 Brak `bg-cosmic` / `backdrop-blur-xl` w `src/pages/auth/` (grep) — 997b795
+- [x] 2.2 `npm run build` — bez błędów — 997b795
+- [x] 2.3 `npm run lint` — bez błędów — 997b795
 
 #### Manual
 
-- [x] 2.4 Auth pages mają płaskie tło `bg-gray-950`, karta bez rozmycia
-- [x] 2.5 Logowanie przekierowuje na `/quotes`
-- [x] 2.6 Wylogowanie przekierowuje na `/auth/signin`
-- [x] 2.7 Błędne hasło → komunikat po polsku
-- [x] 2.8 Niepotwierdony e-mail → inny komunikat po polsku
+- [x] 2.4 Auth pages mają płaskie tło `bg-gray-950`, karta bez rozmycia — 997b795
+- [x] 2.5 Logowanie przekierowuje na `/quotes` — 997b795
+- [x] 2.6 Wylogowanie przekierowuje na `/auth/signin` — 997b795
+- [x] 2.7 Błędne hasło → komunikat po polsku — 997b795
+- [x] 2.8 Niepotwierdony e-mail → inny komunikat po polsku — 997b795
 
 ### Phase 3: Foundation Accessibility — ARIA Labels & lang
 
 #### Automated
 
-- [ ] 3.1 `grep -n 'lang="en"' src/layouts/Layout.astro` — brak wyników
-- [ ] 3.2 `npm run build` — bez błędów
-- [ ] 3.3 `npm run lint` — bez błędów
+- [x] 3.1 `grep -n 'lang="en"' src/layouts/Layout.astro` — brak wyników
+- [x] 3.2 `npm run build` — bez błędów
+- [x] 3.3 `npm run lint` — bez błędów
 
 #### Manual
 

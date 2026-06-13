@@ -96,6 +96,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
                 onChange={(e) => {
                   void handleStatusChange(q.id, e.target.value as QuoteStatus);
                 }}
+                aria-label={`Status wyceny: ${q.title}`}
                 className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white outline-none focus:border-white/30"
               >
                 {QUOTE_STATUSES.map((s) => (
@@ -107,7 +108,10 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <button className="text-white/30 transition-colors hover:text-red-400" aria-label="Usuń wycenę">
+                  <button
+                    className="text-white/30 transition-colors hover:text-red-400"
+                    aria-label={`Usuń wycenę: ${q.title}`}
+                  >
                     ✕
                   </button>
                 </AlertDialogTrigger>
