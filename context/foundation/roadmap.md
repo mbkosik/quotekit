@@ -36,7 +36,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | done     |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | done     |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
-| S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | proposed |
+| S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | done     |
 | S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | proposed |
 
 ## Streams
@@ -179,7 +179,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Minimal — zmiana dotyczy tylko stanu React po stronie klienta; żadnych zmian schematu DB ani API.
-- **Status:** proposed
+- **Status:** done
 
 ### S-08: Quote list filters
 
@@ -237,3 +237,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 
 - **S-03: gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.** — Archived 2026-06-13 → `context/archive/2026-06-13-client-questions-flow/`. Lesson: —.
 - **S-04: użytkownik może zapisać własny kontekst w postaci dowolnego tekstu (free-text), który jest dołączany do każdego promptu AI przy generowaniu pozycji — pozwala przekazać AI informacje o specjalizacji, rynku, stylu pracy lub dowolnym tle, które poprawia trafność wyceny.** — Archived 2026-06-13 → `context/archive/2026-06-13-user-prompt-context/`. Lesson: —.
+- **S-06: użytkownik może dodać nową, pustą pozycję do tabeli wyceny bez angażowania AI — wypełnia ją ręcznie (nazwa zadania, godziny, stawka) i edytuje tak samo jak AI-pozycje.** — Archived 2026-06-13 → `context/archive/2026-06-13-manual-line-items/`. Lesson: —.

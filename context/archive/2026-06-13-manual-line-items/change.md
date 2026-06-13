@@ -1,10 +1,10 @@
 ---
 change_id: manual-line-items
 title: Manual line items
-status: implemented
+status: archived
 created: 2026-06-13
 updated: 2026-06-13
-archived_at: null
+archived_at: 2026-06-13T17:14:32Z
 ---
 
 ## Notes
