@@ -46,7 +46,9 @@ export function QuoteCreator() {
   if (phase === "items" || phase === "saving") {
     return (
       <>
-        {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+        <p role="alert" aria-live="assertive" className="mb-4 text-sm text-red-400">
+          {error}
+        </p>
         <LineItemsEditor
           items={items}
           title={title}

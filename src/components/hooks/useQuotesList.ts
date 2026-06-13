@@ -42,12 +42,14 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<QuoteStatus[]>(initialFilters.statusFilter);
   const [searchFilter, setSearchFilter] = useState(initialFilters.searchFilter);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(initialFilters.sortOrder);
 
   const pageLoadingRef = useRef(false);
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const statusErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const totalPages = Math.ceil(total / pageSize);
   const hasActiveFilters = statusFilter.length > 0 || searchFilter !== "" || sortOrder !== "desc";
@@ -55,6 +57,7 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
   useEffect(() => {
     return () => {
       if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+      if (statusErrorTimerRef.current) clearTimeout(statusErrorTimerRef.current);
     };
   }, []);
 
@@ -89,6 +92,11 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
     } catch {
       setQuotes((qs) => qs.map((q) => (q.id === id ? { ...q, status: prev ?? q.status } : q)));
+      setStatusError("Nie udało się zmienić statusu wyceny. Spróbuj ponownie.");
+      if (statusErrorTimerRef.current) clearTimeout(statusErrorTimerRef.current);
+      statusErrorTimerRef.current = setTimeout(() => {
+        setStatusError(null);
+      }, 4000);
     }
   }
 
@@ -162,6 +170,7 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
     totalPages,
     loading,
     error,
+    statusError,
     statusFilter,
     searchFilter,
     sortOrder,

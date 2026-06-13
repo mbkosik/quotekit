@@ -32,6 +32,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
     totalPages,
     loading,
     error,
+    statusError,
     statusFilter,
     searchFilter,
     sortOrder,
@@ -65,7 +66,12 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
         onClearFilters={handleClearFilters}
       />
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      <p role="alert" aria-live="assertive" className="text-sm text-red-400">
+        {error ?? ""}
+      </p>
+      <p role="alert" aria-live="assertive" className="text-sm text-red-400">
+        {statusError ?? ""}
+      </p>
 
       {isFilteredEmpty ? (
         <div className="flex flex-col items-start gap-2 py-4">

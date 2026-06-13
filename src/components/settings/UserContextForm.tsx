@@ -59,7 +59,9 @@ export function UserContextForm({ context }: Props) {
         </span>
         <div className="flex items-center gap-3">
           {status === "saved" && <span className="text-sm text-green-400">Zapisano</span>}
-          {status === "error" && <span className="text-sm text-red-400">Błąd zapisu — spróbuj ponownie</span>}
+          <p role="alert" aria-live="assertive" className="text-sm text-red-400">
+            {status === "error" ? "Błąd zapisu — spróbuj ponownie" : ""}
+          </p>
           <button
             onClick={handleSave}
             disabled={status === "saving" || isUnchanged || isOverLimit}

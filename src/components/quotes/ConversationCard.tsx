@@ -78,16 +78,24 @@ export function ConversationCard({
         </form>
       )}
 
-      {error && (
-        <div className="flex items-center justify-between rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3">
-          <p className="text-sm text-red-400">{error}</p>
-          {onRetry && (
-            <button onClick={onRetry} className="ml-4 text-sm text-red-300 underline hover:text-red-100">
-              Spróbuj ponownie
-            </button>
-          )}
-        </div>
-      )}
+      <div
+        role="alert"
+        aria-live="assertive"
+        className={
+          error ? "flex items-center justify-between rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3" : ""
+        }
+      >
+        {error && (
+          <>
+            <p className="text-sm text-red-400">{error}</p>
+            {onRetry && (
+              <button onClick={onRetry} className="ml-4 text-sm text-red-300 underline hover:text-red-100">
+                Spróbuj ponownie
+              </button>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

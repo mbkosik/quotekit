@@ -579,9 +579,9 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [x] 3.1 `grep -n 'lang="en"' src/layouts/Layout.astro` — brak wyników
-- [x] 3.2 `npm run build` — bez błędów
-- [x] 3.3 `npm run lint` — bez błędów
+- [x] 3.1 `grep -n 'lang="en"' src/layouts/Layout.astro` — brak wyników — 74ee0a0
+- [x] 3.2 `npm run build` — bez błędów — 74ee0a0
+- [x] 3.3 `npm run lint` — bez błędów — 74ee0a0
 
 #### Manual
 
@@ -599,8 +599,8 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [ ] 4.1 `npm run build` — bez błędów
-- [ ] 4.2 `npm run lint` — bez błędów
+- [x] 4.1 `npm run build` — bez błędów
+- [x] 4.2 `npm run lint` — bez błędów
 
 #### Manual
 

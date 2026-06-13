@@ -14,6 +14,7 @@ import {
 import type { Quote } from "@/types";
 import { QUOTE_STATUSES } from "@/types";
 import { STATUS_LABELS } from "@/lib/quotes";
+import { cn } from "@/lib/utils";
 
 interface Props {
   quote: Quote;
@@ -90,8 +91,20 @@ export function QuoteEditor({ quote }: Props) {
         </select>
       </div>
 
-      {error && <p className="rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</p>}
-      {success && <p className="rounded-lg bg-green-500/10 px-4 py-3 text-sm text-green-400">{success}</p>}
+      <p
+        role="alert"
+        aria-live="assertive"
+        className={cn("text-sm text-red-400", error && "rounded-lg bg-red-500/10 px-4 py-3")}
+      >
+        {error ?? ""}
+      </p>
+      <p
+        role="status"
+        aria-live="polite"
+        className={cn("text-sm text-green-400", success && "rounded-lg bg-green-500/10 px-4 py-3")}
+      >
+        {success ?? ""}
+      </p>
 
       <LineItemsEditor
         title={title}
