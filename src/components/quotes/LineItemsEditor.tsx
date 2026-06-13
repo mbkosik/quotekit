@@ -45,7 +45,26 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
     onItemsChange(items.filter((_, i) => i !== rowIndex));
   }
 
+  function addRow() {
+    const newIdx = items.length;
+    onItemsChange([...items, { task: "", hours: 0, rate: 0 }]);
+    setDraft("");
+    setEditingCell({ rowIndex: newIdx, field: "task" });
+  }
+
   const cellBase = "cursor-pointer rounded px-2 py-1 text-sm transition-colors";
+
+  // Reflect the pending draft in the disabled check and save payload so clicking
+  // save while an input is focused commits + saves in one action.
+  const effectiveItems = editingCell
+    ? items.map((item, i) => {
+        if (i !== editingCell.rowIndex) return item;
+        if (editingCell.field === "task") return { ...item, task: draft };
+        const num = parseFloat(draft);
+        if (isNaN(num) || num < 0) return item;
+        return { ...item, [editingCell.field]: num };
+      })
+    : items;
 
   return (
     <div className="flex w-full max-w-4xl flex-col gap-6">
@@ -182,15 +201,34 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
         </table>
       </div>
 
-      <button
-        onClick={() => {
-          onSave(items);
-        }}
-        disabled={saving || items.length === 0 || saveDisabled}
-        className="self-end rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {saving ? "Zapisuję..." : "Zapisz wycenę"}
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={addRow}
+          className="rounded-lg border border-dashed border-white/20 px-4 py-2 text-sm text-white/40 transition-colors hover:border-white/40 hover:text-white/60"
+        >
+          + Dodaj pozycję
+        </button>
+        <button
+          onMouseDown={(e) => {
+            if (editingCell) e.preventDefault();
+          }}
+          onClick={() => {
+            if (editingCell) {
+              onItemsChange(effectiveItems);
+              setEditingCell(null);
+              onSave(effectiveItems);
+            } else {
+              onSave(items);
+            }
+          }}
+          disabled={
+            saving || items.length === 0 || !!saveDisabled || effectiveItems.some((item) => item.task.trim() === "")
+          }
+          className="rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {saving ? "Zapisuję..." : "Zapisz wycenę"}
+        </button>
+      </div>
     </div>
   );
 }
