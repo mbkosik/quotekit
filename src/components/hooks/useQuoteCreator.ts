@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { QuoteItem, Message } from "@/types";
 
-export type Phase = "inquiry" | "loading" | "conversation" | "items" | "saving" | "done";
+export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
 type ChatResponse =
   | { type: "question"; content: string }
   | { type: "sparse" }
@@ -9,6 +9,17 @@ type ChatResponse =
   | { error: string };
 
 export const MAX_QUESTIONS = 5;
+
+async function callQuestions(inquiry: string): Promise<string[]> {
+  const res = await fetch("/api/ai/questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ inquiry_text: inquiry }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = (await res.json()) as { questions: string[] };
+  return data.questions;
+}
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
   const res = await fetch("/api/ai/chat", {
@@ -28,6 +39,7 @@ export function useQuoteCreator() {
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [items, setItems] = useState<QuoteItem[]>([]);
   const [title, setTitle] = useState("");
+  const [clientQuestions, setClientQuestions] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
@@ -52,8 +64,14 @@ export function useQuoteCreator() {
         return;
       }
       if (data.type === "sparse") {
-        setPhase("inquiry");
-        setSparseMessage("Zapytanie jest zbyt ogólne. Dodaj więcej szczegółów o projekcie.");
+        try {
+          const questions = await callQuestions(text);
+          setClientQuestions(questions);
+          setPhase("questions");
+        } catch {
+          setPhase("inquiry");
+          setSparseMessage("Zapytanie jest za krótkie. Spróbuj dodać więcej szczegółów.");
+        }
         return;
       }
       if (data.type === "complete") {
@@ -135,6 +153,25 @@ export function useQuoteCreator() {
     }
   }, [messages, currentQuestion, inquiryText]);
 
+  async function handleGenerateQuestions(text: string) {
+    setInquiryText(text);
+    setSparseMessage("");
+    setPhase("loading");
+    try {
+      const questions = await callQuestions(text);
+      setClientQuestions(questions);
+      setPhase("questions");
+    } catch {
+      setPhase("inquiry");
+      setSparseMessage("Nie udało się wygenerować pytań. Spróbuj ponownie.");
+    }
+  }
+
+  function handleBackFromQuestions() {
+    setPhase("inquiry");
+    setClientQuestions([]);
+  }
+
   async function handleSave(finalItems: QuoteItem[]) {
     if (phase === "saving") return;
     setPhase("saving");
@@ -171,12 +208,22 @@ export function useQuoteCreator() {
       messages,
       questionCount,
       currentQuestion,
+      clientQuestions,
       items,
       title,
       error,
       sparseMessage,
       savedTitle,
     },
-    actions: { handleInquirySubmit, handleAnswer, handleSkip, handleSave, setItems, setError },
+    actions: {
+      handleInquirySubmit,
+      handleAnswer,
+      handleSkip,
+      handleSave,
+      handleGenerateQuestions,
+      handleBackFromQuestions,
+      setItems,
+      setError,
+    },
   };
 }
