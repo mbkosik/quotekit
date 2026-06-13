@@ -1,7 +1,7 @@
 ---
 change_id: client-questions-flow
 title: Client questions flow
-status: implementing
+status: implemented
 created: 2026-06-13
 updated: 2026-06-13
 archived_at: null

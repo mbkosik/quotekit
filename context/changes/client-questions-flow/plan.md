@@ -227,13 +227,13 @@ Nowy komponent listy pytań. Rozszerzenie InquiryForm o drugi przycisk i `defaul
 
 #### Automated
 
-- [x] 2.1 TypeScript kompiluje bez błędów: `npm run build`
-- [x] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.1 TypeScript kompiluje bez błędów: `npm run build` — cd79f21
+- [x] 2.2 Lint przechodzi: `npm run lint` — cd79f21
 
 #### Manual
 
-- [x] 2.3 Brief + "Generuj pytania" → lista 5–7 pytań w UI
-- [x] 2.4 "Kopiuj wszystkie" → etykieta zmienia się na "Skopiowano!" i wraca po 2s; schowek zawiera pytania ponumerowane
-- [x] 2.5 "Wróć do wyceny" → formularz z briefem zachowanym w textarea
-- [x] 2.6 Sparse brief + "Analizuj zapytanie" → automatyczna lista pytań bez błędu
-- [x] 2.7 Istniejący flow z dłuższym briefem bez regresji
+- [x] 2.3 Brief + "Generuj pytania" → lista 5–7 pytań w UI — cd79f21
+- [x] 2.4 "Kopiuj wszystkie" → etykieta zmienia się na "Skopiowano!" i wraca po 2s; schowek zawiera pytania ponumerowane — cd79f21
+- [x] 2.5 "Wróć do wyceny" → formularz z briefem zachowanym w textarea — cd79f21
+- [x] 2.6 Sparse brief + "Analizuj zapytanie" → automatyczna lista pytań bez błędu — cd79f21
+- [x] 2.7 Istniejący flow z dłuższym briefem bez regresji — cd79f21
