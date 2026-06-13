@@ -253,31 +253,31 @@ No existing data to migrate. Users who never visit `/settings` get the default b
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `npx supabase db reset`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 GET /api/settings returns `{ prompt_context: '' }` for user with no row
-- [x] 1.4 POST /api/settings with valid text upserts and returns the value
-- [x] 1.5 POST /api/settings with 501-char string returns 400
+- [x] 1.1 Migration applies cleanly: `npx supabase db reset` — 61e1a38
+- [x] 1.2 Linting passes: `npm run lint` — 61e1a38
+- [x] 1.3 GET /api/settings returns `{ prompt_context: '' }` for user with no row — 61e1a38
+- [x] 1.4 POST /api/settings with valid text upserts and returns the value — 61e1a38
+- [x] 1.5 POST /api/settings with 501-char string returns 400 — 61e1a38
 
 #### Manual
 
-- [x] 1.6 RLS isolation: User A's context not visible to User B
+- [x] 1.6 RLS isolation: User A's context not visible to User B — 61e1a38
 
 ### Phase 2: Settings UI
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 /settings redirects to /auth/signin when unauthenticated
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 /settings redirects to /auth/signin when unauthenticated
 
 #### Manual
 
-- [ ] 2.3 Authenticated user sees "Ustawienia" in Topbar and reaches /settings
-- [ ] 2.4 Textarea shows current context (empty on first visit)
-- [ ] 2.5 Character counter updates; turns red above 500
-- [ ] 2.6 Save button disabled when value is unchanged
-- [ ] 2.7 Valid save shows success feedback and persists on reload
-- [ ] 2.8 501+ chars save shows error feedback
+- [x] 2.3 Authenticated user sees "Ustawienia" in Topbar and reaches /settings
+- [x] 2.4 Textarea shows current context (empty on first visit)
+- [x] 2.5 Character counter updates; turns red above 500
+- [x] 2.6 Save button disabled when value is unchanged
+- [x] 2.7 Valid save shows success feedback and persists on reload
+- [x] 2.8 501+ chars save shows error feedback
 
 ### Phase 3: AI Prompt Injection
 

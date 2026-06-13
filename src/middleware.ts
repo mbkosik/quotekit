@@ -2,7 +2,7 @@ import { defineMiddleware } from "astro:middleware";
 import { createClient } from "@/lib/supabase";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-const PROTECTED_ROUTES = ["/new", "/quotes"];
+const PROTECTED_ROUTES = ["/new", "/quotes", "/settings"];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createClient(context.request.headers, context.cookies);
