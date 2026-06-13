@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,77 +9,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { Quote, QuoteStatus } from "@/types";
+import type { QuoteStatus } from "@/types";
 import { QUOTE_STATUSES } from "@/types";
 import { STATUS_LABELS } from "@/lib/quotes";
+import { useQuotesList, type FilterState, type QuoteRow } from "@/components/hooks/useQuotesList";
 
-type QuoteRow = Pick<Quote, "id" | "title" | "status" | "created_at">;
+const DEFAULT_FILTERS: FilterState = { statusFilter: [], searchFilter: "", sortOrder: "desc" };
 
 interface Props {
   initialQuotes: QuoteRow[];
   initialTotal: number;
   pageSize: number;
+  initialFilters?: FilterState;
 }
 
-export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
-  const [quotes, setQuotes] = useState<QuoteRow[]>(initialQuotes);
-  const [total, setTotal] = useState(initialTotal);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const pageLoadingRef = useRef(false);
-
-  const totalPages = Math.ceil(total / pageSize);
-
-  async function handleStatusChange(id: string, newStatus: QuoteStatus) {
-    const prev = quotes.find((q) => q.id === id)?.status;
-    setQuotes((qs) => qs.map((q) => (q.id === id ? { ...q, status: newStatus } : q)));
-    try {
-      const res = await fetch(`/api/quotes/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    } catch {
-      setQuotes((qs) => qs.map((q) => (q.id === id ? { ...q, status: prev ?? q.status } : q)));
-    }
-  }
-
-  async function handleDelete(id: string) {
-    setError(null);
-    try {
-      const res = await fetch(`/api/quotes/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      if (quotes.length === 1 && currentPage > 1) {
-        void handlePageChange(currentPage - 1);
-      } else {
-        setQuotes((qs) => qs.filter((q) => q.id !== id));
-        setTotal((t) => t - 1);
-      }
-    } catch {
-      setError("Nie udało się usunąć wyceny. Spróbuj ponownie.");
-    }
-  }
-
-  async function handlePageChange(page: number) {
-    if (pageLoadingRef.current) return;
-    pageLoadingRef.current = true;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/quotes?page=${page}&limit=${pageSize}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as { quotes: QuoteRow[]; total: number; page: number };
-      setQuotes(data.quotes);
-      setTotal(data.total);
-      setCurrentPage(data.page);
-    } catch {
-      // page change failed — stay on current page
-    } finally {
-      pageLoadingRef.current = false;
-      setLoading(false);
-    }
-  }
+export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilters = DEFAULT_FILTERS }: Props) {
+  const { quotes, total, currentPage, totalPages, loading, error, handleStatusChange, handleDelete, handlePageChange } =
+    useQuotesList({ initialQuotes, initialTotal, pageSize, initialFilters });
 
   if (quotes.length === 0 && total === 0) {
     return <p className="text-sm text-white/40">Nie masz jeszcze żadnych wycen.</p>;
@@ -150,7 +95,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
         <div className="flex items-center justify-between pt-2">
           <button
             onClick={() => {
-              void handlePageChange(currentPage - 1);
+              handlePageChange(currentPage - 1);
             }}
             disabled={currentPage <= 1 || loading}
             className="rounded-lg px-4 py-2 text-sm text-white/60 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
@@ -162,7 +107,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize }: Props) {
           </span>
           <button
             onClick={() => {
-              void handlePageChange(currentPage + 1);
+              handlePageChange(currentPage + 1);
             }}
             disabled={currentPage >= totalPages || loading}
             className="rounded-lg px-4 py-2 text-sm text-white/60 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"

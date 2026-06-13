@@ -254,8 +254,8 @@ Layout: horizontal flex row with three groups — status pills (`STATUS_LABELS` 
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes
-- [x] 1.2 `npm run build` passes
+- [x] 1.1 `npm run lint` passes — 8fe544d
+- [x] 1.2 `npm run build` passes — 8fe544d
 - [ ] 1.3 `GET /api/quotes?status=sent` returns only sent quotes
 - [ ] 1.4 `GET /api/quotes?status=sent,draft` returns quotes with status in [sent, draft]
 - [ ] 1.5 `GET /api/quotes?search=acme` returns only title-matching quotes
@@ -270,9 +270,9 @@ Layout: horizontal flex row with three groups — status pills (`STATUS_LABELS` 
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npm run build` passes
-- [ ] 2.3 QuotesList renders without errors with default initialFilters
+- [x] 2.1 `npm run lint` passes
+- [x] 2.2 `npm run build` passes
+- [x] 2.3 QuotesList renders without errors with default initialFilters
 
 #### Manual
 
