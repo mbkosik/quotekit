@@ -1,10 +1,10 @@
 ---
 change_id: client-questions-flow
 title: Client questions flow
-status: impl_reviewed
+status: archived
 created: 2026-06-13
 updated: 2026-06-13
-archived_at: null
+archived_at: 2026-06-13T11:29:43Z
 ---
 
 ## Notes

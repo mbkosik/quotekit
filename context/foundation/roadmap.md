@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-03
+updated: 2026-06-13
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -33,7 +33,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | —             | FR-005, FR-006                                                                        | done     |
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
 | S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                               | F-01          | FR-011, FR-012, FR-013                                                                | done     |
-| S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
+| S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | done     |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | proposed |
@@ -167,7 +167,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - **Pytania do klienta (S-03, FR-004)** — AI generuje listę pytań, które freelancer wysyła klientowi gdy brief jest zbyt lakoniczny; cel: uzupełnić brief przed wejściem do flow S-01; external, do przekazania, UX: lista do skopiowania.
   - Konsekwencja dla promptu: S-03 wymaga osobnego promptu nastawionego na pytania _klient-facing_ (profesjonalny ton, konkretne, bez żargonu AI). Nie wolno reużyć promptu doprecyzowującego z S-01.
   - Konsekwencja dla UX: brak interfejsu chat; jeden request → lista pytań → przycisk kopiowania → użytkownik wraca z odpowiedziami do flow S-01.
-- **Status:** proposed
+- **Status:** done
 
 ### S-06: Manual line item addition
 
@@ -234,3 +234,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | F-02 | ai-integration-scaffold | @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | 2026-06-03 |
 | S-01 | ai-quote-creation-flow | AI-assisted quote creation end-to-end (inquiry → rozmowa AI → edycja → zapis draft) | 2026-05-29 |
 | S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |
+- **S-03: gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.** — Archived 2026-06-13 → `context/archive/2026-06-13-client-questions-flow/`. Lesson: —.
