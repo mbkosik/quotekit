@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { UserContextForm } from "@/components/settings/UserContextForm";
+import type { PostgrestError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase";
 
 const user = Astro.locals.user;
@@ -10,11 +11,13 @@ if (!user) return Astro.redirect("/auth/signin");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 if (!supabase) return new Response("Serwis niedostępny", { status: 503 });
 
-const { data } = (await supabase
+const { data, error } = (await supabase
   .from("user_settings")
   .select("prompt_context")
   .eq("user_id", user.id)
-  .maybeSingle()) as { data: { prompt_context: string } | null; error: unknown };
+  .maybeSingle()) as { data: { prompt_context: string } | null; error: PostgrestError | null };
+
+if (error) return new Response("Błąd serwera", { status: 503 });
 
 const promptContext = data?.prompt_context ?? "";
 ---

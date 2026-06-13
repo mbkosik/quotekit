@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import type { PostgrestError } from "@supabase/supabase-js";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
 
@@ -25,11 +26,18 @@ export const GET: APIRoute = async (context) => {
     });
   }
 
-  const { data } = (await supabase
+  const { data, error } = (await supabase
     .from("user_settings")
     .select("prompt_context")
     .eq("user_id", user.id)
-    .maybeSingle()) as { data: { prompt_context: string } | null; error: unknown };
+    .maybeSingle()) as { data: { prompt_context: string } | null; error: PostgrestError | null };
+
+  if (error) {
+    return new Response(JSON.stringify({ error: "Failed to load settings" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   return new Response(JSON.stringify({ prompt_context: data?.prompt_context ?? "" }), {
     status: 200,

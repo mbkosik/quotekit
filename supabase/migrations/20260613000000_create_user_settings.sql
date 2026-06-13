@@ -25,3 +25,6 @@ CREATE POLICY "user_settings_insert_own" ON user_settings
 -- UPDATE: own row only
 CREATE POLICY "user_settings_update_own" ON user_settings
   FOR UPDATE USING ((select auth.uid()) = user_id) WITH CHECK ((select auth.uid()) = user_id);
+
+-- DELETE: intentionally no policy — RLS deny-all is the desired behavior.
+-- Rows are only ever upserted, never deleted (ON DELETE CASCADE on user_id handles account deletion).
