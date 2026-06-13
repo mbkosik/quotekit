@@ -285,16 +285,16 @@ Layout: horizontal flex row with three groups — status pills (`STATUS_LABELS` 
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes
-- [x] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes — b123143
+- [x] 3.2 `npm run build` passes — b123143
 
 #### Manual
 
-- [x] 3.3 Status pills toggle correctly; list updates after each toggle
-- [x] 3.4 Multi-pill OR semantics work correctly
-- [x] 3.5 Search filters by title with ~300 ms debounce
-- [x] 3.6 Sort toggle changes order; label updates
-- [x] 3.7 Clear filters resets all three dimensions
-- [x] 3.8 Empty-with-filters shows correct message and working clear link
-- [x] 3.9 Direct navigation to filtered URL shows correct SSR state
-- [x] 3.10 Pagination works correctly while filters are active
+- [x] 3.3 Status pills toggle correctly; list updates after each toggle — b123143
+- [x] 3.4 Multi-pill OR semantics work correctly — b123143
+- [x] 3.5 Search filters by title with ~300 ms debounce — b123143
+- [x] 3.6 Sort toggle changes order; label updates — b123143
+- [x] 3.7 Clear filters resets all three dimensions — b123143
+- [x] 3.8 Empty-with-filters shows correct message and working clear link — b123143
+- [x] 3.9 Direct navigation to filtered URL shows correct SSR state — b123143
+- [x] 3.10 Pagination works correctly while filters are active — b123143
