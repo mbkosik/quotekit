@@ -6,6 +6,8 @@ import { createAnthropicClient } from "@/lib/anthropic";
 export const prerender = false;
 
 const InputSchema = z.object({
+  // min(3) intentional: questions endpoint serves short briefs (e.g. "strona www"),
+  // unlike chat/scope which need ≥20 chars for quote generation context
   inquiry_text: z.string().min(3),
 });
 

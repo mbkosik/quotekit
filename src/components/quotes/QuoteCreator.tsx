@@ -11,6 +11,7 @@ export function QuoteCreator() {
     currentQuestion,
     questionCount,
     clientQuestions,
+    questionsLoading,
     items,
     title,
     error,
@@ -87,6 +88,7 @@ export function QuoteCreator() {
       onSubmit={handleInquirySubmit}
       onGenerateQuestions={handleGenerateQuestions}
       loading={isLoading}
+      questionsLoading={questionsLoading}
       sparseMessage={sparseMessage || undefined}
       defaultValue={inquiryText}
     />

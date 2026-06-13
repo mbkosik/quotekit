@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   questions: string[];
@@ -7,14 +7,29 @@ interface Props {
 
 export function ClientQuestionsList({ questions, onBack }: Props) {
   const [copied, setCopied] = useState(false);
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+    },
+    [],
+  );
 
   function handleCopy() {
     const text = questions.map((q, i) => `${i + 1}. ${q}`).join("\n");
-    void navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+        setCopied(true);
+        copiedTimerRef.current = setTimeout(() => {
+          setCopied(false);
+        }, 2000);
+      })
+      .catch(() => {
+        // clipboard unavailable (non-HTTPS or unfocused document) — silently skip
+      });
   }
 
   return (
@@ -25,7 +40,7 @@ export function ClientQuestionsList({ questions, onBack }: Props) {
       </div>
       <ol className="flex flex-col gap-3">
         {questions.map((q, i) => (
-          <li key={i} className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+          <li key={q} className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
             <span className="shrink-0 text-sm font-medium text-purple-400">{i + 1}.</span>
             <span className="text-sm text-white/80">{q}</span>
           </li>

@@ -17,8 +17,9 @@ async function callQuestions(inquiry: string): Promise<string[]> {
     body: JSON.stringify({ inquiry_text: inquiry }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = (await res.json()) as { questions: string[] };
-  return data.questions;
+  const data = (await res.json()) as { questions: unknown };
+  if (!Array.isArray(data.questions)) throw new Error("Malformed response");
+  return data.questions as string[];
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
@@ -40,6 +41,7 @@ export function useQuoteCreator() {
   const [items, setItems] = useState<QuoteItem[]>([]);
   const [title, setTitle] = useState("");
   const [clientQuestions, setClientQuestions] = useState<string[]>([]);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
@@ -64,13 +66,16 @@ export function useQuoteCreator() {
         return;
       }
       if (data.type === "sparse") {
+        setQuestionsLoading(true);
         try {
           const questions = await callQuestions(text);
           setClientQuestions(questions);
           setPhase("questions");
         } catch {
           setPhase("inquiry");
-          setSparseMessage("Zapytanie jest za krótkie. Spróbuj dodać więcej szczegółów.");
+          setSparseMessage("Nie udało się wygenerować pytań. Spróbuj ponownie.");
+        } finally {
+          setQuestionsLoading(false);
         }
         return;
       }
@@ -157,6 +162,7 @@ export function useQuoteCreator() {
     setInquiryText(text);
     setSparseMessage("");
     setPhase("loading");
+    setQuestionsLoading(true);
     try {
       const questions = await callQuestions(text);
       setClientQuestions(questions);
@@ -164,6 +170,8 @@ export function useQuoteCreator() {
     } catch {
       setPhase("inquiry");
       setSparseMessage("Nie udało się wygenerować pytań. Spróbuj ponownie.");
+    } finally {
+      setQuestionsLoading(false);
     }
   }
 
@@ -209,6 +217,7 @@ export function useQuoteCreator() {
       questionCount,
       currentQuestion,
       clientQuestions,
+      questionsLoading,
       items,
       title,
       error,

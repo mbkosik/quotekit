@@ -4,11 +4,19 @@ interface Props {
   onSubmit: (text: string) => void;
   onGenerateQuestions: (text: string) => void;
   loading: boolean;
+  questionsLoading?: boolean;
   sparseMessage?: string;
   defaultValue?: string;
 }
 
-export function InquiryForm({ onSubmit, onGenerateQuestions, loading, sparseMessage, defaultValue }: Props) {
+export function InquiryForm({
+  onSubmit,
+  onGenerateQuestions,
+  loading,
+  questionsLoading,
+  sparseMessage,
+  defaultValue,
+}: Props) {
   const [text, setText] = useState(defaultValue ?? "");
   const [validationError, setValidationError] = useState("");
 
@@ -52,7 +60,7 @@ export function InquiryForm({ onSubmit, onGenerateQuestions, loading, sparseMess
         disabled={loading}
         className="flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? (
+        {loading && !questionsLoading ? (
           <>
             <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             Analizuję...
@@ -73,9 +81,16 @@ export function InquiryForm({ onSubmit, onGenerateQuestions, loading, sparseMess
           setValidationError("");
           onGenerateQuestions(trimmed);
         }}
-        className="rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Generuj pytania do klienta
+        {questionsLoading ? (
+          <>
+            <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/70" />
+            Generuję pytania...
+          </>
+        ) : (
+          "Generuj pytania do klienta"
+        )}
       </button>
     </form>
   );
