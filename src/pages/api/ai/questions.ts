@@ -6,7 +6,7 @@ import { createAnthropicClient } from "@/lib/anthropic";
 export const prerender = false;
 
 const InputSchema = z.object({
-  inquiry_text: z.string().min(20),
+  inquiry_text: z.string().min(3),
 });
 
 const QuestionsOutputSchema = z.object({

@@ -1,12 +1,33 @@
 import { useQuoteCreator, MAX_QUESTIONS } from "@/components/hooks/useQuoteCreator";
 import { InquiryForm } from "./InquiryForm";
+import { ClientQuestionsList } from "./ClientQuestionsList";
 import { ConversationCard } from "./ConversationCard";
 import { LineItemsEditor } from "./LineItemsEditor";
 
 export function QuoteCreator() {
   const { state, actions } = useQuoteCreator();
-  const { phase, currentQuestion, questionCount, items, title, error, sparseMessage, savedTitle } = state;
-  const { handleInquirySubmit, handleAnswer, handleSkip, handleSave, setItems, setError } = actions;
+  const {
+    phase,
+    currentQuestion,
+    questionCount,
+    clientQuestions,
+    items,
+    title,
+    error,
+    sparseMessage,
+    savedTitle,
+    inquiryText,
+  } = state;
+  const {
+    handleInquirySubmit,
+    handleAnswer,
+    handleSkip,
+    handleSave,
+    handleGenerateQuestions,
+    handleBackFromQuestions,
+    setItems,
+    setError,
+  } = actions;
 
   const isLoading = phase === "loading" || phase === "saving";
 
@@ -57,5 +78,17 @@ export function QuoteCreator() {
     );
   }
 
-  return <InquiryForm onSubmit={handleInquirySubmit} loading={isLoading} sparseMessage={sparseMessage || undefined} />;
+  if (phase === "questions") {
+    return <ClientQuestionsList questions={clientQuestions} onBack={handleBackFromQuestions} />;
+  }
+
+  return (
+    <InquiryForm
+      onSubmit={handleInquirySubmit}
+      onGenerateQuestions={handleGenerateQuestions}
+      loading={isLoading}
+      sparseMessage={sparseMessage || undefined}
+      defaultValue={inquiryText}
+    />
+  );
 }

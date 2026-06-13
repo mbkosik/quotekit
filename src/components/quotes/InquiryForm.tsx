@@ -2,22 +2,29 @@ import { useState } from "react";
 
 interface Props {
   onSubmit: (text: string) => void;
+  onGenerateQuestions: (text: string) => void;
   loading: boolean;
   sparseMessage?: string;
+  defaultValue?: string;
 }
 
-export function InquiryForm({ onSubmit, loading, sparseMessage }: Props) {
-  const [text, setText] = useState("");
+export function InquiryForm({ onSubmit, onGenerateQuestions, loading, sparseMessage, defaultValue }: Props) {
+  const [text, setText] = useState(defaultValue ?? "");
   const [validationError, setValidationError] = useState("");
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (text.trim().length < 20) {
-      setValidationError("Zapytanie musi mieć co najmniej 20 znaków.");
+    const trimmed = text.trim();
+    if (trimmed.length < 3) {
+      setValidationError("Opisz projekt klienta, żeby móc wygenerować pytania lub wycenę.");
       return;
     }
     setValidationError("");
-    onSubmit(text.trim());
+    if (trimmed.length < 20) {
+      onGenerateQuestions(trimmed);
+      return;
+    }
+    onSubmit(trimmed);
   }
 
   return (
@@ -53,6 +60,22 @@ export function InquiryForm({ onSubmit, loading, sparseMessage }: Props) {
         ) : (
           "Analizuj zapytanie"
         )}
+      </button>
+      <button
+        type="button"
+        disabled={loading}
+        onClick={() => {
+          const trimmed = text.trim();
+          if (trimmed.length < 3) {
+            setValidationError("Opisz projekt klienta, żeby móc wygenerować pytania.");
+            return;
+          }
+          setValidationError("");
+          onGenerateQuestions(trimmed);
+        }}
+        className="rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Generuj pytania do klienta
       </button>
     </form>
   );
