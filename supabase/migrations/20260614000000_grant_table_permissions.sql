@@ -2,7 +2,6 @@
 -- ALTER DEFAULT PRIVILEGES may not be applied automatically.
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE quotes TO authenticated;
-GRANT SELECT ON TABLE quotes TO anon;
 GRANT ALL ON TABLE quotes TO service_role;
 
 GRANT SELECT, INSERT ON TABLE rate_limit_events TO authenticated;

@@ -147,16 +147,17 @@ describe("Risk #1: Core CRUD — quote list, save, fetch, and delete", () => {
     expect(error).not.toBeNull();
   });
 
-  // RLS: unauthenticated client sees zero quotes — auth.uid() = null filters all rows.
-  it("unauthenticated Supabase client cannot list quotes — SELECT returns empty array", async () => {
+  // No SELECT grant for anon on quotes — PostgreSQL blocks before RLS fires.
+  // Defense in depth: even if the RLS policy had a bug, anon gets nothing.
+  it("unauthenticated Supabase client cannot list quotes — permission denied", async () => {
     const anonClient = createClient(TEST_URL, TEST_ANON_KEY, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
 
     const { data, error } = await anonClient.from("quotes").select("id");
 
-    expect(error).toBeNull();
-    expect(data).toHaveLength(0);
+    expect(error?.code).toBe("42501");
+    expect(data).toBeNull();
   });
 
   // Edge: deleting a non-existent id returns count 0, not an error.
