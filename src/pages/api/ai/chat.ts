@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
+import { createClient } from "@/lib/supabase";
 import { QuoteItemSchema, MessageSchema } from "@/types";
 
 export const prerender = false;
@@ -47,6 +48,7 @@ async function generateItems(
   client: NonNullable<ReturnType<typeof createAnthropicClient>>,
   inquiry_text: string,
   messages: z.infer<typeof MessageSchema>[],
+  systemPrompt: string,
 ) {
   const pairs: string[] = [];
   for (let i = 0; i < messages.length - 1; i++) {
@@ -63,7 +65,7 @@ async function generateItems(
   const message = await client.messages.parse({
     model: "claude-haiku-4-5-20251001",
     max_tokens: 2048,
-    system: GENERATION_SYSTEM_PROMPT,
+    system: systemPrompt,
     messages: [{ role: "user", content: userContent }],
     output_config: { format: zodOutputFormat(ChatOutputSchema) },
   });
@@ -88,6 +90,25 @@ export const POST: APIRoute = async (context) => {
     });
   }
 
+  let userContext = "";
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (supabase) {
+    try {
+      const { data } = (await supabase
+        .from("user_settings")
+        .select("prompt_context")
+        .eq("user_id", context.locals.user.id)
+        .maybeSingle()) as { data: { prompt_context: string } | null; error: unknown };
+      userContext = data?.prompt_context ?? "";
+    } catch {
+      // fallback to empty — AI continues without user context
+    }
+  }
+
+  const contextSection = userContext ? `\n\n## Kontekst użytkownika\n${userContext}` : "";
+  const questionSystemPrompt = QUESTION_SYSTEM_PROMPT + contextSection;
+  const generationSystemPrompt = GENERATION_SYSTEM_PROMPT + contextSection;
+
   let body: unknown;
   try {
     body = await context.request.json();
@@ -111,7 +132,7 @@ export const POST: APIRoute = async (context) => {
   if (generate) {
     let result;
     try {
-      result = await generateItems(client, inquiry_text, messages);
+      result = await generateItems(client, inquiry_text, messages, generationSystemPrompt);
     } catch {
       return new Response(JSON.stringify({ error: "AI service error" }), {
         status: 502,
@@ -138,7 +159,7 @@ export const POST: APIRoute = async (context) => {
     questionResponse = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 512,
-      system: QUESTION_SYSTEM_PROMPT,
+      system: questionSystemPrompt,
       messages: [{ role: "user", content: `Zapytanie: ${inquiry_text}` }, ...messages],
     });
   } catch {
@@ -160,7 +181,7 @@ export const POST: APIRoute = async (context) => {
   if (responseText === "DONE") {
     let result;
     try {
-      result = await generateItems(client, inquiry_text, messages);
+      result = await generateItems(client, inquiry_text, messages, generationSystemPrompt);
     } catch {
       return new Response(JSON.stringify({ error: "AI service error" }), {
         status: 502,

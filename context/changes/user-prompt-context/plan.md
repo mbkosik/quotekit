@@ -267,28 +267,28 @@ No existing data to migrate. Users who never visit `/settings` get the default b
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 /settings redirects to /auth/signin when unauthenticated
+- [x] 2.1 Linting passes: `npm run lint` — 5483410
+- [x] 2.2 /settings redirects to /auth/signin when unauthenticated — 5483410
 
 #### Manual
 
-- [x] 2.3 Authenticated user sees "Ustawienia" in Topbar and reaches /settings
-- [x] 2.4 Textarea shows current context (empty on first visit)
-- [x] 2.5 Character counter updates; turns red above 500
-- [x] 2.6 Save button disabled when value is unchanged
-- [x] 2.7 Valid save shows success feedback and persists on reload
-- [x] 2.8 501+ chars save shows error feedback
+- [x] 2.3 Authenticated user sees "Ustawienia" in Topbar and reaches /settings — 5483410
+- [x] 2.4 Textarea shows current context (empty on first visit) — 5483410
+- [x] 2.5 Character counter updates; turns red above 500 — 5483410
+- [x] 2.6 Save button disabled when value is unchanged — 5483410
+- [x] 2.7 Valid save shows success feedback and persists on reload — 5483410
+- [x] 2.8 501+ chars save shows error feedback — 5483410
 
 ### Phase 3: AI Prompt Injection
 
 #### Automated
 
-- [ ] 3.1 Linting passes: `npm run lint`
-- [ ] 3.2 Build succeeds: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint`
+- [x] 3.2 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 3.3 No context: quote creation works as before (no regression)
-- [ ] 3.4 With context: AI clarifying questions reference specialization domain
-- [ ] 3.5 With context: generated line items reflect stated rates/domain
-- [ ] 3.6 Supabase failure during AI call: flow continues without error
+- [x] 3.3 No context: quote creation works as before (no regression)
+- [x] 3.4 With context: AI clarifying questions reference specialization domain
+- [x] 3.5 With context: generated line items reflect stated rates/domain
+- [x] 3.6 Supabase failure during AI call: flow continues without error
