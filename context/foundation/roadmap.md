@@ -34,7 +34,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
 | S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                               | F-01          | FR-011, FR-012, FR-013                                                                | done     |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | done     |
-| S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
+| S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | done     |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | proposed |
 | S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | proposed |
@@ -136,7 +136,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - Gdzie przechowywać kontekst? Nowa tabela `user_profiles` / `user_settings` w Supabase (własna migracja + RLS) vs kolumna w istniejącym schemacie — do zdecydowania przy `/10x-plan user-prompt-context`.
   - Gdzie w UI edytować kontekst? Dedykowana strona `/settings` vs modal w dashboardzie — do zdecydowania przy planie.
 - **Risk:** Użytkownik może wpisać kontekst, który wprowadza AI w błąd (sprzeczne instrukcje, bardzo lakoniczny tekst) — edge case do obsłużenia w prompt engineering przy implementacji.
-- **Status:** proposed
+- **Status:** done
 
 ### S-05: UI enhancements
 
@@ -236,3 +236,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |
 
 - **S-03: gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.** — Archived 2026-06-13 → `context/archive/2026-06-13-client-questions-flow/`. Lesson: —.
+- **S-04: użytkownik może zapisać własny kontekst w postaci dowolnego tekstu (free-text), który jest dołączany do każdego promptu AI przy generowaniu pozycji — pozwala przekazać AI informacje o specjalizacji, rynku, stylu pracy lub dowolnym tle, które poprawia trafność wyceny.** — Archived 2026-06-13 → `context/archive/2026-06-13-user-prompt-context/`. Lesson: —.

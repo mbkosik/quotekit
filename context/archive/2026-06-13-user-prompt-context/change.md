@@ -1,10 +1,10 @@
 ---
 change_id: user-prompt-context
 title: User prompt context
-status: impl_reviewed
+status: archived
 created: 2026-06-13
 updated: 2026-06-13
-archived_at: null
+archived_at: 2026-06-13T14:14:00Z
 ---
 
 ## Notes
