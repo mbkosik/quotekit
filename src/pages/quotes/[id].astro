@@ -9,27 +9,53 @@ import { z } from "zod";
 const user = Astro.locals.user;
 if (!user) return Astro.redirect("/auth/signin");
 
+interface ErrorState {
+  title: string;
+  message: string;
+}
+let errorState: ErrorState | null = null;
+let quote: Quote | null = null;
+
 const supabase = createClient(Astro.request.headers, Astro.cookies);
-if (!supabase) return new Response(null, { status: 503 });
+if (!supabase) {
+  errorState = { title: "Błąd serwera", message: "Błąd serwera — spróbuj ponownie za chwilę" };
+} else {
+  const parsedId = z.uuid().safeParse(Astro.params.id);
+  if (!parsedId.success) {
+    errorState = { title: "Nieprawidłowe żądanie", message: "Nieprawidłowe żądanie" };
+  } else {
+    const id = parsedId.data;
+    const result = (await supabase.from("quotes").select("*").eq("id", id).eq("user_id", user.id).single()) as
+      | { data: Quote; error: null }
+      | { data: null; error: Error };
+    if (result.error) {
+      errorState = { title: "Nie znaleziono wyceny", message: "Nie znaleziono wyceny" };
+    } else {
+      quote = result.data;
+    }
+  }
+}
 
-const parsedId = z.uuid().safeParse(Astro.params.id);
-if (!parsedId.success) return new Response(null, { status: 400 });
-const id = parsedId.data;
-
-const result = (await supabase.from("quotes").select("*").eq("id", id).eq("user_id", user.id).single()) as
-  | { data: Quote; error: null }
-  | { data: null; error: Error };
-
-if (result.error) return new Response(null, { status: 404 });
-
-const quote = result.data;
+const pageTitle = errorState ? errorState.title : quote ? `${quote.title} — QuoteKit` : "QuoteKit";
 ---
 
-<Layout title={`${quote.title} — QuoteKit`}>
+<Layout title={pageTitle}>
   <div class="flex min-h-screen flex-col bg-gray-950 text-white">
     <Topbar />
     <main class="flex flex-1 flex-col items-center px-4 py-10">
-      <QuoteEditor quote={quote} client:load />
+      {
+        errorState ? (
+          <div class="flex flex-col items-center gap-4 text-center">
+            <h1 class="text-2xl font-bold">{errorState.title}</h1>
+            <p class="text-white/60">{errorState.message}</p>
+            <a href="/quotes" class="text-sm text-purple-300 transition-colors hover:text-purple-100">
+              ← Wróć do listy wycen
+            </a>
+          </div>
+        ) : (
+          quote && <QuoteEditor quote={quote} client:load />
+        )
+      }
     </main>
   </div>
 </Layout>

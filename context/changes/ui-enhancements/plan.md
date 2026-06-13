@@ -599,8 +599,8 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [x] 4.1 `npm run build` — bez błędów
-- [x] 4.2 `npm run lint` — bez błędów
+- [x] 4.1 `npm run build` — bez błędów — 77d4dc7
+- [x] 4.2 `npm run lint` — bez błędów — 77d4dc7
 
 #### Manual
 
@@ -615,9 +615,9 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [ ] 5.1 `test -f src/pages/404.astro` — plik istnieje
-- [ ] 5.2 `npm run build` — bez błędów
-- [ ] 5.3 `npm run lint` — bez błędów
+- [x] 5.1 `test -f src/pages/404.astro` — plik istnieje
+- [x] 5.2 `npm run build` — bez błędów
+- [x] 5.3 `npm run lint` — bez błędów
 
 #### Manual
 

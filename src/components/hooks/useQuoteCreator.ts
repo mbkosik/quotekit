@@ -10,6 +10,12 @@ type ChatResponse =
 
 export const MAX_QUESTIONS = 5;
 
+const RATE_LIMIT_MSG = "Osiągnięto limit zapytań do AI. Odczekaj chwilę i spróbuj ponownie.";
+
+function is429(err: unknown): boolean {
+  return err instanceof Error && err.message === "HTTP 429";
+}
+
 async function callQuestions(inquiry: string): Promise<string[]> {
   const res = await fetch("/api/ai/questions", {
     method: "POST",
@@ -71,9 +77,9 @@ export function useQuoteCreator() {
           const questions = await callQuestions(text);
           setClientQuestions(questions);
           setPhase("questions");
-        } catch {
+        } catch (err) {
           setPhase("inquiry");
-          setSparseMessage("Nie udało się wygenerować pytań. Spróbuj ponownie.");
+          setSparseMessage(is429(err) ? RATE_LIMIT_MSG : "Nie udało się wygenerować pytań. Spróbuj ponownie.");
         } finally {
           setQuestionsLoading(false);
         }
@@ -88,9 +94,9 @@ export function useQuoteCreator() {
       setCurrentQuestion(data.content);
       setQuestionCount(1);
       setPhase("conversation");
-    } catch {
+    } catch (err) {
       setPhase("inquiry");
-      setSparseMessage("Błąd połączenia z AI. Spróbuj ponownie.");
+      setSparseMessage(is429(err) ? RATE_LIMIT_MSG : "Błąd połączenia z AI. Spróbuj ponownie.");
     }
   }
 
@@ -125,9 +131,9 @@ export function useQuoteCreator() {
         setQuestionCount(newCount);
         setCurrentQuestion(data.content);
         setPhase("conversation");
-      } catch {
+      } catch (err) {
         setPhase("conversation");
-        setError("Błąd połączenia. Spróbuj ponownie.");
+        setError(is429(err) ? RATE_LIMIT_MSG : "Błąd połączenia. Spróbuj ponownie.");
       }
     },
     [messages, currentQuestion, questionCount, inquiryText],
@@ -152,9 +158,9 @@ export function useQuoteCreator() {
       setItems(data.items);
       setTitle(data.title);
       setPhase("items");
-    } catch {
+    } catch (err) {
       setPhase("conversation");
-      setError("Błąd połączenia. Spróbuj ponownie.");
+      setError(is429(err) ? RATE_LIMIT_MSG : "Błąd połączenia. Spróbuj ponownie.");
     }
   }, [messages, currentQuestion, inquiryText]);
 
@@ -167,9 +173,9 @@ export function useQuoteCreator() {
       const questions = await callQuestions(text);
       setClientQuestions(questions);
       setPhase("questions");
-    } catch {
+    } catch (err) {
       setPhase("inquiry");
-      setSparseMessage("Nie udało się wygenerować pytań. Spróbuj ponownie.");
+      setSparseMessage(is429(err) ? RATE_LIMIT_MSG : "Nie udało się wygenerować pytań. Spróbuj ponownie.");
     } finally {
       setQuestionsLoading(false);
     }

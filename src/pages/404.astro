@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
+---
+
+<Layout title="Nie znaleziono strony">
+  <div class="flex min-h-screen flex-col bg-gray-950 text-white">
+    <Topbar />
+    <main class="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-10 text-center">
+      <h1 class="text-2xl font-bold">Nie znaleziono strony</h1>
+      <p class="text-white/60">Strona, której szukasz, nie istnieje.</p>
+      <a href="/quotes" class="text-sm text-purple-300 transition-colors hover:text-purple-100">
+        ← Wróć do listy wycen
+      </a>
+    </main>
+  </div>
+</Layout>
