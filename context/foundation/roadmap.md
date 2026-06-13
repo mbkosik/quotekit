@@ -27,17 +27,17 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 
 ## At a glance
 
-| ID   | Change ID               | Outcome (user can …)                                                                     | Prerequisites | PRD refs                                                                              | Status   |
-| ---- | ----------------------- | ---------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
-| F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                 | —             | FR-010, FR-011, FR-013                                                                | done     |
-| F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON  | —             | FR-005, FR-006                                                                        | done     |
-| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft   | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
-| S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                                | F-01          | FR-011, FR-012, FR-013                                                                | done     |
-| S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je                | S-01          | FR-004                                                                                | proposed |
-| S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji    | S-01          | —                                                                                     | proposed |
-| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                    | S-01          | —                                                                                     | proposed |
-| S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                              | S-01          | FR-008                                                                                | proposed |
-| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)          | S-02          | FR-011                                                                                | proposed |
+| ID   | Change ID               | Outcome (user can …)                                                                    | Prerequisites | PRD refs                                                                              | Status   |
+| ---- | ----------------------- | --------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------- | -------- |
+| F-01 | quotes-schema-rls       | (foundation) tabela `quotes` + polityki RLS per-user wdrożone w Supabase                | —             | FR-010, FR-011, FR-013                                                                | done     |
+| F-02 | ai-integration-scaffold | (foundation) @anthropic-ai/sdk podłączony, /api/ai/scope zwraca sparsowane pozycje JSON | —             | FR-005, FR-006                                                                        | done     |
+| S-01 | ai-quote-creation-flow  | wkleić zapytanie → przejść rozmowę AI → edytować AI-pozycje → zapisać wycen jako draft  | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009, FR-010, FR-011 | done     |
+| S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                               | F-01          | FR-011, FR-012, FR-013                                                                | done     |
+| S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | proposed |
+| S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | proposed |
+| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
+| S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | proposed |
+| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | proposed |
 
 ## Streams
 
@@ -165,7 +165,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **Design decision — dwa typy pytań:**
   - **Pytania doprecyzowujące AI (S-01, FR-005)** — AI pyta freelancera w toku rozmowy; cel: zebrać kontekst, by wygenerować pozycje; ephemeral, wewnętrzne, UX: chat turn-by-turn.
   - **Pytania do klienta (S-03, FR-004)** — AI generuje listę pytań, które freelancer wysyła klientowi gdy brief jest zbyt lakoniczny; cel: uzupełnić brief przed wejściem do flow S-01; external, do przekazania, UX: lista do skopiowania.
-  - Konsekwencja dla promptu: S-03 wymaga osobnego promptu nastawionego na pytania *klient-facing* (profesjonalny ton, konkretne, bez żargonu AI). Nie wolno reużyć promptu doprecyzowującego z S-01.
+  - Konsekwencja dla promptu: S-03 wymaga osobnego promptu nastawionego na pytania _klient-facing_ (profesjonalny ton, konkretne, bez żargonu AI). Nie wolno reużyć promptu doprecyzowującego z S-01.
   - Konsekwencja dla UX: brak interfejsu chat; jeden request → lista pytań → przycisk kopiowania → użytkownik wraca z odpowiedziami do flow S-01.
 - **Status:** proposed
 
@@ -202,14 +202,14 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | Roadmap ID | Change ID               | Suggested issue title                                     | Ready for `/10x-plan` | Notes                                                                             |
 | ---------- | ----------------------- | --------------------------------------------------------- | --------------------- | --------------------------------------------------------------------------------- |
 | F-01       | quotes-schema-rls       | Create quotes table with per-user RLS                     | done                  | Archived 2026-05-28                                                               |
-| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint          | yes                   | Run `/10x-plan ai-integration-scaffold`                                           |
-| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow                | yes                   | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
+| F-02       | ai-integration-scaffold | Wire @anthropic-ai/sdk to /api/ai/scope endpoint          | done                  | Run `/10x-plan ai-integration-scaffold`                                           |
+| S-01       | ai-quote-creation-flow  | AI-assisted quote creation end-to-end flow                | done                  | OQ-1 resolved; OQ-2 → sparse guard only (dual-mode → S-03); run after F-01 + F-02 |
 | S-02       | quote-management        | Quote list, status management, and delete                 | done                  | Completed 2026-05-30                                                              |
-| S-03       | client-questions-flow   | Client questions for sparse briefs                        | no                    | Awaiting S-01 completion; storage approach TBD                                    |
-| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts  | no                    | Awaiting S-01 completion; storage + UI placement TBD                              |
-| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management   | no                    | Scope TBD; start with `/10x-research` + exa/Context7                              |
+| S-03       | client-questions-flow   | Client questions for sparse briefs                        | yes                   | Awaiting S-01 completion; storage approach TBD                                    |
+| S-04       | user-prompt-context     | User-editable free-text context injected into AI prompts  | tes                   | Awaiting S-01 completion; storage + UI placement TBD                              |
+| S-05       | ui-enhancements         | UI/UX enhancements across quote creation and management   | yes                   | Scope TBD; start with `/10x-research` + exa/Context7                              |
 | S-06       | manual-line-items       | Manual line item addition (no AI)                         | yes                   | S-01 done; tylko zmiana UI — run `/10x-plan manual-line-items`                    |
-| S-08       | quote-list-filters      | Server-side filter by status + title search on quote list | no                    | Awaiting S-02 completion; run `/10x-plan quote-list-filters`                      |
+| S-08       | quote-list-filters      | Server-side filter by status + title search on quote list | yes                   | Awaiting S-02 completion; run `/10x-plan quote-list-filters`                      |
 
 ## Open Roadmap Questions
 
