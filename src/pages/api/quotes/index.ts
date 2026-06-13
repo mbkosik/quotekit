@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
-import { QuoteItemSchema, type Quote } from "@/types";
+import { QuoteItemSchema, QUOTE_STATUSES, type Quote, type QuoteStatus } from "@/types";
 
 export const prerender = false;
 
@@ -89,16 +89,34 @@ export const GET: APIRoute = async (context) => {
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
+  const rawStatus = url.searchParams.get("status") ?? "";
+  const statusFilter = rawStatus
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s): s is QuoteStatus => (QUOTE_STATUSES as readonly string[]).includes(s));
+
+  const searchFilter = (url.searchParams.get("search") ?? "").trim();
+
+  const sortRaw = url.searchParams.get("sort");
+  const sortOrder: "asc" | "desc" = sortRaw === "asc" ? "asc" : "desc";
+
+  let query = supabase
+    .from("quotes")
+    .select("id, title, status, created_at", { count: "exact" })
+    .eq("user_id", user.id);
+
+  if (statusFilter.length > 0) {
+    query = query.in("status", statusFilter);
+  }
+  if (searchFilter) {
+    query = query.ilike("title", `%${searchFilter}%`);
+  }
+
   const {
     data: quotes,
     error,
     count,
-  } = await supabase
-    .from("quotes")
-    .select("id, title, status, created_at", { count: "exact" })
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-    .range(from, to);
+  } = await query.order("created_at", { ascending: sortOrder === "asc" }).range(from, to);
 
   if (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch quotes" }), {
