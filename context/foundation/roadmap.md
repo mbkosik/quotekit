@@ -37,7 +37,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | done     |
 | S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | done     |
-| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | proposed |
+| S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | done     |
 
 ## Streams
 
@@ -195,7 +195,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - UI: filter chips lub tabs dla statusu + input tekstowy dla search; zmiany triggerują nowe zapytanie API (bez przeładowania strony)
   - `QuotesList` po stronie React zarządza stanem filtrów i odpytuje `GET /api/quotes` z odpowiednimi params
 - **Risk:** ILIKE na nieuindeksowanej kolumnie `title` może być wolne przy dużych zbiorach — akceptowalne przy docelowej skali (solo freelancer, small data volume per PRD).
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -236,5 +236,6 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 | S-02 | quote-management | Lista wycen z paginacją, inline status change, delete + strona edycji wyceny | 2026-05-30 |
 
 - **S-03: gdy brief jest zbyt lakoniczny, użytkownik może poprosić AI o listę pytań do klienta, skopiować je i wrócić z kompletnym briefem do standardowego przepływu S-01.** — Archived 2026-06-13 → `context/archive/2026-06-13-client-questions-flow/`. Lesson: —.
+- **S-08: użytkownik może filtrować listę wycen po statusie (draft / sent / accepted / rejected / wszystkie) i przeszukiwać wyceny po tytule — obie operacje server-side przez rozszerzone `GET /api/quotes`.** — Archived 2026-06-13 → `context/archive/2026-06-13-quote-list-filters/`. Lesson: —.
 - **S-04: użytkownik może zapisać własny kontekst w postaci dowolnego tekstu (free-text), który jest dołączany do każdego promptu AI przy generowaniu pozycji — pozwala przekazać AI informacje o specjalizacji, rynku, stylu pracy lub dowolnym tle, które poprawia trafność wyceny.** — Archived 2026-06-13 → `context/archive/2026-06-13-user-prompt-context/`. Lesson: —.
 - **S-06: użytkownik może dodać nową, pustą pozycję do tabeli wyceny bez angażowania AI — wypełnia ją ręcznie (nazwa zadania, godziny, stawka) i edytuje tak samo jak AI-pozycje.** — Archived 2026-06-13 → `context/archive/2026-06-13-manual-line-items/`. Lesson: —.
