@@ -70,7 +70,7 @@ export function ConversationCard({
             <button
               type="button"
               onClick={onSkip}
-              className="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+              className="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
             >
               Pomiń / Wystarczy
             </button>

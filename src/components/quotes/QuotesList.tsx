@@ -115,7 +115,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
-                    className="text-white/30 transition-colors hover:text-red-400"
+                    className="text-white/50 transition-colors hover:text-red-400"
                     aria-label={`Usuń wycenę: ${q.title}`}
                   >
                     ✕

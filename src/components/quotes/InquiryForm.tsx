@@ -81,7 +81,7 @@ export function InquiryForm({
           setValidationError("");
           onGenerateQuestions(trimmed);
         }}
-        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {questionsLoading ? (
           <>

@@ -110,9 +110,17 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     />
                   ) : (
                     <span
+                      role="button"
+                      tabIndex={0}
                       className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
                       onClick={() => {
                         startEdit(i, "task");
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          startEdit(i, "task");
+                        }
                       }}
                     >
                       {item.task}
@@ -138,9 +146,17 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     />
                   ) : (
                     <span
+                      role="button"
+                      tabIndex={0}
                       className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
                       onClick={() => {
                         startEdit(i, "hours");
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          startEdit(i, "hours");
+                        }
                       }}
                     >
                       {item.hours}
@@ -165,9 +181,17 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     />
                   ) : (
                     <span
+                      role="button"
+                      tabIndex={0}
                       className={cn(cellBase, editingCell?.rowIndex === i ? "bg-white/10" : "hover:bg-white/5")}
                       onClick={() => {
                         startEdit(i, "rate");
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          startEdit(i, "rate");
+                        }
                       }}
                     >
                       {item.rate}
@@ -180,7 +204,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     onClick={() => {
                       removeRow(i);
                     }}
-                    className="text-white/30 transition-colors hover:text-red-400"
+                    className="text-white/50 transition-colors hover:text-red-400"
                     aria-label="Usuń pozycję"
                   >
                     ✕

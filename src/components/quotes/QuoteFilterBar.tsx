@@ -35,7 +35,7 @@ export function QuoteFilterBar({
                 onStatusFilterToggle(s);
               }}
               aria-pressed={active}
-              className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+              className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 ${
                 active
                   ? "bg-purple-600 text-white"
                   : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
@@ -65,7 +65,7 @@ export function QuoteFilterBar({
             ? "Sortuj: najnowsze. Kliknij, by sortować od najstarszych"
             : "Sortuj: najstarsze. Kliknij, by sortować od najnowszych"
         }
-        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
       >
         {sortOrder === "desc" ? "Najnowsze ↓" : "Najstarsze ↑"}
       </button>

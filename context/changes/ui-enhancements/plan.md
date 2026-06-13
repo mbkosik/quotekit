@@ -585,15 +585,15 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Manual
 
-- [ ] 3.4 `<html lang="pl">` w page source
-- [ ] 3.5 `<nav aria-label="Nawigacja główna">` widoczny w DevTools
-- [ ] 3.6 FormField w błędzie: input ma `aria-invalid="true"` i `aria-describedby`
-- [ ] 3.7 Przyciski filtrów QuoteFilterBar mają `aria-pressed`
-- [ ] 3.8 Search input ma `aria-label`
-- [ ] 3.9 Status selects w QuotesList mają `aria-label` z tytułem wyceny
-- [ ] 3.10 Delete buttons mają `aria-label` z tytułem wyceny
-- [ ] 3.11 ConversationCard textarea ma `aria-labelledby` wskazujące na pytanie
-- [ ] 3.12 UserContextForm textarea ma `aria-label`
+- [x] 3.4 `<html lang="pl">` w page source
+- [x] 3.5 `<nav aria-label="Nawigacja główna">` widoczny w DevTools
+- [x] 3.6 FormField w błędzie: input ma `aria-invalid="true"` i `aria-describedby`
+- [x] 3.7 Przyciski filtrów QuoteFilterBar mają `aria-pressed`
+- [x] 3.8 Search input ma `aria-label`
+- [x] 3.9 Status selects w QuotesList mają `aria-label` z tytułem wyceny
+- [x] 3.10 Delete buttons mają `aria-label` z tytułem wyceny
+- [x] 3.11 ConversationCard textarea ma `aria-labelledby` wskazujące na pytanie
+- [x] 3.12 UserContextForm textarea ma `aria-label`
 
 ### Phase 4: Dynamic Feedback — role="alert" + Silent Rollback Fix
 
@@ -604,38 +604,38 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Manual
 
-- [ ] 4.3 QuoteCreator error ma `role="alert"` (inspect)
-- [ ] 4.4 QuoteEditor error/success mają `role="alert"` / `role="status"` (inspect)
-- [ ] 4.5 UserContextForm error ma `role="alert"` (inspect)
-- [ ] 4.6 QuotesList delete error ma `role="alert"` (inspect)
-- [ ] 4.7 ConversationCard error ma `role="alert"` (inspect)
-- [ ] 4.8 Rollback statusu wyceny → użytkownik widzi komunikat błędu (nie cichy rollback)
+- [x] 4.3 QuoteCreator error ma `role="alert"` (inspect)
+- [x] 4.4 QuoteEditor error/success mają `role="alert"` / `role="status"` (inspect)
+- [x] 4.5 UserContextForm error ma `role="alert"` (inspect)
+- [x] 4.6 QuotesList delete error ma `role="alert"` (inspect)
+- [x] 4.7 ConversationCard error ma `role="alert"` (inspect)
+- [x] 4.8 Rollback statusu wyceny → użytkownik widzi komunikat błędu (nie cichy rollback)
 
 ### Phase 5: Error Pages + Rate Limit UX
 
 #### Automated
 
-- [x] 5.1 `test -f src/pages/404.astro` — plik istnieje
-- [x] 5.2 `npm run build` — bez błędów
-- [x] 5.3 `npm run lint` — bez błędów
+- [x] 5.1 `test -f src/pages/404.astro` — plik istnieje — 3cb2b70
+- [x] 5.2 `npm run build` — bez błędów — 3cb2b70
+- [x] 5.3 `npm run lint` — bez błędów — 3cb2b70
 
 #### Manual
 
-- [ ] 5.4 `/quotes/nonexistent-id` → komunikat z linkiem powrotu, Topbar widoczny
-- [ ] 5.5 Nieistniejący URL → 404.astro z Layout
-- [ ] 5.6 Rate limit 429 → komunikat o limicie, nie "błąd połączenia"
+- [x] 5.4 `/quotes/nonexistent-id` → komunikat z linkiem powrotu, Topbar widoczny
+- [x] 5.5 Nieistniejący URL → 404.astro z Layout
+- [x] 5.6 Rate limit 429 → komunikat o limicie, nie "błąd połączenia"
 
 ### Phase 6: Keyboard Access + Color Contrast
 
 #### Automated
 
-- [ ] 6.1 `npm run build` — bez błędów
-- [ ] 6.2 `npm run lint` — bez błędów
+- [x] 6.1 `npm run build` — bez błędów
+- [x] 6.2 `npm run lint` — bez błędów
 
 #### Manual
 
-- [ ] 6.3 Tab do LineItemsEditor → Enter otwiera edycję komórki
-- [ ] 6.4 Spacja na komórce LineItemsEditor → to samo
-- [ ] 6.5 Tab przez QuoteFilterBar → focus ring widoczny na każdym przycisku
-- [ ] 6.6 Tab przez ConversationCard → focus ring na przycisku "Pomiń"
-- [ ] 6.7 Delete buttons mają widoczny kolor w resting state (nie prawie niewidoczny)
+- [x] 6.3 Tab do LineItemsEditor → Enter otwiera edycję komórki
+- [x] 6.4 Spacja na komórce LineItemsEditor → to samo
+- [x] 6.5 Tab przez QuoteFilterBar → focus ring widoczny na każdym przycisku
+- [x] 6.6 Tab przez ConversationCard → focus ring na przycisku "Pomiń"
+- [x] 6.7 Delete buttons mają widoczny kolor w resting state (nie prawie niewidoczny)
