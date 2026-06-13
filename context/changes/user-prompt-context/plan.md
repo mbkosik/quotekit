@@ -283,12 +283,12 @@ No existing data to migrate. Users who never visit `/settings` get the default b
 
 #### Automated
 
-- [x] 3.1 Linting passes: `npm run lint`
-- [x] 3.2 Build succeeds: `npm run build`
+- [x] 3.1 Linting passes: `npm run lint` — be502b5
+- [x] 3.2 Build succeeds: `npm run build` — be502b5
 
 #### Manual
 
-- [x] 3.3 No context: quote creation works as before (no regression)
-- [x] 3.4 With context: AI clarifying questions reference specialization domain
-- [x] 3.5 With context: generated line items reflect stated rates/domain
-- [x] 3.6 Supabase failure during AI call: flow continues without error
+- [x] 3.3 No context: quote creation works as before (no regression) — be502b5
+- [x] 3.4 With context: AI clarifying questions reference specialization domain — be502b5
+- [x] 3.5 With context: generated line items reflect stated rates/domain — be502b5
+- [x] 3.6 Supabase failure during AI call: flow continues without error — be502b5
