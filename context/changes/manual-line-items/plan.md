@@ -139,13 +139,13 @@ Dashed border on "Dodaj pozycję" signals an additive action without competing w
 
 #### Automated
 
-- [x] 1.1 Linting passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
+- [x] 1.1 Linting passes: `npm run lint` — 73bd630
+- [x] 1.2 Build succeeds: `npm run build` — 73bd630
 
 #### Manual
 
-- [x] 1.3 Button visible on /new; new row added with task cell focused
-- [x] 1.4 Save disabled with empty task; enabled when all tasks filled
-- [x] 1.5 Manually added item persists after save (creation flow)
-- [x] 1.6 Button and persistence work on /quotes/[id] (edit flow)
-- [x] 1.7 No regression in existing inline editing
+- [x] 1.3 Button visible on /new; new row added with task cell focused — 73bd630
+- [x] 1.4 Save disabled with empty task; enabled when all tasks filled — 73bd630
+- [x] 1.5 Manually added item persists after save (creation flow) — 73bd630
+- [x] 1.6 Button and persistence work on /quotes/[id] (edit flow) — 73bd630
+- [x] 1.7 No regression in existing inline editing — 73bd630
