@@ -547,33 +547,33 @@ Brak migracji danych. Zmiany `package.json` nie wymagają `npm install`.
 
 #### Automated
 
-- [x] 1.1 Brak "10x Astro Starter" / "10x-astro-starter" w src/ (grep)
-- [x] 1.2 `public/template.png` nie istnieje; README go nie referencjonuje
-- [x] 1.3 `npm run build` — bez błędów
-- [x] 1.4 `npm run lint` — bez błędów
+- [x] 1.1 Brak "10x Astro Starter" / "10x-astro-starter" w src/ (grep) — 5d88cd7
+- [x] 1.2 `public/template.png` nie istnieje; README go nie referencjonuje — 5d88cd7
+- [x] 1.3 `npm run build` — bez błędów — 5d88cd7
+- [x] 1.4 `npm run lint` — bez błędów — 5d88cd7
 
 #### Manual
 
-- [x] 1.5 Odwiedź `/` jako gość → QuoteKit branding, zero śladów startera
-- [x] 1.6 Odwiedź `/` jako zalogowany → redirect na `/quotes`
-- [x] 1.7 Karta przeglądarki na stronie bez własnego title → "QuoteKit"
-- [x] 1.8 Banner błędu konfiguracji → link nie prowadzi do obcego repo
+- [x] 1.5 Odwiedź `/` jako gość → QuoteKit branding, zero śladów startera — 5d88cd7
+- [x] 1.6 Odwiedź `/` jako zalogowany → redirect na `/quotes` — 5d88cd7
+- [x] 1.7 Karta przeglądarki na stronie bez własnego title → "QuoteKit" — 5d88cd7
+- [x] 1.8 Banner błędu konfiguracji → link nie prowadzi do obcego repo — 5d88cd7
 
 ### Phase 2: Auth Flat Theme + Auth Redirects + Error i18n
 
 #### Automated
 
-- [ ] 2.1 Brak `bg-cosmic` / `backdrop-blur-xl` w `src/pages/auth/` (grep)
-- [ ] 2.2 `npm run build` — bez błędów
-- [ ] 2.3 `npm run lint` — bez błędów
+- [x] 2.1 Brak `bg-cosmic` / `backdrop-blur-xl` w `src/pages/auth/` (grep)
+- [x] 2.2 `npm run build` — bez błędów
+- [x] 2.3 `npm run lint` — bez błędów
 
 #### Manual
 
-- [ ] 2.4 Auth pages mają płaskie tło `bg-gray-950`, karta bez rozmycia
-- [ ] 2.5 Logowanie przekierowuje na `/quotes`
-- [ ] 2.6 Wylogowanie przekierowuje na `/auth/signin`
-- [ ] 2.7 Błędne hasło → komunikat po polsku
-- [ ] 2.8 Niepotwierdony e-mail → inny komunikat po polsku
+- [x] 2.4 Auth pages mają płaskie tło `bg-gray-950`, karta bez rozmycia
+- [x] 2.5 Logowanie przekierowuje na `/quotes`
+- [x] 2.6 Wylogowanie przekierowuje na `/auth/signin`
+- [x] 2.7 Błędne hasło → komunikat po polsku
+- [x] 2.8 Niepotwierdony e-mail → inny komunikat po polsku
 
 ### Phase 3: Foundation Accessibility — ARIA Labels & lang
 
