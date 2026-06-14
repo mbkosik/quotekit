@@ -3,7 +3,7 @@ project: "QuoteKit"
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-13
+updated: 2026-06-14
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -35,7 +35,7 @@ Freelancer na początku kariery dostaje zapytanie od klienta i nie wie, ile poli
 | S-02 | quote-management        | zobaczyć pełną listę wycen, zmienić status, usunąć wycenę                               | F-01          | FR-011, FR-012, FR-013                                                                | done     |
 | S-03 | client-questions-flow   | gdy brief za lakoniczny — poprosić AI o pytania do klienta i skopiować je               | S-01          | FR-004                                                                                | done     |
 | S-04 | user-prompt-context     | napisać własny kontekst (free-text), który AI dostaje przy każdym generowaniu pozycji   | S-01          | —                                                                                     | done     |
-| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | proposed |
+| S-05 | ui-enhancements         | (TBD — pending research) wzmocnienia UI/UX w istniejących przepływach                   | S-01          | —                                                                                     | done     |
 | S-06 | manual-line-items       | ręcznie dodać nową pozycję do wyceny (bez AI) i ją edytować                             | S-01          | FR-008                                                                                | done     |
 | S-08 | quote-list-filters      | filtrować listę wycen po statusie i przeszukiwać wyceny po tytule (server-side)         | S-02          | FR-011                                                                                | done     |
 
@@ -150,7 +150,7 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
   - Które konkretnie elementy UI wymagają poprawy? Do zbadania przez `/10x-research ui-enhancements` (istniejące komponenty, shadcn/ui coverage, wzorce Tailwind) + exa/Context7 (best practices, biblioteki).
   - Czy potrzebne nowe shadcn/ui komponenty czy wystarczy dopracowanie istniejących?
 - **Risk:** Zbyt szeroki scope — "UI enhancements" bez granic łatwo puchnie; badania mają zawęzić zakres do konkretnych, mierzalnych poprawek przed planowaniem.
-- **Status:** proposed
+- **Status:** done
 
 ### S-03: Client questions for sparse briefs
 
@@ -239,3 +239,4 @@ Foundations poniżej zakładają, że poniższe elementy są gotowe i NIE są po
 - **S-08: użytkownik może filtrować listę wycen po statusie (draft / sent / accepted / rejected / wszystkie) i przeszukiwać wyceny po tytule — obie operacje server-side przez rozszerzone `GET /api/quotes`.** — Archived 2026-06-13 → `context/archive/2026-06-13-quote-list-filters/`. Lesson: —.
 - **S-04: użytkownik może zapisać własny kontekst w postaci dowolnego tekstu (free-text), który jest dołączany do każdego promptu AI przy generowaniu pozycji — pozwala przekazać AI informacje o specjalizacji, rynku, stylu pracy lub dowolnym tle, które poprawia trafność wyceny.** — Archived 2026-06-13 → `context/archive/2026-06-13-user-prompt-context/`. Lesson: —.
 - **S-06: użytkownik może dodać nową, pustą pozycję do tabeli wyceny bez angażowania AI — wypełnia ją ręcznie (nazwa zadania, godziny, stawka) i edytuje tak samo jak AI-pozycje.** — Archived 2026-06-13 → `context/archive/2026-06-13-manual-line-items/`. Lesson: —.
+- **S-05: TBD — zakres do ustalenia po fazie badawczej; potencjalny scope: wizualny polish, poprawki UX flow i ulepszenia na poziomie komponentów w przepływach quote creation i quote management.** — Archived 2026-06-14 → `context/archive/2026-05-29-ui-enhancements/`. Lesson: —.
