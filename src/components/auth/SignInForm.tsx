@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useSignInForm } from "@/components/hooks/useSignInForm";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { FormField } from "@/components/auth/FormField";
 import { PasswordToggle } from "@/components/auth/PasswordToggle";
@@ -10,34 +10,8 @@ interface Props {
 }
 
 export default function SignInForm({ serverError }: Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-
-  function validate() {
-    const next: typeof errors = {};
-    if (!email.trim()) {
-      next.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      next.email = "Enter a valid email address";
-    }
-    if (!password) {
-      next.password = "Password is required";
-    }
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
-  function clearError(field: keyof typeof errors) {
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
-  }
-
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    if (!validate()) {
-      e.preventDefault();
-    }
-  }
+  const { email, setEmail, password, setPassword, showPassword, toggleShowPassword, errors, clearError, handleSubmit } =
+    useSignInForm();
 
   return (
     <form method="POST" action="/api/auth/signin" className="space-y-4" onSubmit={handleSubmit} noValidate>
@@ -67,14 +41,7 @@ export default function SignInForm({ serverError }: Props) {
         placeholder="Your password"
         error={errors.password}
         icon={<Lock className="size-4" />}
-        endContent={
-          <PasswordToggle
-            visible={showPassword}
-            onToggle={() => {
-              setShowPassword(!showPassword);
-            }}
-          />
-        }
+        endContent={<PasswordToggle visible={showPassword} onToggle={toggleShowPassword} />}
       />
 
       <ServerError message={serverError} />

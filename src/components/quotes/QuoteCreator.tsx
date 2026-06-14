@@ -1,8 +1,8 @@
 import { useQuoteCreator, MAX_QUESTIONS } from "@/components/hooks/useQuoteCreator";
-import { InquiryForm } from "./InquiryForm";
-import { ClientQuestionsList } from "./ClientQuestionsList";
-import { ConversationCard } from "./ConversationCard";
-import { LineItemsEditor } from "./LineItemsEditor";
+import { InquiryForm } from "@/components/quotes/InquiryForm";
+import { ClientQuestionsList } from "@/components/quotes/ClientQuestionsList";
+import { ConversationCard } from "@/components/quotes/ConversationCard";
+import { LineItemsEditor } from "@/components/quotes/LineItemsEditor";
 import { InlineError } from "@/components/ui/inline-error";
 import { ChevronRight } from "lucide-react";
 

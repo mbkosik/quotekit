@@ -95,7 +95,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={item.id ?? i} className="border-b border-white/5 text-white/60 last:border-0">
+              <tr key={item.id} className="border-b border-white/5 text-white/60 last:border-0">
                 <td className="px-4 py-2">
                   {editingCell?.rowIndex === i && editingCell.field === "task" ? (
                     <input

@@ -1,58 +1,30 @@
-import React, { useState } from "react";
+import { useSignUpForm, MIN_PASSWORD_LENGTH } from "@/components/hooks/useSignUpForm";
 import { Mail, Lock, UserPlus } from "lucide-react";
 import { FormField } from "@/components/auth/FormField";
 import { PasswordToggle } from "@/components/auth/PasswordToggle";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
 
-const MIN_PASSWORD_LENGTH = 6;
-
 interface Props {
   serverError?: string | null;
 }
 
 export default function SignUpForm({ serverError }: Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
-
-  function validate() {
-    const next: typeof errors = {};
-
-    if (!email.trim()) {
-      next.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      next.email = "Enter a valid email address";
-    }
-
-    if (!password) {
-      next.password = "Password is required";
-    } else if (password.length < MIN_PASSWORD_LENGTH) {
-      next.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
-    }
-
-    if (!confirmPassword) {
-      next.confirmPassword = "Please confirm your password";
-    } else if (password !== confirmPassword) {
-      next.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
-  function clearError(field: keyof typeof errors) {
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
-  }
-
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    if (!validate()) {
-      e.preventDefault();
-    }
-  }
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    showPassword,
+    toggleShowPassword,
+    showConfirmPassword,
+    toggleShowConfirmPassword,
+    errors,
+    clearError,
+    handleSubmit,
+  } = useSignUpForm();
 
   const passwordHint =
     !errors.password && password.length > 0 && password.length < MIN_PASSWORD_LENGTH ? (
@@ -91,14 +63,7 @@ export default function SignUpForm({ serverError }: Props) {
         error={errors.password}
         hint={passwordHint}
         icon={<Lock className="size-4" />}
-        endContent={
-          <PasswordToggle
-            visible={showPassword}
-            onToggle={() => {
-              setShowPassword(!showPassword);
-            }}
-          />
-        }
+        endContent={<PasswordToggle visible={showPassword} onToggle={toggleShowPassword} />}
       />
 
       <FormField
@@ -114,14 +79,7 @@ export default function SignUpForm({ serverError }: Props) {
         placeholder="Re-enter your password"
         error={errors.confirmPassword}
         icon={<Lock className="size-4" />}
-        endContent={
-          <PasswordToggle
-            visible={showConfirmPassword}
-            onToggle={() => {
-              setShowConfirmPassword(!showConfirmPassword);
-            }}
-          />
-        }
+        endContent={<PasswordToggle visible={showConfirmPassword} onToggle={toggleShowConfirmPassword} />}
       />
 
       <ServerError message={serverError} />

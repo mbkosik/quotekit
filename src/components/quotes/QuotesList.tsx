@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { InlineError } from "@/components/ui/inline-error";
+import { cn } from "@/lib/utils";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   AlertDialog,
@@ -83,7 +84,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
           </button>
         </div>
       ) : (
-        <ul className={`flex flex-col gap-3 transition-opacity ${loading ? "opacity-50" : ""}`}>
+        <ul className={cn("flex flex-col gap-3 transition-opacity", loading && "opacity-50")}>
           {quotes.map((q) => (
             <li
               key={q.id}

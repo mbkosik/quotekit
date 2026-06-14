@@ -679,36 +679,36 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [x] 3.1 `test -f src/components/ui/app-textarea.tsx`
-- [x] 3.2 `test -f src/components/ui/inline-error.tsx`
-- [x] 3.3 Brak zduplikowanego textarea className w src/components/ (grep)
-- [x] 3.4 `npm run build` — bez błędów
-- [x] 3.5 `npm run lint` — bez błędów
+- [x] 3.1 `test -f src/components/ui/app-textarea.tsx` — a025e89
+- [x] 3.2 `test -f src/components/ui/inline-error.tsx` — a025e89
+- [x] 3.3 Brak zduplikowanego textarea className w src/components/ (grep) — a025e89
+- [x] 3.4 `npm run build` — bez błędów — a025e89
+- [x] 3.5 `npm run lint` — bez błędów — a025e89
 
 #### Manual
 
-- [x] 3.6 Textarea wizualnie identyczne jak przed
-- [x] 3.7 InlineError spójny styl na wszystkich komponentach
-- [x] 3.8 Ikony Lucide zamiast Unicode w quotes area
-- [x] 3.9 Focus ring nadal widoczny na przyciskach
+- [x] 3.6 Textarea wizualnie identyczne jak przed — a025e89
+- [x] 3.7 InlineError spójny styl na wszystkich komponentach — a025e89
+- [x] 3.8 Ikony Lucide zamiast Unicode w quotes area — a025e89
+- [x] 3.9 Focus ring nadal widoczny na przyciskach — a025e89
 
 ### Phase 4: Code Quality
 
 #### Automated
 
-- [ ] 4.1 `test -f src/components/hooks/useSignUpForm.ts`
-- [ ] 4.2 `test -f src/components/hooks/useSignInForm.ts`
-- [ ] 4.3 Brak `key={i}` w LineItemsEditor (grep)
-- [ ] 4.4 Brak template literal className w 3 plikach (grep)
-- [ ] 4.5 Brak relative imports w QuoteCreator (grep)
-- [ ] 4.6 `npm run build` — bez błędów
-- [ ] 4.7 `npm run lint` — bez błędów
+- [x] 4.1 `test -f src/components/hooks/useSignUpForm.ts`
+- [x] 4.2 `test -f src/components/hooks/useSignInForm.ts`
+- [x] 4.3 Brak `key={i}` w LineItemsEditor (grep)
+- [x] 4.4 Brak template literal className w 3 plikach (grep)
+- [x] 4.5 Brak relative imports w QuoteCreator (grep)
+- [x] 4.6 `npm run build` — bez błędów
+- [x] 4.7 `npm run lint` — bez błędów
 
 #### Manual
 
-- [ ] 4.8 SignUpForm działa identycznie po hook extraction
-- [ ] 4.9 SignInForm działa identycznie
-- [ ] 4.10 LineItemsEditor: usunięcie środkowego wiersza nie powoduje skoku focus
+- [x] 4.8 SignUpForm działa identycznie po hook extraction
+- [x] 4.9 SignInForm działa identycznie
+- [x] 4.10 LineItemsEditor: usunięcie środkowego wiersza nie powoduje skoku focus
 
 ### Phase 5: MEDIUM A11y + Polish
 

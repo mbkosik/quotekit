@@ -22,7 +22,17 @@ export function InquiryForm({
   const [text, setText] = useState(defaultValue ?? "");
   const [validationError, setValidationError] = useState("");
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleGenerateQuestionsClick() {
+    const trimmed = text.trim();
+    if (trimmed.length < 3) {
+      setValidationError("Opisz projekt klienta, żeby móc wygenerować pytania.");
+      return;
+    }
+    setValidationError("");
+    onGenerateQuestions(trimmed);
+  }
+
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     const trimmed = text.trim();
     if (trimmed.length < 3) {
@@ -72,15 +82,7 @@ export function InquiryForm({
         type="button"
         variant="outline"
         disabled={loading}
-        onClick={() => {
-          const trimmed = text.trim();
-          if (trimmed.length < 3) {
-            setValidationError("Opisz projekt klienta, żeby móc wygenerować pytania.");
-            return;
-          }
-          setValidationError("");
-          onGenerateQuestions(trimmed);
-        }}
+        onClick={handleGenerateQuestionsClick}
         className="w-full"
       >
         {questionsLoading ? (

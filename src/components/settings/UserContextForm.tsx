@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AppTextarea } from "@/components/ui/app-textarea";
 import { InlineError } from "@/components/ui/inline-error";
@@ -64,7 +65,7 @@ export function UserContextForm({ context }: Props) {
         aria-label="Kontekst użytkownika dla generowania wycen"
       />
       <div className="flex items-center justify-between">
-        <span className={`text-xs ${isOverLimit ? "text-red-400" : "text-white/40"}`}>
+        <span className={cn("text-xs", isOverLimit ? "text-red-400" : "text-white/40")}>
           {value.length} / {MAX_CHARS}
         </span>
         <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppTextarea } from "@/components/ui/app-textarea";
+import { cn } from "@/lib/utils";
 
 interface Props {
   question: string;
@@ -25,7 +26,7 @@ export function ConversationCard({
 }: Props) {
   const [answer, setAnswer] = useState("");
 
-  function handleAnswer(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleAnswer(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!answer.trim()) return;
     onAnswer(answer.trim());
@@ -74,9 +75,9 @@ export function ConversationCard({
       <div
         role="alert"
         aria-live="assertive"
-        className={
-          error ? "flex items-center justify-between rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3" : ""
-        }
+        className={cn(
+          error && "flex items-center justify-between rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3",
+        )}
       >
         {error && (
           <>
