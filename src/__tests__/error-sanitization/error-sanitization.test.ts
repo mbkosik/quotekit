@@ -18,6 +18,8 @@ vi.mock("@/lib/anthropic", () => ({
   }),
 }));
 
+vi.mock("@/lib/supabase", () => ({ createClient: () => null }));
+
 function makeContext(body: Record<string, unknown>): APIContext {
   return {
     locals: { user: { id: "test-user-1" } },

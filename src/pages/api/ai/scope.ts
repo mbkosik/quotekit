@@ -98,7 +98,15 @@ export const POST: APIRoute = async (context) => {
   }
 
   const parsed_output = LineItemsSchema.safeParse(message.parsed_output);
-  const items: QuoteItem[] = parsed_output.success ? parsed_output.data.items : [];
+
+  if (!parsed_output.success) {
+    return new Response(JSON.stringify({ error: "AI service error" }), {
+      status: 502,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const items: QuoteItem[] = parsed_output.data.items;
 
   if (items.length === 0) {
     return new Response(JSON.stringify({ error: "inquiry_too_short" }), {

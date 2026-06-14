@@ -110,7 +110,7 @@ export const POST: APIRoute = async (context) => {
         .select("prompt_context")
         .eq("user_id", context.locals.user.id)
         .maybeSingle()) as { data: { prompt_context: string } | null; error: unknown };
-      userContext = data?.prompt_context ?? "";
+      userContext = (data?.prompt_context ?? "").slice(0, 500);
     } catch {
       // fallback to empty — AI continues without user context
     }

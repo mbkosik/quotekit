@@ -1,6 +1,6 @@
 // @vitest-environment node
 //
-// Risk #3: query param data isolation — GET /api/quotes with ?status= and ?search=
+// Risk #10: query param data isolation — GET /api/quotes with ?status= and ?search=
 // filters must never return rows belonging to another user.
 // Oracle: PRD §NFR data isolation — filter parameters must not bypass RLS.
 //
@@ -12,7 +12,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { createAdminClient } from "@/lib/supabase-test";
 import { createTestUser, cleanupTestUser, type TestUser } from "@/lib/test-helpers";
 
-describe("Risk #3: query param data isolation — quotes filter RLS", () => {
+describe("Risk #10: query param data isolation — quotes filter RLS", () => {
   let userA: TestUser | undefined;
   let userB: TestUser | undefined;
   let quoteA_draftId: string;

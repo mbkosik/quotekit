@@ -1,6 +1,6 @@
 // @vitest-environment node
 //
-// Risk #4: IDOR on user_settings — User B reads or modifies User A's settings.
+// Risk #11: IDOR on user_settings — User B reads or modifies User A's settings.
 // Oracle: PRD §NFR data isolation — user_settings must be isolated by owner.
 //
 // Strategy: two real test users; User A's settings inserted by admin; all
@@ -13,7 +13,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { createAdminClient } from "@/lib/supabase-test";
 import { createTestUser, cleanupTestUser, type TestUser } from "@/lib/test-helpers";
 
-describe("Risk #4: IDOR on user_settings — SELECT/INSERT/UPDATE RLS", () => {
+describe("Risk #11: IDOR on user_settings — SELECT/INSERT/UPDATE RLS", () => {
   let userA: TestUser | undefined;
   let userB: TestUser | undefined;
 
