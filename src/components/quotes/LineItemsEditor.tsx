@@ -94,6 +94,13 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
             </tr>
           </thead>
           <tbody>
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-4 py-8 text-center text-sm text-white/40">
+                  Dodaj pierwszą pozycję wyceny za pomocą przycisku poniżej.
+                </td>
+              </tr>
+            )}
             {items.map((item, i) => (
               <tr key={item.id} className="border-b border-white/5 text-white/60 last:border-0">
                 <td className="px-4 py-2">

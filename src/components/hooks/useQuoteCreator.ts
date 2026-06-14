@@ -60,6 +60,19 @@ export function useQuoteCreator() {
     [],
   );
 
+  function resetForm() {
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    setPhase("inquiry");
+    setInquiryText("");
+    setMessages([]);
+    setQuestionCount(0);
+    setCurrentQuestion("");
+    setItems([]);
+    setTitle("");
+    setSavedTitle("");
+    setSparseMessage("");
+  }
+
   async function handleInquirySubmit(text: string) {
     setInquiryText(text);
     setSparseMessage("");
@@ -68,7 +81,11 @@ export function useQuoteCreator() {
       const data = await callChat(text, [], false);
       if ("error" in data) {
         setPhase("inquiry");
-        setSparseMessage("Nie udało się przetworzyć zapytania. Spróbuj ponownie.");
+        if (data.error === "inquiry_unusable") {
+          setSparseMessage("Opis jest zbyt ogólny. Podaj zakres prac, technologię i oczekiwania — min. 3-4 zdania.");
+        } else {
+          setSparseMessage("Nie udało się przetworzyć zapytania. Spróbuj ponownie.");
+        }
         return;
       }
       if (data.type === "sparse") {
@@ -198,17 +215,6 @@ export function useQuoteCreator() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSavedTitle(title);
       setPhase("done");
-      resetTimerRef.current = setTimeout(() => {
-        setPhase("inquiry");
-        setInquiryText("");
-        setMessages([]);
-        setQuestionCount(0);
-        setCurrentQuestion("");
-        setItems([]);
-        setTitle("");
-        setSavedTitle("");
-        setSparseMessage("");
-      }, 3000);
     } catch {
       setPhase("items");
       setError("Błąd zapisu. Spróbuj ponownie.");
@@ -239,6 +245,7 @@ export function useQuoteCreator() {
       handleBackFromQuestions,
       setItems,
       setError,
+      resetForm,
     },
   };
 }

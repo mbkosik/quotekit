@@ -4,6 +4,7 @@ import { ClientQuestionsList } from "@/components/quotes/ClientQuestionsList";
 import { ConversationCard } from "@/components/quotes/ConversationCard";
 import { LineItemsEditor } from "@/components/quotes/LineItemsEditor";
 import { InlineError } from "@/components/ui/inline-error";
+import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
 export function QuoteCreator() {
@@ -30,6 +31,7 @@ export function QuoteCreator() {
     handleBackFromQuestions,
     setItems,
     setError,
+    resetForm,
   } = actions;
 
   const isLoading = phase === "loading" || phase === "saving";
@@ -41,6 +43,9 @@ export function QuoteCreator() {
         <a href="/quotes" className="flex items-center gap-1 text-sm text-purple-300 underline hover:text-purple-100">
           Zobacz swoje wyceny <ChevronRight size={16} aria-hidden />
         </a>
+        <Button variant="outline" onClick={resetForm} className="mt-2">
+          Utwórz nową wycenę
+        </Button>
       </div>
     );
   }
@@ -83,6 +88,15 @@ export function QuoteCreator() {
 
   if (phase === "questions") {
     return <ClientQuestionsList questions={clientQuestions} onBack={handleBackFromQuestions} />;
+  }
+
+  if (phase === "loading" && questionCount === 0) {
+    return (
+      <div className="flex w-full max-w-3xl flex-col items-center gap-3 py-12 text-white/60">
+        <span className="size-6 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
+        <p className="text-sm">Analizuję zapytanie...</p>
+      </div>
+    );
   }
 
   return (

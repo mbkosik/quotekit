@@ -37,6 +37,8 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
     loading,
     error,
     statusError,
+    statusSuccess,
+    isDeleting,
     statusFilter,
     searchFilter,
     sortOrder,
@@ -72,6 +74,19 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
 
       <InlineError message={error} />
       <InlineError message={statusError} />
+      {statusSuccess && (
+        <p role="status" className="text-sm text-green-400">
+          {statusSuccess}
+        </p>
+      )}
+
+      {loading && quotes.length === 0 && (
+        <div className="flex flex-col gap-3">
+          <div className="h-16 animate-pulse rounded-xl bg-white/5" />
+          <div className="h-16 animate-pulse rounded-xl bg-white/5" />
+          <div className="h-16 animate-pulse rounded-xl bg-white/5" />
+        </div>
+      )}
 
       {isFilteredEmpty ? (
         <div className="flex flex-col items-start gap-2 py-4">
@@ -131,14 +146,15 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Anuluj</AlertDialogCancel>
+                    <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => {
                         void handleDelete(q.id);
                       }}
+                      disabled={isDeleting}
                       className="bg-red-600 hover:bg-red-500"
                     >
-                      Usuń
+                      {isDeleting ? "Usuwanie..." : "Usuń"}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -161,9 +177,12 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
             <ChevronLeft size={14} aria-hidden />
             Poprzednia
           </Button>
-          <span className="text-xs text-white/40">
-            {currentPage} / {totalPages}
-          </span>
+          <div className="flex items-center gap-2">
+            {loading && <span className="text-sm text-white/40">Ładowanie...</span>}
+            <span className="text-xs text-white/40">
+              {currentPage} / {totalPages}
+            </span>
+          </div>
           <Button
             variant="ghost"
             size="sm"

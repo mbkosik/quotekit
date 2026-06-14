@@ -696,37 +696,37 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [x] 4.1 `test -f src/components/hooks/useSignUpForm.ts`
-- [x] 4.2 `test -f src/components/hooks/useSignInForm.ts`
-- [x] 4.3 Brak `key={i}` w LineItemsEditor (grep)
-- [x] 4.4 Brak template literal className w 3 plikach (grep)
-- [x] 4.5 Brak relative imports w QuoteCreator (grep)
-- [x] 4.6 `npm run build` — bez błędów
-- [x] 4.7 `npm run lint` — bez błędów
+- [x] 4.1 `test -f src/components/hooks/useSignUpForm.ts` — 42e6084
+- [x] 4.2 `test -f src/components/hooks/useSignInForm.ts` — 42e6084
+- [x] 4.3 Brak `key={i}` w LineItemsEditor (grep) — 42e6084
+- [x] 4.4 Brak template literal className w 3 plikach (grep) — 42e6084
+- [x] 4.5 Brak relative imports w QuoteCreator (grep) — 42e6084
+- [x] 4.6 `npm run build` — bez błędów — 42e6084
+- [x] 4.7 `npm run lint` — bez błędów — 42e6084
 
 #### Manual
 
-- [x] 4.8 SignUpForm działa identycznie po hook extraction
-- [x] 4.9 SignInForm działa identycznie
-- [x] 4.10 LineItemsEditor: usunięcie środkowego wiersza nie powoduje skoku focus
+- [x] 4.8 SignUpForm działa identycznie po hook extraction — 42e6084
+- [x] 4.9 SignInForm działa identycznie — 42e6084
+- [x] 4.10 LineItemsEditor: usunięcie środkowego wiersza nie powoduje skoku focus — 42e6084
 
 ### Phase 5: MEDIUM A11y + Polish
 
 #### Automated
 
-- [ ] 5.1 `npm run build` — bez błędów
-- [ ] 5.2 `npm run lint` — bez błędów
+- [x] 5.1 `npm run build` — bez błędów
+- [x] 5.2 `npm run lint` — bez błędów
 
 #### Manual
 
-- [ ] 5.3 QuotesList loading skeleton przy initial fetch
-- [ ] 5.4 LineItemsEditor pusta lista → komunikat
-- [ ] 5.5 ClientQuestionsList 0 pytań → komunikat; "Kopiuj" disabled
-- [ ] 5.6 QuoteCreator first AI call → loading indicator
-- [ ] 5.7 Paginacja → "Ładowanie..." text
-- [ ] 5.8 Done phase → brak auto-reset; przycisk do nowej wyceny
-- [ ] 5.9 Delete → loading state na przycisku
-- [ ] 5.10 Status change → brief visual confirmation
-- [ ] 5.11 inquiry_unusable → konkretny komunikat
-- [ ] 5.12 confirm-email emoji → aria-hidden
-- [ ] 5.13 axe DevTools: 0 violations na /quotes, /new, /settings
+- [x] 5.3 QuotesList loading skeleton przy initial fetch
+- [x] 5.4 LineItemsEditor pusta lista → komunikat
+- [x] 5.5 ClientQuestionsList 0 pytań → komunikat; "Kopiuj" disabled
+- [x] 5.6 QuoteCreator first AI call → loading indicator
+- [x] 5.7 Paginacja → "Ładowanie..." text
+- [x] 5.8 Done phase → brak auto-reset; przycisk do nowej wyceny
+- [x] 5.9 Delete → loading state na przycisku
+- [x] 5.10 Status change → brief visual confirmation
+- [x] 5.11 inquiry_unusable → konkretny komunikat
+- [x] 5.12 confirm-email emoji → aria-hidden
+- [x] 5.13 axe DevTools: 0 violations na /quotes, /new, /settings
