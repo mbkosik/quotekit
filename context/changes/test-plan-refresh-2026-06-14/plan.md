@@ -260,23 +260,23 @@ Uwaga na test 4: upsert pod RLS może zwrócić brak błędu ale 0 mutacji (zach
 
 #### Automated
 
-- [ ] 1.1 npm test przechodzi (wszystkie istniejące testy green + nowy questions.ts sanitization test)
-- [ ] 1.2 npm run lint czyste
-- [ ] 1.3 npx astro check czyste
+- [x] 1.1 npm test przechodzi (wszystkie istniejące testy green + nowy questions.ts sanitization test) — b71ea2c
+- [x] 1.2 npm run lint czyste — b71ea2c
+- [x] 1.3 npx astro check czyste — b71ea2c
 
 #### Manual
 
-- [ ] 1.4 POST /api/ai/questions z auth i poprawnym body → 200 (wiring nie broke)
-- [ ] 1.5 POST /api/ai/scope z auth → 200 (scope wiring nie broke)
-- [ ] 1.6 POST /api/ai/chat z auth → 200 (chat wiring nie broke)
+- [x] 1.4 POST /api/ai/questions z auth i poprawnym body → 200 (wiring nie broke) — b71ea2c
+- [x] 1.5 POST /api/ai/scope z auth → 200 (scope wiring nie broke) — b71ea2c
+- [x] 1.6 POST /api/ai/chat z auth → 200 (chat wiring nie broke) — b71ea2c
 
 ### Phase 2: R2 — Query Param Data Isolation
 
 #### Automated
 
-- [ ] 2.1 npm test przechodzi (nowe 3 testy query-filter-isolation green, wymaga supabase start)
-- [ ] 2.2 npm run lint czyste
-- [ ] 2.3 npx astro check czyste
+- [x] 2.1 npm test przechodzi (nowe 3 testy query-filter-isolation green, wymaga supabase start)
+- [x] 2.2 npm run lint czyste
+- [x] 2.3 npx astro check czyste
 
 #### Manual
 
