@@ -714,19 +714,19 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [x] 5.1 `npm run build` — bez błędów
-- [x] 5.2 `npm run lint` — bez błędów
+- [x] 5.1 `npm run build` — bez błędów — 863ef86
+- [x] 5.2 `npm run lint` — bez błędów — 863ef86
 
 #### Manual
 
-- [x] 5.3 QuotesList loading skeleton przy initial fetch
-- [x] 5.4 LineItemsEditor pusta lista → komunikat
-- [x] 5.5 ClientQuestionsList 0 pytań → komunikat; "Kopiuj" disabled
-- [x] 5.6 QuoteCreator first AI call → loading indicator
-- [x] 5.7 Paginacja → "Ładowanie..." text
-- [x] 5.8 Done phase → brak auto-reset; przycisk do nowej wyceny
-- [x] 5.9 Delete → loading state na przycisku
-- [x] 5.10 Status change → brief visual confirmation
-- [x] 5.11 inquiry_unusable → konkretny komunikat
-- [x] 5.12 confirm-email emoji → aria-hidden
-- [x] 5.13 axe DevTools: 0 violations na /quotes, /new, /settings
+- [x] 5.3 QuotesList loading skeleton przy initial fetch — 863ef86
+- [x] 5.4 LineItemsEditor pusta lista → komunikat — 863ef86
+- [x] 5.5 ClientQuestionsList 0 pytań → komunikat; "Kopiuj" disabled — 863ef86
+- [x] 5.6 QuoteCreator first AI call → loading indicator — 863ef86
+- [x] 5.7 Paginacja → "Ładowanie..." text — 863ef86
+- [x] 5.8 Done phase → brak auto-reset; przycisk do nowej wyceny — 863ef86
+- [x] 5.9 Delete → loading state na przycisku — 863ef86
+- [x] 5.10 Status change → brief visual confirmation — 863ef86
+- [x] 5.11 inquiry_unusable → konkretny komunikat — 863ef86
+- [x] 5.12 confirm-email emoji → aria-hidden — 863ef86
+- [x] 5.13 axe DevTools: 0 violations na /quotes, /new, /settings — 863ef86
