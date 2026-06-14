@@ -1,10 +1,10 @@
 ---
 change_id: ui-visual-quality
 title: UI visual quality
-status: impl_reviewed
+status: archived
 created: 2026-06-13
 updated: 2026-06-14
-archived_at: null
+archived_at: 2026-06-14T18:36:12Z
 ---
 
 ## Notes
