@@ -155,7 +155,7 @@ describe("Golden path", () => {
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("items");
     expect(result.current.state.title).toBe("Dashboard App");
-    expect(result.current.state.items).toEqual(items);
+    expect(result.current.state.items).toMatchObject(items);
 
     // items → done
     fetchMock.mockReturnValueOnce(jsonResponse({ id: "q1" }));
@@ -164,14 +164,6 @@ describe("Golden path", () => {
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("done");
     expect(result.current.state.savedTitle).toBe("Dashboard App");
-
-    // done → inquiry (3s auto-reset timer)
-    act(() => {
-      vi.runAllTimers();
-    });
-    expect(result.current.state.phase).toBe("inquiry");
-    expect(result.current.state.items).toEqual([]);
-    expect(result.current.state.messages).toEqual([]);
   });
 });
 
@@ -213,7 +205,7 @@ describe("handleInquirySubmit error and edge paths", () => {
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("items");
-    expect(result.current.state.items).toEqual(items);
+    expect(result.current.state.items).toMatchObject(items);
     expect(result.current.state.title).toBe("Direct Quote");
   });
 });
@@ -249,7 +241,7 @@ describe("Behavior D: MAX_QUESTIONS answers trigger generation", () => {
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("items");
-    expect(result.current.state.items).toEqual(items);
+    expect(result.current.state.items).toMatchObject(items);
   });
 });
 

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
 import { createClient } from "@/lib/supabase";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { QuoteItemSchema, MessageSchema } from "@/types";
 
 export const prerender = false;
@@ -82,6 +83,17 @@ export const POST: APIRoute = async (context) => {
     });
   }
 
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (supabase) {
+    const rl = await checkRateLimit(supabase, context.locals.user.id);
+    if (!rl.allowed) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429,
+        headers: { "Content-Type": "application/json", "Retry-After": String(rl.retryAfterSecs) },
+      });
+    }
+  }
+
   const client = createAnthropicClient();
   if (!client) {
     return new Response(JSON.stringify({ error: "AI unavailable" }), {
@@ -91,7 +103,6 @@ export const POST: APIRoute = async (context) => {
   }
 
   let userContext = "";
-  const supabase = createClient(context.request.headers, context.cookies);
   if (supabase) {
     try {
       const { data } = (await supabase

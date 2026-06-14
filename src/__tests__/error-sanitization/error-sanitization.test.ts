@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { POST as scopePOST } from "@/pages/api/ai/scope";
 import { POST as chatPOST } from "@/pages/api/ai/chat";
+import { POST as questionsPOST } from "@/pages/api/ai/questions";
 import type { APIContext } from "astro";
 
 const FAKE_KEY = "sk-ant-api03-test-fake-key";
@@ -107,6 +108,23 @@ describe("error response sanitization", () => {
         generate: false,
       });
       const res = await chatPOST(ctx);
+      const body = (await res.json()) as { error: unknown };
+
+      expect(res.status).toBe(502);
+      expect(body.error).toBe("AI service error");
+      expect(JSON.stringify(body)).not.toContain(FAKE_KEY);
+    });
+  });
+
+  describe("questions.ts — Anthropic SDK error does not leak API key", () => {
+    it("returns generic error without key when messages.parse throws", async () => {
+      mockParse.mockRejectedValue(
+        new Error(`401 {"error":{"message":"invalid x-api-key ${FAKE_KEY}","type":"authentication_error"}}`),
+      );
+
+      // inquiry_text min 3 chars (questions.ts uses z.string().min(3), not min(20))
+      const ctx = makeContext({ inquiry_text: "strona www" });
+      const res = await questionsPOST(ctx);
       const body = (await res.json()) as { error: unknown };
 
       expect(res.status).toBe(502);
