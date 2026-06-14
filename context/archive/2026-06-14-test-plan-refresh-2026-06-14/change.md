@@ -1,10 +1,10 @@
 ---
 change_id: test-plan-refresh-2026-06-14
 title: Test plan refresh — cover /api/ai/questions, query param data isolation, and settings RLS
-status: impl_reviewed
+status: archived
 created: 2026-06-14
-updated: 2026-06-14
-archived_at: null
+updated: 2026-06-15
+archived_at: 2026-06-14T23:00:59Z
 ---
 
 ## Notes
