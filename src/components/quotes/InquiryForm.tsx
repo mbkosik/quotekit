@@ -53,7 +53,9 @@ export function InquiryForm({
       </label>
 
       {validationError && <p className="text-sm text-red-400">{validationError}</p>}
-      {sparseMessage && <p className="text-sm text-amber-400">{sparseMessage}</p>}
+      <p role="alert" aria-live="assertive" className="text-sm text-amber-400">
+        {sparseMessage ?? ""}
+      </p>
 
       <button
         type="submit"

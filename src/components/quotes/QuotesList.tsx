@@ -69,7 +69,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
       <p role="alert" aria-live="assertive" className="text-sm text-red-400">
         {error ?? ""}
       </p>
-      <p role="alert" aria-live="assertive" className="text-sm text-red-400">
+      <p role="status" aria-live="polite" className="text-sm text-red-400">
         {statusError ?? ""}
       </p>
 

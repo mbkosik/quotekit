@@ -63,9 +63,9 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
 
   async function fetchQuotes(page: number, filters: FilterState) {
     if (pageLoadingRef.current) return;
+    pageLoadingRef.current = true;
     setLoading(true);
     try {
-      pageLoadingRef.current = true;
       const res = await fetch(buildAPIURL(page, pageSize, filters));
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = (await res.json()) as { quotes: QuoteRow[]; total: number; page: number };
@@ -108,6 +108,7 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       if (quotes.length === 1 && currentPage > 1) {
         const newPage = currentPage - 1;
+        setTotal((t) => t - 1);
         history.replaceState(null, "", buildPageURL(newPage, filters));
         void fetchQuotes(newPage, filters);
       } else {

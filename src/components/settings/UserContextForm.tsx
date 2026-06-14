@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   context: string;
@@ -9,6 +9,13 @@ const MAX_CHARS = 500;
 export function UserContextForm({ context }: Props) {
   const [value, setValue] = useState(context);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const isUnchanged = value === context;
   const isOverLimit = value.length > MAX_CHARS;
@@ -26,7 +33,8 @@ export function UserContextForm({ context }: Props) {
         return;
       }
       setStatus("saved");
-      setTimeout(() => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
         setStatus("idle");
       }, 2000);
     } catch {

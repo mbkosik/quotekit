@@ -47,7 +47,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
 
   function addRow() {
     const newIdx = items.length;
-    onItemsChange([...items, { task: "", hours: 0, rate: 0 }]);
+    onItemsChange([...items, { id: crypto.randomUUID(), task: "", hours: 0, rate: 0 }]);
     setDraft("");
     setEditingCell({ rowIndex: newIdx, field: "task" });
   }
@@ -93,7 +93,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={i} className="border-b border-white/5 text-white/80 last:border-0">
+              <tr key={item.id ?? i} className="border-b border-white/5 text-white/80 last:border-0">
                 <td className="px-4 py-2">
                   {editingCell?.rowIndex === i && editingCell.field === "task" ? (
                     <input

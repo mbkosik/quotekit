@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Quote, QuoteItem, QuoteStatus } from "@/types";
 
 export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | "content">) {
@@ -10,6 +10,13 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
   const [isDirty, setIsDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, []);
 
   function setTitle(t: string) {
     _setTitle(t);
@@ -39,7 +46,8 @@ export function useQuoteEditor(initial: Pick<Quote, "id" | "title" | "status" | 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setIsDirty(false);
       setSuccess("Wycena zapisana.");
-      setTimeout(() => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      successTimerRef.current = setTimeout(() => {
         setSuccess(null);
       }, 3000);
     } catch {

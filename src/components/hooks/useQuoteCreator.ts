@@ -86,7 +86,7 @@ export function useQuoteCreator() {
         return;
       }
       if (data.type === "complete") {
-        setItems(data.items);
+        setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
         setTitle(data.title);
         setPhase("items");
         return;
@@ -122,7 +122,7 @@ export function useQuoteCreator() {
         }
         if (data.type === "sparse" || data.type === "complete") {
           if (data.type === "complete") {
-            setItems(data.items);
+            setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
             setTitle(data.title);
           }
           setPhase(data.type === "complete" ? "items" : "inquiry");
@@ -155,7 +155,7 @@ export function useQuoteCreator() {
         setError("Nie udało się wygenerować pozycji. Spróbuj ponownie.");
         return;
       }
-      setItems(data.items);
+      setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
       setTitle(data.title);
       setPhase("items");
     } catch (err) {

@@ -11,6 +11,7 @@ export const MessageSchema = z.object({
 export type Message = z.infer<typeof MessageSchema>;
 
 export const QuoteItemSchema = z.object({
+  id: z.string().optional(),
   task: z.string(),
   hours: z.number(),
   rate: z.number(),
