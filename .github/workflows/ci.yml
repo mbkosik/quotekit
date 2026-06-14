@@ -17,7 +17,7 @@ jobs:
           cache: npm
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.106.0
       - run: supabase start
       - name: Export Supabase local credentials
         run: |
