@@ -36,9 +36,9 @@ export function InquiryForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-2xl flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex w-full max-w-3xl flex-col gap-4">
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-medium text-white/70">Wklej zapytanie klienta</span>
+        <span className="text-sm font-medium text-white/60">Wklej zapytanie klienta</span>
         <textarea
           value={text}
           onChange={(e) => {
@@ -83,11 +83,11 @@ export function InquiryForm({
           setValidationError("");
           onGenerateQuestions(trimmed);
         }}
-        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/60 transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {questionsLoading ? (
           <>
-            <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/70" />
+            <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
             Generuję pytania...
           </>
         ) : (

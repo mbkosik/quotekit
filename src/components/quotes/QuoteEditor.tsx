@@ -38,9 +38,9 @@ export function QuoteEditor({ quote }: Props) {
   } = useQuoteEditor(quote);
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-6">
+    <div className="flex w-full max-w-3xl flex-col gap-6">
       <div className="flex items-center justify-between">
-        <a href="/quotes" className="text-sm text-white/40 transition-colors hover:text-white/70">
+        <a href="/quotes" className="text-sm text-white/40 transition-colors hover:text-white/60">
           ← Wróć do listy
         </a>
         <AlertDialog>

@@ -46,14 +46,21 @@ const pageTitle = errorState ? errorState.title : quote ? `${quote.title} — Qu
       {
         errorState ? (
           <div class="flex flex-col items-center gap-4 text-center">
-            <h1 class="text-2xl font-bold">{errorState.title}</h1>
+            <h1 class="text-2xl font-bold" aria-live="assertive">
+              {errorState.title}
+            </h1>
             <p class="text-white/60">{errorState.message}</p>
             <a href="/quotes" class="text-sm text-purple-300 transition-colors hover:text-purple-100">
               ← Wróć do listy wycen
             </a>
           </div>
         ) : (
-          quote && <QuoteEditor quote={quote} client:load />
+          quote && (
+            <>
+              <h1 class="sr-only">Edycja wyceny: {quote.title}</h1>
+              <QuoteEditor quote={quote} client:load />
+            </>
+          )
         )
       }
     </main>

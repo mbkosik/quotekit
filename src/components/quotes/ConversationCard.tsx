@@ -31,20 +31,20 @@ export function ConversationCard({
   }
 
   return (
-    <div className="flex w-full max-w-2xl flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+    <div className="flex w-full max-w-3xl flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-white/40">
           Pytanie {questionNumber} / {maxQuestions}
         </span>
       </div>
 
-      <p id={`question-${questionNumber}`} className="text-base text-white/90">
+      <p id={`question-${questionNumber}`} className="text-base text-white/60">
         {question}
       </p>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-sm text-white/50">
-          <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
+        <div className="flex items-center gap-2 text-sm text-white/40">
+          <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
           Analizuję...
         </div>
       ) : (

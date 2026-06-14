@@ -46,7 +46,7 @@ export function UserContextForm({ context }: Props) {
     <div className="flex flex-col gap-4">
       <div>
         <h2 className="text-lg font-semibold text-white">Kontekst użytkownika</h2>
-        <p className="mt-1 text-sm text-white/50">
+        <p className="mt-1 text-sm text-white/40">
           Te informacje są dołączane do każdego promptu AI i pomagają dopasować wyceny do Twojej specjalizacji.
         </p>
       </div>

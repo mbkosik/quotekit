@@ -73,7 +73,7 @@ export function QuoteFilterBar({
       {hasActiveFilters && (
         <button
           onClick={onClearFilters}
-          className="text-xs text-white/40 underline-offset-2 transition-colors hover:text-white/70 hover:underline"
+          className="text-xs text-white/40 underline-offset-2 transition-colors hover:text-white/60 hover:underline"
         >
           Wyczyść filtry
         </button>

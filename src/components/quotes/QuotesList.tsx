@@ -92,7 +92,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
             >
               <a
                 href={`/quotes/${q.id}`}
-                className="flex-1 truncate text-sm font-medium text-white transition-colors hover:text-white/70"
+                className="flex-1 truncate text-sm font-medium text-white transition-colors hover:text-white/60"
               >
                 {q.title}
               </a>
@@ -115,7 +115,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
-                    className="text-white/50 transition-colors hover:text-red-400"
+                    className="text-white/40 transition-colors hover:text-red-400"
                     aria-label={`Usuń wycenę: ${q.title}`}
                   >
                     ✕

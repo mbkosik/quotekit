@@ -647,10 +647,10 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [ ] 1.1 Brak text-white/50, /70, /80, /90, text-blue-100/* w src/ (grep)
-- [ ] 1.2 Brak `<style>` w Banner.astro (grep)
-- [ ] 1.3 `npm run build` — bez błędów
-- [ ] 1.4 `npm run lint` — bez błędów
+- [x] 1.1 Brak text-white/50, /70, /80, /90, text-blue-100/* w src/ (grep)
+- [x] 1.2 Brak `<style>` w Banner.astro (grep)
+- [x] 1.3 `npm run build` — bez błędów
+- [x] 1.4 `npm run lint` — bez błędów
 
 #### Manual
 

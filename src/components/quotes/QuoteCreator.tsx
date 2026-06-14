@@ -34,7 +34,7 @@ export function QuoteCreator() {
 
   if (phase === "done") {
     return (
-      <div className="flex w-full max-w-2xl flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-green-500/10 px-8 py-12 text-center">
+      <div className="flex w-full max-w-3xl flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-green-500/10 px-8 py-12 text-center">
         <p className="text-lg font-medium text-green-300">Wycena &ldquo;{savedTitle}&rdquo; zapisana!</p>
         <a href="/quotes" className="text-sm text-purple-300 underline hover:text-purple-100">
           Zobacz swoje wyceny →

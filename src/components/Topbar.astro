@@ -2,7 +2,7 @@
 const { user } = Astro.locals;
 ---
 
-<div class="flex items-center justify-between border-b border-white/10 bg-white/5 px-6 py-3 text-sm text-white/80">
+<div class="flex items-center justify-between border-b border-white/10 bg-white/5 px-6 py-3 text-sm text-white/60">
   <a href="/new" class="text-lg font-semibold text-white">QuoteKit</a>
   {
     user ? (
@@ -17,7 +17,7 @@ const { user } = Astro.locals;
             </a>
           </div>
         </nav>
-        <span class="text-blue-100/70">{user.email}</span>
+        <span class="text-white/60">{user.email}</span>
         <form method="POST" action="/api/auth/signout">
           <button type="submit" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
             Sign out

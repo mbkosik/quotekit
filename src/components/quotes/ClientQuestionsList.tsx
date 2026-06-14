@@ -33,16 +33,16 @@ export function ClientQuestionsList({ questions, onBack }: Props) {
   }
 
   return (
-    <div className="flex w-full max-w-2xl flex-col gap-6">
+    <div className="flex w-full max-w-3xl flex-col gap-6">
       <div>
         <h2 className="mb-1 text-lg font-semibold text-white">Pytania do klienta</h2>
-        <p className="text-sm text-white/50">Skopiuj i wyślij klientowi przed wyceną</p>
+        <p className="text-sm text-white/40">Skopiuj i wyślij klientowi przed wyceną</p>
       </div>
       <ol className="flex flex-col gap-3">
         {questions.map((q, i) => (
           <li key={q} className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
             <span className="shrink-0 text-sm font-medium text-purple-400">{i + 1}.</span>
-            <span className="text-sm text-white/80">{q}</span>
+            <span className="text-sm text-white/60">{q}</span>
           </li>
         ))}
       </ol>
@@ -55,7 +55,7 @@ export function ClientQuestionsList({ questions, onBack }: Props) {
         </button>
         <button
           onClick={onBack}
-          className="rounded-xl border border-white/10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-white/5"
+          className="rounded-xl border border-white/10 px-6 py-3 text-sm text-white/60 transition-colors hover:bg-white/5"
         >
           Wróć do wyceny
         </button>

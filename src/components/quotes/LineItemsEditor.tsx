@@ -67,7 +67,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
     : items;
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-6">
+    <div className="flex w-full max-w-3xl flex-col gap-6">
       {onTitleChange ? (
         <input
           value={title}
@@ -93,7 +93,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={item.id ?? i} className="border-b border-white/5 text-white/80 last:border-0">
+              <tr key={item.id ?? i} className="border-b border-white/5 text-white/60 last:border-0">
                 <td className="px-4 py-2">
                   {editingCell?.rowIndex === i && editingCell.field === "task" ? (
                     <input
@@ -204,7 +204,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     onClick={() => {
                       removeRow(i);
                     }}
-                    className="text-white/50 transition-colors hover:text-red-400"
+                    className="text-white/40 transition-colors hover:text-red-400"
                     aria-label="Usuń pozycję"
                   >
                     ✕
