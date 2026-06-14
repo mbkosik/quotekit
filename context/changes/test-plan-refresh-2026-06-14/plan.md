@@ -274,21 +274,21 @@ Uwaga na test 4: upsert pod RLS może zwrócić brak błędu ale 0 mutacji (zach
 
 #### Automated
 
-- [x] 2.1 npm test przechodzi (nowe 3 testy query-filter-isolation green, wymaga supabase start)
-- [x] 2.2 npm run lint czyste
-- [x] 2.3 npx astro check czyste
+- [x] 2.1 npm test przechodzi (nowe 3 testy query-filter-isolation green, wymaga supabase start) — 664eb91
+- [x] 2.2 npm run lint czyste — 664eb91
+- [x] 2.3 npx astro check czyste — 664eb91
 
 #### Manual
 
-- [ ] 2.4 GET /api/quotes?status=draft&search=[term] zwraca tylko własne wyceny zalogowanego usera
+- [x] 2.4 GET /api/quotes?status=draft&search=[term] zwraca tylko własne wyceny zalogowanego usera — 664eb91
 
 ### Phase 3: R3 — Settings RLS
 
 #### Automated
 
-- [ ] 3.1 npm test przechodzi (nowe 4 testy settings-idor green, wymaga supabase start)
-- [ ] 3.2 npm run lint czyste
-- [ ] 3.3 npx astro check czyste
+- [x] 3.1 npm test przechodzi (nowe 4 testy settings-idor green, wymaga supabase start)
+- [x] 3.2 npm run lint czyste
+- [x] 3.3 npx astro check czyste
 
 #### Manual
 
