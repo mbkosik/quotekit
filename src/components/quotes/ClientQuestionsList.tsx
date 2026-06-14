@@ -52,7 +52,7 @@ export function ClientQuestionsList({ questions, onBack }: Props) {
         </ol>
       )}
       <div className="flex gap-3">
-        <Button onClick={handleCopy} disabled={questions.length === 0} className="flex-1">
+        <Button variant="outline" onClick={handleCopy} disabled={questions.length === 0} className="flex-1">
           {copied ? "Skopiowano!" : "Kopiuj wszystkie"}
         </Button>
         <Button variant="ghost" onClick={onBack}>

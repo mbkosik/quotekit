@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppTextarea } from "@/components/ui/app-textarea";
+import { InlineError } from "@/components/ui/inline-error";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -72,24 +73,16 @@ export function ConversationCard({
         </form>
       )}
 
-      <div
-        role="alert"
-        aria-live="assertive"
-        className={cn(
-          error && "flex items-center justify-between rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3",
-        )}
-      >
-        {error && (
-          <>
-            <p className="text-sm text-red-400">{error}</p>
-            {onRetry && (
-              <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
-                Spróbuj ponownie
-              </Button>
-            )}
-          </>
-        )}
-      </div>
+      {(error ?? onRetry) && (
+        <div className={cn(error && "flex items-center justify-between")}>
+          <InlineError message={error ?? null} />
+          {onRetry && (
+            <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
+              Spróbuj ponownie
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

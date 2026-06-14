@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback } from "react";
 import type { QuoteItem, Message } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
@@ -51,17 +51,8 @@ export function useQuoteCreator() {
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
-  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(
-    () => () => {
-      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
-    },
-    [],
-  );
 
   function resetForm() {
-    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
     setPhase("inquiry");
     setInquiryText("");
     setMessages([]);

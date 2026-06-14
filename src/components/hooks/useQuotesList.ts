@@ -109,7 +109,7 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
     }
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(id: string): Promise<boolean> {
     setError(null);
     setIsDeleting(true);
     const filters: FilterState = { statusFilter, searchFilter, sortOrder };
@@ -125,8 +125,10 @@ export function useQuotesList({ initialQuotes, initialTotal, pageSize, initialFi
         setQuotes((qs) => qs.filter((q) => q.id !== id));
         setTotal((t) => t - 1);
       }
+      return true;
     } catch {
       setError("Nie udało się usunąć wyceny. Spróbuj ponownie.");
+      return false;
     } finally {
       setIsDeleting(false);
     }

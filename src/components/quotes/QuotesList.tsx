@@ -1,17 +1,16 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { InlineError } from "@/components/ui/inline-error";
 import { cn } from "@/lib/utils";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { QuoteStatus } from "@/types";
 import { QUOTE_STATUSES } from "@/types";
@@ -52,7 +51,9 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
     handleClearFilters,
   } = useQuotesList({ initialQuotes, initialTotal, pageSize, initialFilters });
 
-  const isEmpty = total === 0 && !hasActiveFilters;
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const isEmpty = total === 0 && !hasActiveFilters && !loading;
   const isFilteredEmpty = quotes.length === 0 && hasActiveFilters;
 
   if (isEmpty) {
@@ -127,17 +128,23 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
                 ))}
               </select>
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white/40 hover:text-red-400"
-                    aria-label={`Usuń wycenę: ${q.title}`}
-                  >
-                    <X size={14} aria-hidden />
-                  </Button>
-                </AlertDialogTrigger>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white/40 hover:text-red-400"
+                aria-label={`Usuń wycenę: ${q.title}`}
+                onClick={() => {
+                  setDeleteId(q.id);
+                }}
+              >
+                <X size={14} aria-hidden />
+              </Button>
+              <AlertDialog
+                open={deleteId === q.id}
+                onOpenChange={(open) => {
+                  if (!open && !isDeleting) setDeleteId(null);
+                }}
+              >
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Usunąć wycenę?</AlertDialogTitle>
@@ -147,15 +154,16 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => {
-                        void handleDelete(q.id);
+                    <Button
+                      onClick={async () => {
+                        const ok = await handleDelete(q.id);
+                        if (ok) setDeleteId(null);
                       }}
                       disabled={isDeleting}
                       className="bg-red-600 hover:bg-red-500"
                     >
                       {isDeleting ? "Usuwanie..." : "Usuń"}
-                    </AlertDialogAction>
+                    </Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

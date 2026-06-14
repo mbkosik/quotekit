@@ -71,7 +71,7 @@ export function InquiryForm({
       <Button type="submit" disabled={loading} className="w-full">
         {loading && !questionsLoading ? (
           <>
-            <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            <span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
             Analizuję...
           </>
         ) : (

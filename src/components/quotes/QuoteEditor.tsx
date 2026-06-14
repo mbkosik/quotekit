@@ -52,12 +52,7 @@ export function QuoteEditor({ quote }: Props) {
         </a>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={deleting}
-              className="text-red-400 hover:bg-red-400/10 hover:text-red-400"
-            >
+            <Button variant="destructive" size="sm" disabled={deleting}>
               {deleting ? "Usuwanie…" : "Usuń wycenę"}
             </Button>
           </AlertDialogTrigger>

@@ -42,6 +42,16 @@
 
 **Applies to**: Komentarze w kodzie, opisy zmian, komunikaty UI, dokumentacja — wszędzie gdzie pojawia się słowo "quote" w kontekście domenowym
 
+## Dla tymczasowych kluczy React używaj _clientId zamiast pola domenowego id
+
+**Context**: src/components/quotes/LineItemsEditor.tsx — key prop dla wierszy dodawanych przez użytkownika
+
+**Problem**: Plan wymagał osobnego pola `_clientId` (UUID generowany po stronie klienta, niewnoszony do API) jako klucza React. Implementacja użyła istniejącego pola `id` z `crypto.randomUUID()` w `addRow`. Działa poprawnie, ale `id` jest polem domenowym (wysyłanym do API), przez co nie można odróżnić rekordów "świeżo stworzonych po stronie klienta" od "zapisanych w bazie".
+
+**Rule**: Przy dynamicznie dodawanych wierszach używaj dedykowanego pola `_clientId` generowanego tylko po stronie klienta (`crypto.randomUUID()`), nie recykluj pola `id` z modelu domenowego. `_clientId` nie trafia do API — jest filtrowan przy serializacji.
+
+**Applies to**: Każdy komponent React z listą wierszy dodawanych przez użytkownika przed zapisem do API (tabele pozycji, tagi, warianty itp.)
+
 ## Logika state machine komponentu trafia do hooka, nie do komponentu
 
 **Context**: src/components/hooks/useQuoteCreator.ts — ai-quote-creation-flow (2026-05-29)

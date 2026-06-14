@@ -68,7 +68,7 @@ export default function SignUpForm({ serverError }: Props) {
 
       <FormField
         id="confirmPassword"
-        name="confirmPassword"
+        name=""
         label="Confirm password"
         type={showConfirmPassword ? "text" : "password"}
         value={confirmPassword}
