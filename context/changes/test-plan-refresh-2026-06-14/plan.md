@@ -286,12 +286,12 @@ Uwaga na test 4: upsert pod RLS może zwrócić brak błędu ale 0 mutacji (zach
 
 #### Automated
 
-- [x] 3.1 npm test przechodzi (nowe 4 testy settings-idor green, wymaga supabase start)
-- [x] 3.2 npm run lint czyste
-- [x] 3.3 npx astro check czyste
+- [x] 3.1 npm test przechodzi (nowe 4 testy settings-idor green, wymaga supabase start) — 6c5f3a3
+- [x] 3.2 npm run lint czyste — 6c5f3a3
+- [x] 3.3 npx astro check czyste — 6c5f3a3
 
 #### Manual
 
-- [ ] 3.4 GET /api/settings zwraca własne ustawienia użytkownika
-- [ ] 3.5 POST /api/settings zapisuje i zwraca dane
-- [ ] 3.6 Statusy faz R1, R2, R3 w test-plan.md §3 zaktualizowane na done
+- [x] 3.4 GET /api/settings zwraca własne ustawienia użytkownika — 6c5f3a3
+- [x] 3.5 POST /api/settings zapisuje i zwraca dane — 6c5f3a3
+- [x] 3.6 Statusy faz R1, R2, R3 w test-plan.md §3 zaktualizowane na done

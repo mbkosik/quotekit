@@ -76,9 +76,9 @@ The following are **deliberately not tested** in this rollout:
 | 2 | Core flow reliability | Prove quote CRUD and AI creation state machine are regression-safe | #1 (core CRUD), #3 (AI flow state machine) | Unit (hook), integration (API) | done | Risk #1: src/__tests__/core-crud/crud.test.ts; Risk #3: src/components/hooks/useQuoteCreator.test.ts |
 | 3 | AI endpoint safety | Implement and test rate limiting; prove error responses don't leak credentials | #5 (rate limiting), #7 (key leakage) | Integration (rate limit), unit (error response) | done | Risk #5: src/lib/rate-limit.ts + src/__tests__/rate-limiting/rate-limit.test.ts; Risk #7: context/changes/error-response-sanitization |
 | 4 | Quality gates wiring | Wire lint + test + type-check into CI on the correct branch; lock all prior tests into the gate | #4 (CI gate), all | CI configuration + smoke | done | ci.yml commit 6beab3c on main; smoke PR #2 confirmed gate blocks |
-| R1 | AI questions safety | Backfill rate limiting wiring to all 3 AI endpoints; prove `/api/ai/questions` error responses don't leak credentials | #8 (rate limit), #9 (sanitization) | Integration (rate limit — function level), unit (error sanitization mock) | in_progress | test-plan-refresh-2026-06-14 |
-| R2 | Query param data isolation | Prove `GET /api/quotes` filters always stay within authenticated user's own rows | #10 (filter isolation) | Integration — real local Supabase | pending | test-plan-refresh-2026-06-14 |
-| R3 | Settings RLS | Prove `user_settings` RLS blocks cross-user read and write via `/api/settings` | #11 (settings IDOR) | Integration — real local Supabase | pending | test-plan-refresh-2026-06-14 |
+| R1 | AI questions safety | Backfill rate limiting wiring to all 3 AI endpoints; prove `/api/ai/questions` error responses don't leak credentials | #8 (rate limit), #9 (sanitization) | Integration (rate limit — function level), unit (error sanitization mock) | done | test-plan-refresh-2026-06-14 |
+| R2 | Query param data isolation | Prove `GET /api/quotes` filters always stay within authenticated user's own rows | #10 (filter isolation) | Integration — real local Supabase | done | test-plan-refresh-2026-06-14 |
+| R3 | Settings RLS | Prove `user_settings` RLS blocks cross-user read and write via `/api/settings` | #11 (settings IDOR) | Integration — real local Supabase | done | test-plan-refresh-2026-06-14 |
 
 ---
 
