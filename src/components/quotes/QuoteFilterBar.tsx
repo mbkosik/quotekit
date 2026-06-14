@@ -3,6 +3,7 @@ import { QUOTE_STATUSES } from "@/types";
 import { STATUS_LABELS } from "@/lib/quotes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 interface Props {
   statusFilter: QuoteStatus[];
@@ -72,7 +73,15 @@ export function QuoteFilterBar({
         }
         className="text-xs text-white/60"
       >
-        {sortOrder === "desc" ? "Najnowsze ↓" : "Najstarsze ↑"}
+        {sortOrder === "desc" ? (
+          <>
+            Najnowsze <ArrowDown size={14} aria-hidden />
+          </>
+        ) : (
+          <>
+            Najstarsze <ArrowUp size={14} aria-hidden />
+          </>
+        )}
       </Button>
 
       {hasActiveFilters && (

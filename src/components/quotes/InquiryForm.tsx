@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { AppTextarea } from "@/components/ui/app-textarea";
 
 interface Props {
   onSubmit: (text: string) => void;
@@ -40,7 +41,7 @@ export function InquiryForm({
     <form onSubmit={handleSubmit} className="flex w-full max-w-3xl flex-col gap-4">
       <label className="flex flex-col gap-2">
         <span className="text-sm font-medium text-white/60">Wklej zapytanie klienta</span>
-        <textarea
+        <AppTextarea
           value={text}
           onChange={(e) => {
             setText(e.target.value);
@@ -48,7 +49,6 @@ export function InquiryForm({
           }}
           rows={6}
           placeholder="Opisz projekt klienta — im więcej szczegółów, tym lepsza wycena..."
-          className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/40"
           disabled={loading}
         />
       </label>

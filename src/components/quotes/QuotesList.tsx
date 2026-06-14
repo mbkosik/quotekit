@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { InlineError } from "@/components/ui/inline-error";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -67,12 +69,8 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
         onClearFilters={handleClearFilters}
       />
 
-      <p role="alert" aria-live="assertive" className="text-sm text-red-400">
-        {error ?? ""}
-      </p>
-      <p role="status" aria-live="polite" className="text-sm text-red-400">
-        {statusError ?? ""}
-      </p>
+      <InlineError message={error} />
+      <InlineError message={statusError} />
 
       {isFilteredEmpty ? (
         <div className="flex flex-col items-start gap-2 py-4">
@@ -121,7 +119,7 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
                     className="text-white/40 hover:text-red-400"
                     aria-label={`Usuń wycenę: ${q.title}`}
                   >
-                    ✕
+                    <X size={14} aria-hidden />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -159,7 +157,8 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
             }}
             disabled={currentPage <= 1 || loading}
           >
-            ← Poprzednia
+            <ChevronLeft size={14} aria-hidden />
+            Poprzednia
           </Button>
           <span className="text-xs text-white/40">
             {currentPage} / {totalPages}
@@ -172,7 +171,8 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
             }}
             disabled={currentPage >= totalPages || loading}
           >
-            Następna →
+            Następna
+            <ChevronRight size={14} aria-hidden />
           </Button>
         </div>
       )}

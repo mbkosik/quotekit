@@ -664,33 +664,33 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [x] 2.1 Brak ręcznych px-*/py-*/rounded klas na button elementach w quotes/settings (grep)
-- [x] 2.2 `npm run build` — bez błędów
-- [x] 2.3 `npm run lint` — bez błędów
+- [x] 2.1 Brak ręcznych px-*/py-*/rounded klas na button elementach w quotes/settings (grep) — 4166f3a
+- [x] 2.2 `npm run build` — bez błędów — 4166f3a
+- [x] 2.3 `npm run lint` — bez błędów — 4166f3a
 
 #### Manual
 
-- [ ] 2.4 /new flow — przyciski spójne (rounded-xl, warianty)
-- [ ] 2.5 Tab przez formularz — focus ring na każdym przycisku
-- [ ] 2.6 Disabled state — opacity jednolita
-- [ ] 2.7 Auth SubmitButton bez regressions
+- [x] 2.4 /new flow — przyciski spójne (rounded-xl, warianty) — 4166f3a
+- [x] 2.5 Tab przez formularz — focus ring na każdym przycisku — 4166f3a
+- [x] 2.6 Disabled state — opacity jednolita — 4166f3a
+- [x] 2.7 Auth SubmitButton bez regressions — 4166f3a
 
 ### Phase 3: Shared UI Components + Lucide Icons
 
 #### Automated
 
-- [ ] 3.1 `test -f src/components/ui/app-textarea.tsx`
-- [ ] 3.2 `test -f src/components/ui/inline-error.tsx`
-- [ ] 3.3 Brak zduplikowanego textarea className w src/components/ (grep)
-- [ ] 3.4 `npm run build` — bez błędów
-- [ ] 3.5 `npm run lint` — bez błędów
+- [x] 3.1 `test -f src/components/ui/app-textarea.tsx`
+- [x] 3.2 `test -f src/components/ui/inline-error.tsx`
+- [x] 3.3 Brak zduplikowanego textarea className w src/components/ (grep)
+- [x] 3.4 `npm run build` — bez błędów
+- [x] 3.5 `npm run lint` — bez błędów
 
 #### Manual
 
-- [ ] 3.6 Textarea wizualnie identyczne jak przed
-- [ ] 3.7 InlineError spójny styl na wszystkich komponentach
-- [ ] 3.8 Ikony Lucide zamiast Unicode w quotes area
-- [ ] 3.9 Focus ring nadal widoczny na przyciskach
+- [x] 3.6 Textarea wizualnie identyczne jak przed
+- [x] 3.7 InlineError spójny styl na wszystkich komponentach
+- [x] 3.8 Ikony Lucide zamiast Unicode w quotes area
+- [x] 3.9 Focus ring nadal widoczny na przyciskach
 
 ### Phase 4: Code Quality
 

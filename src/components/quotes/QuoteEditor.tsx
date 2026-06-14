@@ -1,5 +1,7 @@
 import { useQuoteEditor } from "@/components/hooks/useQuoteEditor";
 import { Button } from "@/components/ui/button";
+import { InlineError } from "@/components/ui/inline-error";
+import { ChevronLeft } from "lucide-react";
 import { LineItemsEditor } from "@/components/quotes/LineItemsEditor";
 import {
   AlertDialog,
@@ -41,8 +43,12 @@ export function QuoteEditor({ quote }: Props) {
   return (
     <div className="flex w-full max-w-3xl flex-col gap-6">
       <div className="flex items-center justify-between">
-        <a href="/quotes" className="text-sm text-white/40 transition-colors hover:text-white/60">
-          ← Wróć do listy
+        <a
+          href="/quotes"
+          className="flex items-center gap-1 text-sm text-white/40 transition-colors hover:text-white/60"
+        >
+          <ChevronLeft size={16} aria-hidden />
+          Wróć do listy
         </a>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -94,13 +100,7 @@ export function QuoteEditor({ quote }: Props) {
         </select>
       </div>
 
-      <p
-        role="alert"
-        aria-live="assertive"
-        className={cn("text-sm text-red-400", error && "rounded-lg bg-red-500/10 px-4 py-3")}
-      >
-        {error ?? ""}
-      </p>
+      <InlineError message={error} />
       <p
         role="status"
         aria-live="polite"

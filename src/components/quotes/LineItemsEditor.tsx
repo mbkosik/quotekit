@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { QuoteItem } from "@/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface Props {
   items: QuoteItem[];
@@ -211,7 +212,7 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                     className="text-white/40 hover:text-red-400"
                     aria-label="Usuń pozycję"
                   >
-                    ✕
+                    <X size={12} aria-hidden />
                   </Button>
                 </td>
               </tr>

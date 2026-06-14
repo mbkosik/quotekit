@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { AppTextarea } from "@/components/ui/app-textarea";
+import { InlineError } from "@/components/ui/inline-error";
 
 interface Props {
   context: string;
@@ -51,7 +53,7 @@ export function UserContextForm({ context }: Props) {
           Te informacje są dołączane do każdego promptu AI i pomagają dopasować wyceny do Twojej specjalizacji.
         </p>
       </div>
-      <textarea
+      <AppTextarea
         value={value}
         onChange={(e) => {
           setValue(e.target.value);
@@ -60,7 +62,6 @@ export function UserContextForm({ context }: Props) {
         rows={6}
         placeholder="Np. Specjalizuję się w aplikacjach webowych (Laravel, Vue). Pracuję z małymi firmami na rynku polskim. Moja stawka to 120–180 PLN/h. Zawsze wyceniam czas na dokumentację i komunikację."
         aria-label="Kontekst użytkownika dla generowania wycen"
-        className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/40"
       />
       <div className="flex items-center justify-between">
         <span className={`text-xs ${isOverLimit ? "text-red-400" : "text-white/40"}`}>
@@ -68,9 +69,7 @@ export function UserContextForm({ context }: Props) {
         </span>
         <div className="flex items-center gap-3">
           {status === "saved" && <span className="text-sm text-green-400">Zapisano</span>}
-          <p role="alert" aria-live="assertive" className="text-sm text-red-400">
-            {status === "error" ? "Błąd zapisu — spróbuj ponownie" : ""}
-          </p>
+          <InlineError message={status === "error" ? "Błąd zapisu — spróbuj ponownie" : null} />
           <Button type="button" onClick={handleSave} disabled={status === "saving" || isUnchanged || isOverLimit}>
             {status === "saving" ? "Zapisywanie…" : "Zapisz"}
           </Button>

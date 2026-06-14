@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { AppTextarea } from "@/components/ui/app-textarea";
 
 interface Props {
   question: string;
@@ -50,7 +51,7 @@ export function ConversationCard({
         </div>
       ) : (
         <form onSubmit={handleAnswer} className="flex flex-col gap-3">
-          <textarea
+          <AppTextarea
             value={answer}
             onChange={(e) => {
               setAnswer(e.target.value);
@@ -58,7 +59,6 @@ export function ConversationCard({
             rows={3}
             placeholder="Twoja odpowiedź..."
             aria-labelledby={`question-${questionNumber}`}
-            className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/40"
           />
           <div className="flex gap-3">
             <Button type="submit" disabled={!answer.trim()} className="flex-1">

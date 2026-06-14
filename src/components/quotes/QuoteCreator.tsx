@@ -3,6 +3,8 @@ import { InquiryForm } from "./InquiryForm";
 import { ClientQuestionsList } from "./ClientQuestionsList";
 import { ConversationCard } from "./ConversationCard";
 import { LineItemsEditor } from "./LineItemsEditor";
+import { InlineError } from "@/components/ui/inline-error";
+import { ChevronRight } from "lucide-react";
 
 export function QuoteCreator() {
   const { state, actions } = useQuoteCreator();
@@ -36,8 +38,8 @@ export function QuoteCreator() {
     return (
       <div className="flex w-full max-w-3xl flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-green-500/10 px-8 py-12 text-center">
         <p className="text-lg font-medium text-green-300">Wycena &ldquo;{savedTitle}&rdquo; zapisana!</p>
-        <a href="/quotes" className="text-sm text-purple-300 underline hover:text-purple-100">
-          Zobacz swoje wyceny →
+        <a href="/quotes" className="flex items-center gap-1 text-sm text-purple-300 underline hover:text-purple-100">
+          Zobacz swoje wyceny <ChevronRight size={16} aria-hidden />
         </a>
       </div>
     );
@@ -46,9 +48,7 @@ export function QuoteCreator() {
   if (phase === "items" || phase === "saving") {
     return (
       <>
-        <p role="alert" aria-live="assertive" className="mb-4 text-sm text-red-400">
-          {error}
-        </p>
+        <InlineError message={error || null} className="mb-4" />
         <LineItemsEditor
           items={items}
           title={title}
