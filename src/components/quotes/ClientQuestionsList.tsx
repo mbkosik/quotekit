@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   questions: string[];
@@ -47,18 +48,12 @@ export function ClientQuestionsList({ questions, onBack }: Props) {
         ))}
       </ol>
       <div className="flex gap-3">
-        <button
-          onClick={handleCopy}
-          className="flex-1 rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500"
-        >
+        <Button onClick={handleCopy} className="flex-1">
           {copied ? "Skopiowano!" : "Kopiuj wszystkie"}
-        </button>
-        <button
-          onClick={onBack}
-          className="rounded-xl border border-white/10 px-6 py-3 text-sm text-white/60 transition-colors hover:bg-white/5"
-        >
+        </Button>
+        <Button variant="ghost" onClick={onBack}>
           Wróć do wyceny
-        </button>
+        </Button>
       </div>
     </div>
   );

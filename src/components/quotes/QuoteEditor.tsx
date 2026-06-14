@@ -1,4 +1,5 @@
 import { useQuoteEditor } from "@/components/hooks/useQuoteEditor";
+import { Button } from "@/components/ui/button";
 import { LineItemsEditor } from "@/components/quotes/LineItemsEditor";
 import {
   AlertDialog,
@@ -45,12 +46,14 @@ export function QuoteEditor({ quote }: Props) {
         </a>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               disabled={deleting}
-              className="rounded-lg px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-40"
+              className="text-red-400 hover:bg-red-400/10 hover:text-red-400"
             >
               {deleting ? "Usuwanie…" : "Usuń wycenę"}
-            </button>
+            </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

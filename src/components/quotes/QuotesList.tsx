@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -114,12 +115,14 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <button
-                    className="text-white/40 transition-colors hover:text-red-400"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-white/40 hover:text-red-400"
                     aria-label={`Usuń wycenę: ${q.title}`}
                   >
                     ✕
-                  </button>
+                  </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
@@ -148,27 +151,29 @@ export function QuotesList({ initialQuotes, initialTotal, pageSize, initialFilte
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-2">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => {
               handlePageChange(currentPage - 1);
             }}
             disabled={currentPage <= 1 || loading}
-            className="rounded-lg px-4 py-2 text-sm text-white/60 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
             ← Poprzednia
-          </button>
+          </Button>
           <span className="text-xs text-white/40">
             {currentPage} / {totalPages}
           </span>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => {
               handlePageChange(currentPage + 1);
             }}
             disabled={currentPage >= totalPages || loading}
-            className="rounded-lg px-4 py-2 text-sm text-white/60 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
             Następna →
-          </button>
+          </Button>
         </div>
       )}
     </div>

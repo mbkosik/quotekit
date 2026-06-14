@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   question: string;
@@ -60,20 +61,12 @@ export function ConversationCard({
             className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-purple-500/60 focus:ring-1 focus:ring-purple-500/40"
           />
           <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={!answer.trim()}
-              className="flex-1 rounded-xl bg-purple-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-40"
-            >
+            <Button type="submit" disabled={!answer.trim()} className="flex-1">
               Odpowiedz
-            </button>
-            <button
-              type="button"
-              onClick={onSkip}
-              className="rounded-xl border border-white/10 px-4 py-2.5 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
-            >
+            </Button>
+            <Button type="button" variant="ghost" onClick={onSkip}>
               Pomiń / Wystarczy
-            </button>
+            </Button>
           </div>
         </form>
       )}
@@ -89,9 +82,9 @@ export function ConversationCard({
           <>
             <p className="text-sm text-red-400">{error}</p>
             {onRetry && (
-              <button onClick={onRetry} className="ml-4 text-sm text-red-300 underline hover:text-red-100">
+              <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
                 Spróbuj ponownie
-              </button>
+              </Button>
             )}
           </>
         )}

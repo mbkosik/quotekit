@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { QuoteItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   items: QuoteItem[];
@@ -200,15 +201,18 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
                 </td>
                 <td className="px-4 py-2 text-white/60">{(item.hours * item.rate).toLocaleString("pl-PL")} zł</td>
                 <td className="px-4 py-2">
-                  <button
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => {
                       removeRow(i);
                     }}
-                    className="text-white/40 transition-colors hover:text-red-400"
+                    className="text-white/40 hover:text-red-400"
                     aria-label="Usuń pozycję"
                   >
                     ✕
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -226,13 +230,16 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
       </div>
 
       <div className="flex items-center justify-between">
-        <button
+        <Button
+          type="button"
+          variant="outline"
           onClick={addRow}
-          className="rounded-lg border border-dashed border-white/20 px-4 py-2 text-sm text-white/40 transition-colors hover:border-white/40 hover:text-white/60"
+          className="border-dashed border-white/20 text-white/40 hover:border-white/40 hover:text-white/60"
         >
           + Dodaj pozycję
-        </button>
-        <button
+        </Button>
+        <Button
+          type="button"
           onMouseDown={(e) => {
             if (editingCell) e.preventDefault();
           }}
@@ -248,10 +255,9 @@ export function LineItemsEditor({ items, title, onItemsChange, onSave, saving, o
           disabled={
             saving || items.length === 0 || !!saveDisabled || effectiveItems.some((item) => item.task.trim() === "")
           }
-          className="rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? "Zapisuję..." : "Zapisz wycenę"}
-        </button>
+        </Button>
       </div>
     </div>
   );

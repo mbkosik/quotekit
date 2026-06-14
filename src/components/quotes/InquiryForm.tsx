@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   onSubmit: (text: string) => void;
@@ -57,11 +58,7 @@ export function InquiryForm({
         {sparseMessage ?? ""}
       </p>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading} className="w-full">
         {loading && !questionsLoading ? (
           <>
             <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -70,9 +67,10 @@ export function InquiryForm({
         ) : (
           "Analizuj zapytanie"
         )}
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        variant="outline"
         disabled={loading}
         onClick={() => {
           const trimmed = text.trim();
@@ -83,7 +81,7 @@ export function InquiryForm({
           setValidationError("");
           onGenerateQuestions(trimmed);
         }}
-        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm text-white/60 transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full"
       >
         {questionsLoading ? (
           <>
@@ -93,7 +91,7 @@ export function InquiryForm({
         ) : (
           "Generuj pytania do klienta"
         )}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   context: string;
@@ -70,13 +71,9 @@ export function UserContextForm({ context }: Props) {
           <p role="alert" aria-live="assertive" className="text-sm text-red-400">
             {status === "error" ? "Błąd zapisu — spróbuj ponownie" : ""}
           </p>
-          <button
-            onClick={handleSave}
-            disabled={status === "saving" || isUnchanged || isOverLimit}
-            className="rounded-xl bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-40"
-          >
+          <Button type="button" onClick={handleSave} disabled={status === "saving" || isUnchanged || isOverLimit}>
             {status === "saving" ? "Zapisywanie…" : "Zapisz"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -647,26 +647,26 @@ Brak migracji danych. `_clientId` w LineItemsEditor jest czystym stanem klienta 
 
 #### Automated
 
-- [x] 1.1 Brak text-white/50, /70, /80, /90, text-blue-100/* w src/ (grep)
-- [x] 1.2 Brak `<style>` w Banner.astro (grep)
-- [x] 1.3 `npm run build` — bez błędów
-- [x] 1.4 `npm run lint` — bez błędów
+- [x] 1.1 Brak text-white/50, /70, /80, /90, text-blue-100/* w src/ (grep) — a5ba7f6
+- [x] 1.2 Brak `<style>` w Banner.astro (grep) — a5ba7f6
+- [x] 1.3 `npm run build` — bez błędów — a5ba7f6
+- [x] 1.4 `npm run lint` — bez błędów — a5ba7f6
 
 #### Manual
 
-- [ ] 1.5 Secondary text spójny na /quotes i /new
-- [ ] 1.6 Banner (info/warning/error) wizualnie poprawny
-- [ ] 1.7 max-w-3xl na całym /new flow i /quotes
-- [ ] 1.8 Topbar email bez niebieskiego odcienia
-- [ ] 1.9 Screen reader widzi h1 na /new i /quotes/[id]
+- [x] 1.5 Secondary text spójny na /quotes i /new — a5ba7f6
+- [x] 1.6 Banner (info/warning/error) wizualnie poprawny — a5ba7f6
+- [x] 1.7 max-w-3xl na całym /new flow i /quotes — a5ba7f6
+- [x] 1.8 Topbar email bez niebieskiego odcienia — a5ba7f6
+- [x] 1.9 Screen reader widzi h1 na /new i /quotes/[id] — a5ba7f6
 
 ### Phase 2: shadcn Button Migration
 
 #### Automated
 
-- [ ] 2.1 Brak ręcznych px-*/py-*/rounded klas na button elementach w quotes/settings (grep)
-- [ ] 2.2 `npm run build` — bez błędów
-- [ ] 2.3 `npm run lint` — bez błędów
+- [x] 2.1 Brak ręcznych px-*/py-*/rounded klas na button elementach w quotes/settings (grep)
+- [x] 2.2 `npm run build` — bez błędów
+- [x] 2.3 `npm run lint` — bez błędów
 
 #### Manual
 

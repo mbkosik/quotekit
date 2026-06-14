@@ -1,6 +1,8 @@
 import type { QuoteStatus } from "@/types";
 import { QUOTE_STATUSES } from "@/types";
 import { STATUS_LABELS } from "@/lib/quotes";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface Props {
   statusFilter: QuoteStatus[];
@@ -29,20 +31,21 @@ export function QuoteFilterBar({
         {QUOTE_STATUSES.map((s) => {
           const active = statusFilter.includes(s);
           return (
-            <button
+            <Button
               key={s}
+              size="sm"
+              variant="ghost"
               onClick={() => {
                 onStatusFilterToggle(s);
               }}
               aria-pressed={active}
-              className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 ${
-                active
-                  ? "bg-purple-600 text-white"
-                  : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
-              }`}
+              className={cn(
+                "text-xs",
+                active ? "bg-purple-600 text-white hover:bg-purple-500 hover:text-white" : "text-white/60",
+              )}
             >
               {STATUS_LABELS[s]}
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -58,17 +61,19 @@ export function QuoteFilterBar({
         className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white placeholder-white/30 outline-none focus:border-white/30"
       />
 
-      <button
+      <Button
+        size="sm"
+        variant="ghost"
         onClick={onSortChange}
         aria-label={
           sortOrder === "desc"
             ? "Sortuj: najnowsze. Kliknij, by sortować od najstarszych"
             : "Sortuj: najstarsze. Kliknij, by sortować od najnowszych"
         }
-        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-purple-500/80 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
+        className="text-xs text-white/60"
       >
         {sortOrder === "desc" ? "Najnowsze ↓" : "Najstarsze ↑"}
-      </button>
+      </Button>
 
       {hasActiveFilters && (
         <button
