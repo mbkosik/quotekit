@@ -1,12 +1,8 @@
 import { useState, useCallback } from "react";
-import type { QuoteItem, Message } from "@/types";
+import { parseChatResponse } from "@/types";
+import type { QuoteItem, Message, ChatResponse } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
-type ChatResponse =
-  | { type: "question"; content: string }
-  | { type: "sparse" }
-  | { type: "complete"; items: QuoteItem[]; title: string }
-  | { error: string };
 
 export const MAX_QUESTIONS = 5;
 
@@ -24,8 +20,9 @@ async function callQuestions(inquiry: string): Promise<string[]> {
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = (await res.json()) as { questions: unknown };
-  if (!Array.isArray(data.questions)) throw new Error("Malformed response");
-  return data.questions as string[];
+  if (!Array.isArray(data.questions) || !data.questions.every((q) => typeof q === "string"))
+    throw new Error("Malformed response");
+  return data.questions;
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
@@ -35,7 +32,8 @@ async function callChat(inquiry: string, msgs: Message[], generate: boolean): Pr
     body: JSON.stringify({ inquiry_text: inquiry, messages: msgs, generate }),
   });
   if (!res.ok && res.status !== 422) throw new Error(`HTTP ${res.status}`);
-  return res.json() as Promise<ChatResponse>;
+  const raw: unknown = await res.json();
+  return parseChatResponse(raw);
 }
 
 export function useQuoteCreator() {
@@ -62,6 +60,7 @@ export function useQuoteCreator() {
     setTitle("");
     setSavedTitle("");
     setSparseMessage("");
+    setError("");
   }
 
   async function handleInquirySubmit(text: string) {
@@ -132,8 +131,10 @@ export function useQuoteCreator() {
           if (data.type === "complete") {
             setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
             setTitle(data.title);
+            setPhase("items");
+          } else {
+            resetForm();
           }
-          setPhase(data.type === "complete" ? "items" : "inquiry");
           return;
         }
         setQuestionCount(newCount);
@@ -237,6 +238,7 @@ export function useQuoteCreator() {
       setItems,
       setError,
       resetForm,
+      handleResetToInquiry: resetForm,
     },
   };
 }

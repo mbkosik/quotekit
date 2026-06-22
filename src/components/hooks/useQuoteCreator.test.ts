@@ -158,7 +158,7 @@ describe("Golden path", () => {
     expect(result.current.state.items).toMatchObject(items);
 
     // items → done
-    fetchMock.mockReturnValueOnce(jsonResponse({ id: "q1" }));
+    fetchMock.mockReturnValueOnce(jsonResponse({ quote: { id: "q1" } }));
     await act(() => result.current.actions.handleSave(items));
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
@@ -264,6 +264,41 @@ describe("Behavior E: sparse response in handleAnswer resets to inquiry", () => 
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("inquiry");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// handleResetToInquiry (Phase 1 — TD-5)
+// Oracle: user stuck in conversation with an error must be able to return to
+// inquiry without a reload. handleResetToInquiry is a semantic alias for
+// resetForm and must zero out phase, messages, and error state.
+// ---------------------------------------------------------------------------
+
+describe("handleResetToInquiry resets phase to inquiry", () => {
+  it("returns to inquiry phase with cleared state", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    // Reach conversation state
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "What is the deadline?" }));
+    await act(() => result.current.actions.handleInquirySubmit("Client wants a landing page redesign with modern UI"));
+
+    expect(result.current.state.phase).toBe("conversation");
+
+    // Simulate error state (as would happen after a failed handleAnswer)
+    fetchMock.mockReturnValueOnce(Promise.reject(new Error("network")));
+    await act(() => result.current.actions.handleAnswer("Some answer"));
+
+    expect(result.current.state.phase).toBe("conversation");
+    expect(result.current.state.error).toBeTruthy();
+
+    // Reset to inquiry
+    act(() => {
+      result.current.actions.handleResetToInquiry();
+    });
+
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.error).toBe("");
+    expect(result.current.state.messages).toEqual([]);
   });
 });
 

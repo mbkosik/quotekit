@@ -32,6 +32,7 @@ export function QuoteCreator() {
     setItems,
     setError,
     resetForm,
+    handleResetToInquiry,
   } = actions;
 
   const isLoading = phase === "loading" || phase === "saving";
@@ -82,6 +83,7 @@ export function QuoteCreator() {
               }
             : undefined
         }
+        onReset={handleResetToInquiry}
       />
     );
   }
