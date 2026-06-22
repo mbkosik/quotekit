@@ -62,6 +62,7 @@ export function useQuoteCreator() {
     setTitle("");
     setSavedTitle("");
     setSparseMessage("");
+    setError("");
   }
 
   async function handleInquirySubmit(text: string) {
@@ -237,6 +238,7 @@ export function useQuoteCreator() {
       setItems,
       setError,
       resetForm,
+      handleResetToInquiry: resetForm,
     },
   };
 }

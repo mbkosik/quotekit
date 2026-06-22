@@ -271,8 +271,8 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [ ] 1.1 Testy przechodzą: `npm run test`
-- [ ] 1.2 Lint przechodzi: `npm run lint`
+- [x] 1.1 Testy przechodzą: `npm run test`
+- [x] 1.2 Lint przechodzi: `npm run lint`
 
 #### Manual
 
