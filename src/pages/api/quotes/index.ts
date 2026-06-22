@@ -47,7 +47,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { title, inquiry_text, content } = parsed.data;
-  void (parsed.data satisfies QuoteCreateRequest);
+  void (parsed.data satisfies QuoteCreateRequest); // compile-time: Zod schema ↔ QuoteCreateRequest
   const result = (await supabase
     .from("quotes")
     .insert({ title, inquiry_text, content, status: "draft", user_id: user.id })

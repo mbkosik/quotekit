@@ -140,7 +140,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { inquiry_text, messages, generate } = parsed.data;
-  void (parsed.data satisfies ChatRequest);
+  void (parsed.data satisfies ChatRequest); // compile-time: Zod schema ↔ ChatRequest
 
   if (generate) {
     let result;

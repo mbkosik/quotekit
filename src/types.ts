@@ -53,8 +53,4 @@ export interface QuestionsResponse {
   questions: string[];
 }
 
-export interface QuoteCreateRequest {
-  title: string;
-  inquiry_text: string;
-  content: { items: QuoteItem[] };
-}
+export type QuoteCreateRequest = Omit<QuoteInsert, "status">;

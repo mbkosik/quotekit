@@ -19,8 +19,9 @@ async function callQuestions(inquiry: string): Promise<string[]> {
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = (await res.json()) as { questions: unknown };
-  if (!Array.isArray(data.questions)) throw new Error("Malformed response");
-  return data.questions as string[];
+  if (!Array.isArray(data.questions) || !data.questions.every((q) => typeof q === "string"))
+    throw new Error("Malformed response");
+  return data.questions;
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
@@ -128,8 +129,10 @@ export function useQuoteCreator() {
           if (data.type === "complete") {
             setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
             setTitle(data.title);
+            setPhase("items");
+          } else {
+            resetForm();
           }
-          setPhase(data.type === "complete" ? "items" : "inquiry");
           return;
         }
         setQuestionCount(newCount);

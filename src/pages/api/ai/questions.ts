@@ -77,7 +77,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { inquiry_text } = parsed.data;
-  void (parsed.data satisfies QuestionsRequest);
+  void (parsed.data satisfies QuestionsRequest); // compile-time: Zod schema ↔ QuestionsRequest
 
   let message;
   try {

@@ -1,7 +1,7 @@
 ---
 change_id: refactor-opportunities-quote-creator
 title: Rank and scope quote creator refactor opportunities
-status: implemented
+status: impl_reviewed
 created: 2026-06-15
 updated: 2026-06-22
 archived_at: null

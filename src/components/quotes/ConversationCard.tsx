@@ -75,9 +75,9 @@ export function ConversationCard({
         </form>
       )}
 
-      {(error ?? onRetry) && (
+      {!!error && (
         <div className={cn(error && "flex items-center justify-between")}>
-          <InlineError message={error ?? null} />
+          <InlineError message={error} />
           <div className="flex gap-2">
             {onRetry && (
               <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
