@@ -163,10 +163,10 @@ Expose the script as `npm run review` using Node 22's native `--env-file` flag t
 
 #### Automated
 
-- [x] 2.1 `npm run review` resolves without error (no staged changes — exits 0 immediately)
+- [x] 2.1 `npm run review` resolves without error (no staged changes — exits 0 immediately) — 98895cc
 
 #### Manual
 
-- [x] 2.2 Stage a `.ts` file, `npm run review` prints review to terminal
-- [x] 2.3 Commit not blocked after running review
-- [x] 2.4 Running without `ANTHROPIC_KEY` in `.env` exits gracefully with notice
+- [x] 2.2 Stage a `.ts` file, `npm run review` prints review to terminal — 98895cc
+- [x] 2.3 Commit not blocked after running review — 98895cc
+- [x] 2.4 Running without `ANTHROPIC_KEY` in `.env` exits gracefully with notice — 98895cc
