@@ -43,7 +43,29 @@ export type ChatResponse =
   | { type: "question"; content: string }
   | { type: "sparse" }
   | { type: "complete"; items: QuoteItem[]; title: string }
-  | { error: string };
+  | { type: "error"; error: string };
+
+function isChatResponse(value: unknown): value is ChatResponse {
+  if (typeof value !== "object" || value === null) return false;
+  const v = value as Record<string, unknown>;
+  switch (v.type) {
+    case "question":
+      return typeof v.content === "string";
+    case "sparse":
+      return true;
+    case "complete":
+      return Array.isArray(v.items) && typeof v.title === "string";
+    case "error":
+      return typeof v.error === "string";
+    default:
+      return false;
+  }
+}
+
+export function parseChatResponse(raw: unknown): ChatResponse {
+  if (!isChatResponse(raw)) throw new Error("Malformed response");
+  return raw;
+}
 
 export interface QuestionsRequest {
   inquiry_text: string;

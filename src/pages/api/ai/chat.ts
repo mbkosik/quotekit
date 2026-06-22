@@ -154,7 +154,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     if (!result || result.items.length === 0) {
-      return new Response(JSON.stringify({ error: "inquiry_unusable" }), {
+      return new Response(JSON.stringify({ type: "error", error: "inquiry_unusable" } satisfies ChatResponse), {
         status: 422,
         headers: { "Content-Type": "application/json" },
       });
@@ -203,7 +203,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     if (!result || result.items.length === 0) {
-      return new Response(JSON.stringify({ error: "inquiry_unusable" }), {
+      return new Response(JSON.stringify({ type: "error", error: "inquiry_unusable" } satisfies ChatResponse), {
         status: 422,
         headers: { "Content-Type": "application/json" },
       });

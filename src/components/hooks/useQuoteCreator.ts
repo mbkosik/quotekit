@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { parseChatResponse } from "@/types";
 import type { QuoteItem, Message, ChatResponse } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
@@ -31,7 +32,8 @@ async function callChat(inquiry: string, msgs: Message[], generate: boolean): Pr
     body: JSON.stringify({ inquiry_text: inquiry, messages: msgs, generate }),
   });
   if (!res.ok && res.status !== 422) throw new Error(`HTTP ${res.status}`);
-  return res.json() as Promise<ChatResponse>;
+  const raw: unknown = await res.json();
+  return parseChatResponse(raw);
 }
 
 export function useQuoteCreator() {
