@@ -1,7 +1,7 @@
 ---
 change_id: code-review-ci-cd
 title: AI agent code review on GitHub PRs with structured output
-status: implementing
+status: implemented
 created: 2026-06-22
 updated: 2026-06-22
 archived_at: null

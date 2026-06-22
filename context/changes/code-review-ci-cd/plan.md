@@ -272,12 +272,12 @@ New `.github/workflows/code-review.yml` — fires on PRs targeting `develop`, pr
 
 #### Automated
 
-- [x] 3.1 `code-review.yml` YAML is syntactically valid
-- [x] 3.2 Workflow contains `pull-requests: write` permission
+- [x] 3.1 `code-review.yml` YAML is syntactically valid — bbeabb9
+- [x] 3.2 Workflow contains `pull-requests: write` permission — bbeabb9
 
 #### Manual
 
-- [x] 3.3 Code Review workflow appears in PR Checks on a real PR to `develop`
-- [x] 3.4 Review comment appears with criteria table and correct layout
-- [x] 3.5 SCOPE shows SKIP when branch name has no matching change folder
-- [x] 3.6 CI workflow also runs in parallel (Phase 1 confirmed)
+- [x] 3.3 Code Review workflow appears in PR Checks on a real PR to `develop` — bbeabb9
+- [x] 3.4 Review comment appears with criteria table and correct layout — bbeabb9
+- [x] 3.5 SCOPE shows SKIP when branch name has no matching change folder — bbeabb9
+- [x] 3.6 CI workflow also runs in parallel (Phase 1 confirmed) — bbeabb9
