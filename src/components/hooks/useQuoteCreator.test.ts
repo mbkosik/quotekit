@@ -158,7 +158,7 @@ describe("Golden path", () => {
     expect(result.current.state.items).toMatchObject(items);
 
     // items → done
-    fetchMock.mockReturnValueOnce(jsonResponse({ id: "q1" }));
+    fetchMock.mockReturnValueOnce(jsonResponse({ quote: { id: "q1" } }));
     await act(() => result.current.actions.handleSave(items));
 
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C

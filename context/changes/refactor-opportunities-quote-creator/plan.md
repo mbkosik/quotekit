@@ -271,8 +271,8 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [x] 1.1 Testy przechodzą: `npm run test`
-- [x] 1.2 Lint przechodzi: `npm run lint`
+- [x] 1.1 Testy przechodzą: `npm run test` — d2ddbd5
+- [x] 1.2 Lint przechodzi: `npm run lint` — d2ddbd5
 
 #### Manual
 
@@ -284,7 +284,7 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [ ] 2.1 Testy przechodzą: `npm run test`
+- [x] 2.1 Testy przechodzą: `npm run test`
 
 ### Phase 3: Remove Dead Endpoint (scope.ts)
 
