@@ -72,6 +72,19 @@ const astroConfig = tseslint.config({
   },
 });
 
+const nodeScriptsConfig = tseslint.config({
+  files: ["scripts/**/*.mjs"],
+  languageOptions: {
+    globals: {
+      process: "readonly",
+      console: "readonly",
+    },
+  },
+  rules: {
+    "no-console": "off",
+  },
+});
+
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
@@ -79,5 +92,6 @@ export default tseslint.config(
   eslintPluginAstro.configs["flat/recommended"],
   ...eslintPluginAstro.configs["flat/jsx-a11y-recommended"],
   astroConfig,
+  nodeScriptsConfig,
   eslintPluginPrettier,
 );
