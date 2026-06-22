@@ -249,8 +249,8 @@ New `.github/workflows/code-review.yml` — fires on PRs targeting `develop`, pr
 
 #### Automated
 
-- [x] 1.1 `ci.yml` YAML is syntactically valid
-- [x] 1.2 `develop` appears in `pull_request.branches`
+- [x] 1.1 `ci.yml` YAML is syntactically valid — e9af117
+- [x] 1.2 `develop` appears in `pull_request.branches` — e9af117
 
 #### Manual
 
@@ -260,13 +260,13 @@ New `.github/workflows/code-review.yml` — fires on PRs targeting `develop`, pr
 
 #### Automated
 
-- [ ] 2.1 `node --check scripts/pr-review-agent.mjs` passes
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `node --check scripts/pr-review-agent.mjs` passes
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 2.3 Script runs locally with mocked env vars and exits 0
-- [ ] 2.4 Script exits 0 with notice when `ANTHROPIC_KEY` is unset
+- [x] 2.3 Script runs locally with mocked env vars and exits 0
+- [x] 2.4 Script exits 0 with notice when `ANTHROPIC_KEY` is unset
 
 ### Phase 3: Create Code Review Workflow
 
