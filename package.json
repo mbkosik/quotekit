@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "review": "node --env-file=.env scripts/code-review-agent.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:mutation": "stryker run"

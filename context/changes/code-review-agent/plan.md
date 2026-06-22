@@ -150,23 +150,23 @@ Expose the script as `npm run review` using Node 22's native `--env-file` flag t
 
 #### Automated
 
-- [x] 1.1 File exists: `ls scripts/code-review-agent.mjs`
-- [x] 1.2 No syntax errors: `node --check scripts/code-review-agent.mjs`
+- [x] 1.1 File exists: `ls scripts/code-review-agent.mjs` — 11dd107
+- [x] 1.2 No syntax errors: `node --check scripts/code-review-agent.mjs` — 11dd107
 
 #### Manual
 
-- [x] 1.3 Running with `ANTHROPIC_KEY` unset: prints notice and exits 0
-- [x] 1.4 Running with no staged TS/Astro files: prints skip message and exits 0
-- [x] 1.5 Running with staged files and valid key: review appears in terminal, exits 0
+- [x] 1.3 Running with `ANTHROPIC_KEY` unset: prints notice and exits 0 — 11dd107
+- [x] 1.4 Running with no staged TS/Astro files: prints skip message and exits 0 — 11dd107
+- [x] 1.5 Running with staged files and valid key: review appears in terminal, exits 0 — 11dd107
 
 ### Phase 2: Wire npm script
 
 #### Automated
 
-- [ ] 2.1 `npm run review` resolves without error (no staged changes — exits 0 immediately)
+- [x] 2.1 `npm run review` resolves without error (no staged changes — exits 0 immediately)
 
 #### Manual
 
-- [ ] 2.2 Stage a `.ts` file, `npm run review` prints review to terminal
-- [ ] 2.3 Commit not blocked after running review
-- [ ] 2.4 Running without `ANTHROPIC_KEY` in `.env` exits gracefully with notice
+- [x] 2.2 Stage a `.ts` file, `npm run review` prints review to terminal
+- [x] 2.3 Commit not blocked after running review
+- [x] 2.4 Running without `ANTHROPIC_KEY` in `.env` exits gracefully with notice
