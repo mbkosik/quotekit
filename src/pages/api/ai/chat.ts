@@ -5,6 +5,7 @@ import { createAnthropicClient } from "@/lib/anthropic";
 import { createClient } from "@/lib/supabase";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { QuoteItemSchema, MessageSchema } from "@/types";
+import type { ChatRequest, ChatResponse } from "@/types";
 
 export const prerender = false;
 
@@ -139,6 +140,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { inquiry_text, messages, generate } = parsed.data;
+  void (parsed.data satisfies ChatRequest);
 
   if (generate) {
     let result;
@@ -158,10 +160,10 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    return new Response(JSON.stringify({ type: "complete", items: result.items, title: result.title }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ type: "complete", items: result.items, title: result.title } satisfies ChatResponse),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
   }
 
   // Question mode
@@ -183,7 +185,7 @@ export const POST: APIRoute = async (context) => {
   const responseText = questionResponse.content[0]?.type === "text" ? questionResponse.content[0].text.trim() : "";
 
   if (responseText === "TOO_SHORT") {
-    return new Response(JSON.stringify({ type: "sparse" }), {
+    return new Response(JSON.stringify({ type: "sparse" } satisfies ChatResponse), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
@@ -207,13 +209,13 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
-    return new Response(JSON.stringify({ type: "complete", items: result.items, title: result.title }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ type: "complete", items: result.items, title: result.title } satisfies ChatResponse),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
   }
 
-  return new Response(JSON.stringify({ type: "question", content: responseText }), {
+  return new Response(JSON.stringify({ type: "question", content: responseText } satisfies ChatResponse), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });

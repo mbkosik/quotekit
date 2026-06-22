@@ -1,12 +1,7 @@
 import { useState, useCallback } from "react";
-import type { QuoteItem, Message } from "@/types";
+import type { QuoteItem, Message, ChatResponse } from "@/types";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
-type ChatResponse =
-  | { type: "question"; content: string }
-  | { type: "sparse" }
-  | { type: "complete"; items: QuoteItem[]; title: string }
-  | { error: string };
 
 export const MAX_QUESTIONS = 5;
 

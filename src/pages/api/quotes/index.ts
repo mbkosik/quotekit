@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
-import { QuoteItemSchema, QUOTE_STATUSES, type Quote, type QuoteStatus } from "@/types";
+import { QuoteItemSchema, QUOTE_STATUSES, type Quote, type QuoteStatus, type QuoteCreateRequest } from "@/types";
 
 export const prerender = false;
 
@@ -47,6 +47,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { title, inquiry_text, content } = parsed.data;
+  void (parsed.data satisfies QuoteCreateRequest);
   const result = (await supabase
     .from("quotes")
     .insert({ title, inquiry_text, content, status: "draft", user_id: user.id })

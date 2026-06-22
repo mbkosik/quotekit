@@ -32,3 +32,29 @@ export interface Quote {
 
 export type QuoteInsert = Omit<Quote, "id" | "user_id" | "created_at" | "updated_at">;
 export type QuoteUpdate = Partial<Pick<Quote, "title" | "status" | "content">>;
+
+export interface ChatRequest {
+  inquiry_text: string;
+  messages: Message[];
+  generate: boolean;
+}
+
+export type ChatResponse =
+  | { type: "question"; content: string }
+  | { type: "sparse" }
+  | { type: "complete"; items: QuoteItem[]; title: string }
+  | { error: string };
+
+export interface QuestionsRequest {
+  inquiry_text: string;
+}
+
+export interface QuestionsResponse {
+  questions: string[];
+}
+
+export interface QuoteCreateRequest {
+  title: string;
+  inquiry_text: string;
+  content: { items: QuoteItem[] };
+}

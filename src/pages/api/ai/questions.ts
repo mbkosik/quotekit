@@ -4,6 +4,7 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { createAnthropicClient } from "@/lib/anthropic";
 import { createClient } from "@/lib/supabase";
 import { checkRateLimit } from "@/lib/rate-limit";
+import type { QuestionsRequest, QuestionsResponse } from "@/types";
 
 export const prerender = false;
 
@@ -76,6 +77,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const { inquiry_text } = parsed.data;
+  void (parsed.data satisfies QuestionsRequest);
 
   let message;
   try {
@@ -101,7 +103,7 @@ export const POST: APIRoute = async (context) => {
     });
   }
 
-  return new Response(JSON.stringify({ questions: parsedOutput.data.questions }), {
+  return new Response(JSON.stringify({ questions: parsedOutput.data.questions } satisfies QuestionsResponse), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
