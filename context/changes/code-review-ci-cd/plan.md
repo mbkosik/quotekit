@@ -254,30 +254,30 @@ New `.github/workflows/code-review.yml` — fires on PRs targeting `develop`, pr
 
 #### Manual
 
-- [ ] 1.3 Test PR to `develop` triggers the CI workflow
+- [x] 1.3 Test PR to `develop` triggers the CI workflow
 
 ### Phase 2: Create PR Review Script
 
 #### Automated
 
-- [x] 2.1 `node --check scripts/pr-review-agent.mjs` passes
-- [x] 2.2 `npm run lint` passes
+- [x] 2.1 `node --check scripts/pr-review-agent.mjs` passes — e6155b1
+- [x] 2.2 `npm run lint` passes — e6155b1
 
 #### Manual
 
-- [x] 2.3 Script runs locally with mocked env vars and exits 0
-- [x] 2.4 Script exits 0 with notice when `ANTHROPIC_KEY` is unset
+- [x] 2.3 Script runs locally with mocked env vars and exits 0 — e6155b1
+- [x] 2.4 Script exits 0 with notice when `ANTHROPIC_KEY` is unset — e6155b1
 
 ### Phase 3: Create Code Review Workflow
 
 #### Automated
 
-- [ ] 3.1 `code-review.yml` YAML is syntactically valid
-- [ ] 3.2 Workflow contains `pull-requests: write` permission
+- [x] 3.1 `code-review.yml` YAML is syntactically valid
+- [x] 3.2 Workflow contains `pull-requests: write` permission
 
 #### Manual
 
-- [ ] 3.3 Code Review workflow appears in PR Checks on a real PR to `develop`
-- [ ] 3.4 Review comment appears with criteria table and correct layout
-- [ ] 3.5 SCOPE shows SKIP when branch name has no matching change folder
-- [ ] 3.6 CI workflow also runs in parallel (Phase 1 confirmed)
+- [x] 3.3 Code Review workflow appears in PR Checks on a real PR to `develop`
+- [x] 3.4 Review comment appears with criteria table and correct layout
+- [x] 3.5 SCOPE shows SKIP when branch name has no matching change folder
+- [x] 3.6 CI workflow also runs in parallel (Phase 1 confirmed)
