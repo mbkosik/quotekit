@@ -192,4 +192,9 @@ if (!toolUse) {
   process.exit(0);
 }
 
-postReview(prNumber, renderReview(toolUse.input));
+try {
+  postReview(prNumber, renderReview(toolUse.input));
+} catch (err) {
+  console.error("Failed to render/post review:", err instanceof Error ? err.message : String(err));
+  process.exit(0);
+}
