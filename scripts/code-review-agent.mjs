@@ -20,7 +20,13 @@ if (!apiKey) {
   process.exit(0);
 }
 
-const diff = execSync("git diff --cached -- '*.ts' '*.tsx' '*.astro'", { encoding: "utf8" });
+let diff;
+try {
+  diff = execSync("git diff --cached -- '*.ts' '*.tsx' '*.astro'", { encoding: "utf8" });
+} catch {
+  console.error("git diff failed — skipping review");
+  process.exit(0);
+}
 if (!diff.trim()) {
   console.log("No staged changes — skipping review");
   process.exit(0);

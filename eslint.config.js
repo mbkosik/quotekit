@@ -74,10 +74,14 @@ const astroConfig = tseslint.config({
 
 const nodeScriptsConfig = tseslint.config({
   files: ["scripts/**/*.mjs"],
+  extends: [tseslint.configs.disableTypeChecked],
   languageOptions: {
     globals: {
       process: "readonly",
       console: "readonly",
+    },
+    parserOptions: {
+      project: false,
     },
   },
   rules: {
