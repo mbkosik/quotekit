@@ -302,6 +302,6 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [x] 4.1 Testy przechodzą: `npm run test`
-- [x] 4.2 Lint przechodzi: `npm run lint`
-- [x] 4.3 Build TypeScript bez błędów: `npm run build`
+- [x] 4.1 Testy przechodzą: `npm run test` — 97305ee
+- [x] 4.2 Lint przechodzi: `npm run lint` — 97305ee
+- [x] 4.3 Build TypeScript bez błędów: `npm run build` — 97305ee
