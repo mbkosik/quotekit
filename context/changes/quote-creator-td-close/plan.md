@@ -241,23 +241,23 @@ expect(result.current.state.savedQuoteId).toBe("q1");
 
 #### Automated
 
-- [x] 1.1 `npm run lint` przechodzi bez błędów
+- [x] 1.1 `npm run lint` przechodzi bez błędów — 9a02440
 
 #### Manual
 
-- [x] 1.2 Input < 20 znaków → sparseMessage, brak network call
-- [x] 1.3 Input 20+ znaków → normalne przejście do loading
+- [x] 1.2 Input < 20 znaków → sparseMessage, brak network call — 9a02440
+- [x] 1.3 Input 20+ znaków → normalne przejście do loading — 9a02440
 
 ### Phase 2: savedQuoteId
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` przechodzi bez błędów
+- [x] 2.1 `npm run lint` przechodzi bez błędów
 
 #### Manual
 
-- [ ] 2.2 Success screen pokazuje "Otwórz wycenę" z linkiem do `/quotes/:id`
-- [ ] 2.3 Klik linka otwiera konkretną wycenę
+- [x] 2.2 Success screen pokazuje "Otwórz wycenę" z linkiem do `/quotes/:id`
+- [x] 2.3 Klik linka otwiera konkretną wycenę
 
 ### Phase 3: Tests
 

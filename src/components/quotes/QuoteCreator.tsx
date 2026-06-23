@@ -20,6 +20,7 @@ export function QuoteCreator() {
     error,
     sparseMessage,
     savedTitle,
+    savedQuoteId,
     inquiryText,
   } = state;
   const {
@@ -41,8 +42,11 @@ export function QuoteCreator() {
     return (
       <div className="flex w-full max-w-3xl flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-green-500/10 px-8 py-12 text-center">
         <p className="text-lg font-medium text-green-300">Wycena &ldquo;{savedTitle}&rdquo; zapisana!</p>
-        <a href="/quotes" className="flex items-center gap-1 text-sm text-purple-300 underline hover:text-purple-100">
-          Zobacz swoje wyceny <ChevronRight size={16} aria-hidden />
+        <a
+          href={`/quotes/${savedQuoteId}`}
+          className="flex items-center gap-1 text-sm text-purple-300 underline hover:text-purple-100"
+        >
+          Otwórz wycenę <ChevronRight size={16} aria-hidden />
         </a>
         <Button variant="outline" onClick={resetForm} className="mt-2">
           Utwórz nową wycenę

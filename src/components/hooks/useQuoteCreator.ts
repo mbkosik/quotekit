@@ -50,6 +50,7 @@ export function useQuoteCreator() {
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
+  const [savedQuoteId, setSavedQuoteId] = useState("");
 
   function resetForm() {
     setPhase("inquiry");
@@ -60,6 +61,7 @@ export function useQuoteCreator() {
     setItems([]);
     setTitle("");
     setSavedTitle("");
+    setSavedQuoteId("");
     setSparseMessage("");
     setError("");
   }
@@ -210,6 +212,8 @@ export function useQuoteCreator() {
         body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as { quote: { id: string } };
+      setSavedQuoteId(data.quote.id);
       setSavedTitle(title);
       setPhase("done");
     } catch {
@@ -232,6 +236,7 @@ export function useQuoteCreator() {
       error,
       sparseMessage,
       savedTitle,
+      savedQuoteId,
     },
     actions: {
       handleInquirySubmit,
