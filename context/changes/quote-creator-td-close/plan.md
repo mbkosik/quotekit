@@ -252,16 +252,16 @@ expect(result.current.state.savedQuoteId).toBe("q1");
 
 #### Automated
 
-- [x] 2.1 `npm run lint` przechodzi bez błędów
+- [x] 2.1 `npm run lint` przechodzi bez błędów — c3ffb3a
 
 #### Manual
 
-- [x] 2.2 Success screen pokazuje "Otwórz wycenę" z linkiem do `/quotes/:id`
-- [x] 2.3 Klik linka otwiera konkretną wycenę
+- [x] 2.2 Success screen pokazuje "Otwórz wycenę" z linkiem do `/quotes/:id` — c3ffb3a
+- [x] 2.3 Klik linka otwiera konkretną wycenę — c3ffb3a
 
 ### Phase 3: Tests
 
 #### Automated
 
-- [ ] 3.1 `npx vitest run` — wszystkie testy zielone
-- [ ] 3.2 `npm run lint` przechodzi bez błędów
+- [x] 3.1 `npx vitest run` — wszystkie testy zielone
+- [x] 3.2 `npm run lint` przechodzi bez błędów
