@@ -164,6 +164,7 @@ describe("Golden path", () => {
     expect(result.current.state.phase).not.toBe("loading"); // Behavior C
     expect(result.current.state.phase).toBe("done");
     expect(result.current.state.savedTitle).toBe("Dashboard App");
+    expect(result.current.state.savedQuoteId).toBe("q1");
   });
 });
 
@@ -196,6 +197,16 @@ describe("handleInquirySubmit error and edge paths", () => {
     expect(result.current.state.sparseMessage).toBeTruthy();
   });
 
+  it("rejects input shorter than 20 chars with sparseMessage and no fetch", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    await act(() => result.current.actions.handleInquirySubmit("Too short"));
+
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.sparseMessage).toBeTruthy();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it("goes directly to items on complete response without entering conversation", async () => {
     const { result } = renderHook(() => useQuoteCreator());
 
@@ -223,7 +234,7 @@ describe("Behavior D: MAX_QUESTIONS answers trigger generation", () => {
 
     // handleInquirySubmit sets questionCount = 1
     fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "Q1?" }));
-    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    await act(() => result.current.actions.handleInquirySubmit("Build me a web application"));
     expect(result.current.state.phase).toBe("conversation");
 
     // Answers 1 to MAX_QUESTIONS-1: newCount stays ≤ MAX_QUESTIONS → generate: false
@@ -256,7 +267,7 @@ describe("Behavior E: sparse response in handleAnswer resets to inquiry", () => 
     const { result } = renderHook(() => useQuoteCreator());
 
     fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "What is the budget?" }));
-    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    await act(() => result.current.actions.handleInquirySubmit("Build me a web application"));
     expect(result.current.state.phase).toBe("conversation");
 
     fetchMock.mockReturnValueOnce(jsonResponse({ type: "sparse" }));
@@ -271,7 +282,7 @@ describe("Behavior E: sparse response in handleAnswer resets to inquiry", () => 
 // handleResetToInquiry (Phase 1 — TD-5)
 // Oracle: user stuck in conversation with an error must be able to return to
 // inquiry without a reload. handleResetToInquiry is a semantic alias for
-// resetForm and must zero out phase, messages, and error state.
+// resetCreatorState and must zero out phase, messages, and error state.
 // ---------------------------------------------------------------------------
 
 describe("handleResetToInquiry resets phase to inquiry", () => {
@@ -309,13 +320,115 @@ describe("handleResetToInquiry resets phase to inquiry", () => {
 // for this scenario.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// handleSkip triggers generation
+// Oracle: skipping a question must call callChat with generate:true and move
+// to "items" on success, or stay in "conversation" with error on failure.
+// ---------------------------------------------------------------------------
+
+describe("handleSkip triggers generation", () => {
+  async function reachConversation(
+    result: ReturnType<typeof renderHook<ReturnType<typeof useQuoteCreator>, unknown>>["result"],
+  ) {
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "What is the deadline?" }));
+    await act(() => result.current.actions.handleInquirySubmit("Client wants a landing page redesign with modern UI"));
+    expect(result.current.state.phase).toBe("conversation");
+  }
+
+  it("moves to items on complete response", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+    await reachConversation(result);
+
+    const items = [{ task: "Design", hours: 8, rate: 150 }];
+    fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items, title: "Landing Page" }));
+    await act(() => result.current.actions.handleSkip());
+
+    expect(result.current.state.phase).not.toBe("loading");
+    expect(result.current.state.phase).toBe("items");
+    expect(result.current.state.items).toMatchObject(items);
+    expect(result.current.state.title).toBe("Landing Page");
+  });
+
+  it("stays in conversation with error on network error", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+    await reachConversation(result);
+
+    fetchMock.mockReturnValueOnce(Promise.reject(new Error("network")));
+    await act(() => result.current.actions.handleSkip());
+
+    expect(result.current.state.phase).not.toBe("loading");
+    expect(result.current.state.phase).toBe("conversation");
+    expect(result.current.state.error).toBeTruthy();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// handleGenerateQuestions fetches questions
+// Oracle: generateQuestions must call callQuestions and move to "questions"
+// on success, or return to "inquiry" with sparseMessage on failure.
+// ---------------------------------------------------------------------------
+
+describe("handleGenerateQuestions fetches questions", () => {
+  it("moves to questions phase with fetched questions", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ questions: ["Q1?", "Q2?", "Q3?"] }));
+    await act(() =>
+      result.current.actions.handleGenerateQuestions("Client wants a landing page redesign with modern UI"),
+    );
+
+    expect(result.current.state.phase).not.toBe("loading");
+    expect(result.current.state.phase).toBe("questions");
+    expect(result.current.state.clientQuestions).toEqual(["Q1?", "Q2?", "Q3?"]);
+  });
+
+  it("returns to inquiry with sparseMessage on network error", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(Promise.reject(new Error("network")));
+    await act(() =>
+      result.current.actions.handleGenerateQuestions("Client wants a landing page redesign with modern UI"),
+    );
+
+    expect(result.current.state.phase).not.toBe("loading");
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.sparseMessage).toBeTruthy();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// handleBackFromQuestions resets to inquiry
+// Oracle: back button from questions screen must clear clientQuestions and
+// return to "inquiry" without any network call.
+// ---------------------------------------------------------------------------
+
+describe("handleBackFromQuestions resets to inquiry", () => {
+  it("clears clientQuestions and returns to inquiry", async () => {
+    const { result } = renderHook(() => useQuoteCreator());
+
+    fetchMock.mockReturnValueOnce(jsonResponse({ questions: ["Q1?", "Q2?", "Q3?"] }));
+    await act(() =>
+      result.current.actions.handleGenerateQuestions("Client wants a landing page redesign with modern UI"),
+    );
+    expect(result.current.state.phase).toBe("questions");
+    expect(result.current.state.clientQuestions.length).toBeGreaterThan(0);
+
+    act(() => {
+      result.current.actions.handleBackFromQuestions();
+    });
+
+    expect(result.current.state.phase).toBe("inquiry");
+    expect(result.current.state.clientQuestions).toEqual([]);
+  });
+});
+
 describe("handleSave re-entry guard", () => {
   it("second handleSave while saving is a no-op", async () => {
     const { result } = renderHook(() => useQuoteCreator());
 
     // Reach items state
     fetchMock.mockReturnValueOnce(jsonResponse({ type: "question", content: "Q?" }));
-    await act(() => result.current.actions.handleInquirySubmit("Build me an app"));
+    await act(() => result.current.actions.handleInquirySubmit("Build me a web application"));
     const items = [{ task: "Dev", hours: 5, rate: 100 }];
     fetchMock.mockReturnValueOnce(jsonResponse({ type: "complete", items, title: "App" }));
     await act(() => result.current.actions.handleAnswer("Yes"));
@@ -341,7 +454,7 @@ describe("handleSave re-entry guard", () => {
     // continuation run inside act so React flushes the resulting state updates.
     await act(async () => {
       resolveSave(
-        new Response(JSON.stringify({ id: "q1" }), {
+        new Response(JSON.stringify({ quote: { id: "q1" } }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         }),
