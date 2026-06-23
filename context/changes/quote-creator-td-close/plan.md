@@ -263,5 +263,5 @@ expect(result.current.state.savedQuoteId).toBe("q1");
 
 #### Automated
 
-- [x] 3.1 `npx vitest run` — wszystkie testy zielone
-- [x] 3.2 `npm run lint` przechodzi bez błędów
+- [x] 3.1 `npx vitest run` — wszystkie testy zielone — cb1711b
+- [x] 3.2 `npm run lint` przechodzi bez błędów — cb1711b
