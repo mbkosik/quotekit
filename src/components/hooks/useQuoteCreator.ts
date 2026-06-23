@@ -1,12 +1,9 @@
 import { useState, useCallback } from "react";
-import type { QuoteItem, Message } from "@/types";
+import { parseChatResponse } from "@/types";
+import type { QuoteItem, Message, ChatResponse } from "@/types";
+import { API_ROUTES } from "@/lib/api-routes";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
-type ChatResponse =
-  | { type: "question"; content: string }
-  | { type: "sparse" }
-  | { type: "complete"; items: QuoteItem[]; title: string }
-  | { error: string };
 
 export const MAX_QUESTIONS = 5;
 
@@ -17,25 +14,27 @@ function is429(err: unknown): boolean {
 }
 
 async function callQuestions(inquiry: string): Promise<string[]> {
-  const res = await fetch("/api/ai/questions", {
+  const res = await fetch(API_ROUTES.QUESTIONS, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = (await res.json()) as { questions: unknown };
-  if (!Array.isArray(data.questions)) throw new Error("Malformed response");
-  return data.questions as string[];
+  if (!Array.isArray(data.questions) || !data.questions.every((q) => typeof q === "string"))
+    throw new Error("Malformed response");
+  return data.questions;
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
-  const res = await fetch("/api/ai/chat", {
+  const res = await fetch(API_ROUTES.CHAT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry, messages: msgs, generate }),
   });
   if (!res.ok && res.status !== 422) throw new Error(`HTTP ${res.status}`);
-  return res.json() as Promise<ChatResponse>;
+  const raw: unknown = await res.json();
+  return parseChatResponse(raw);
 }
 
 export function useQuoteCreator() {
@@ -51,8 +50,9 @@ export function useQuoteCreator() {
   const [error, setError] = useState("");
   const [sparseMessage, setSparseMessage] = useState("");
   const [savedTitle, setSavedTitle] = useState("");
+  const [savedQuoteId, setSavedQuoteId] = useState("");
 
-  function resetForm() {
+  function resetCreatorState() {
     setPhase("inquiry");
     setInquiryText("");
     setMessages([]);
@@ -61,10 +61,16 @@ export function useQuoteCreator() {
     setItems([]);
     setTitle("");
     setSavedTitle("");
+    setSavedQuoteId("");
     setSparseMessage("");
+    setError("");
   }
 
   async function handleInquirySubmit(text: string) {
+    if (text.trim().length < 20) {
+      setSparseMessage("Opis jest za krótki — podaj co najmniej 20 znaków.");
+      return;
+    }
     setInquiryText(text);
     setSparseMessage("");
     setPhase("loading");
@@ -132,8 +138,10 @@ export function useQuoteCreator() {
           if (data.type === "complete") {
             setItems(data.items.map((item) => ({ ...item, id: item.id ?? crypto.randomUUID() })));
             setTitle(data.title);
+            setPhase("items");
+          } else {
+            resetCreatorState();
           }
-          setPhase(data.type === "complete" ? "items" : "inquiry");
           return;
         }
         setQuestionCount(newCount);
@@ -198,12 +206,15 @@ export function useQuoteCreator() {
     if (phase === "saving") return;
     setPhase("saving");
     try {
-      const res = await fetch("/api/quotes", {
+      const res = await fetch(API_ROUTES.QUOTES, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const saveResponse = (await res.json()) as { quote?: { id?: string } };
+      if (!saveResponse.quote?.id) throw new Error("Missing quote id");
+      setSavedQuoteId(saveResponse.quote.id);
       setSavedTitle(title);
       setPhase("done");
     } catch {
@@ -226,6 +237,7 @@ export function useQuoteCreator() {
       error,
       sparseMessage,
       savedTitle,
+      savedQuoteId,
     },
     actions: {
       handleInquirySubmit,
@@ -236,7 +248,8 @@ export function useQuoteCreator() {
       handleBackFromQuestions,
       setItems,
       setError,
-      resetForm,
+      resetCreatorState,
+      handleResetToInquiry: resetCreatorState,
     },
   };
 }

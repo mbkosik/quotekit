@@ -1,10 +1,10 @@
 ---
 change_id: quote-creator-refactor
 title: Refactor useQuoteCreator into testable orchestrator with typed HTTP contracts
-status: preparing
+status: archived
 created: 2026-06-15
-updated: 2026-06-15
-archived_at: null
+updated: 2026-06-23
+archived_at: 2026-06-23T10:47:52Z
 ---
 
 ## Notes

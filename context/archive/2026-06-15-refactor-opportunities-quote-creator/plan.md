@@ -271,8 +271,8 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [ ] 1.1 Testy przechodzą: `npm run test`
-- [ ] 1.2 Lint przechodzi: `npm run lint`
+- [x] 1.1 Testy przechodzą: `npm run test` — d2ddbd5
+- [x] 1.2 Lint przechodzi: `npm run lint` — d2ddbd5
 
 #### Manual
 
@@ -284,15 +284,15 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [ ] 2.1 Testy przechodzą: `npm run test`
+- [x] 2.1 Testy przechodzą: `npm run test` — 3e64aa4
 
 ### Phase 3: Remove Dead Endpoint (scope.ts)
 
 #### Automated
 
-- [ ] 3.1 Testy przechodzą: `npm run test`
-- [ ] 3.2 Lint przechodzi: `npm run lint`
-- [ ] 3.3 `src/pages/api/ai/scope.ts` nie istnieje
+- [x] 3.1 Testy przechodzą: `npm run test` — ad6c263
+- [x] 3.2 Lint przechodzi: `npm run lint` — ad6c263
+- [x] 3.3 `src/pages/api/ai/scope.ts` nie istnieje — ad6c263
 
 #### Manual
 
@@ -302,6 +302,6 @@ Jeśli `CreateSchema` i `QuoteCreateRequest` rozejdą się w przyszłości, Type
 
 #### Automated
 
-- [ ] 4.1 Testy przechodzą: `npm run test`
-- [ ] 4.2 Lint przechodzi: `npm run lint`
-- [ ] 4.3 Build TypeScript bez błędów: `npm run build`
+- [x] 4.1 Testy przechodzą: `npm run test` — 97305ee
+- [x] 4.2 Lint przechodzi: `npm run lint` — 97305ee
+- [x] 4.3 Build TypeScript bez błędów: `npm run build` — 97305ee

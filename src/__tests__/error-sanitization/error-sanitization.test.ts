@@ -1,6 +1,5 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { POST as scopePOST } from "@/pages/api/ai/scope";
 import { POST as chatPOST } from "@/pages/api/ai/chat";
 import { POST as questionsPOST } from "@/pages/api/ai/questions";
 import type { APIContext } from "astro";
@@ -39,22 +38,6 @@ beforeEach(() => {
 });
 
 describe("error response sanitization", () => {
-  describe("scope.ts — Anthropic SDK error does not leak API key", () => {
-    it("returns generic error without key when messages.parse throws", async () => {
-      mockParse.mockRejectedValue(
-        new Error(`401 {"error":{"message":"invalid x-api-key ${FAKE_KEY}","type":"authentication_error"}}`),
-      );
-
-      const ctx = makeContext({ inquiry_text: VALID_INQUIRY });
-      const res = await scopePOST(ctx);
-      const body = (await res.json()) as { error: unknown };
-
-      expect(res.status).toBe(502);
-      expect(body.error).toBe("AI service error");
-      expect(JSON.stringify(body)).not.toContain(FAKE_KEY);
-    });
-  });
-
   describe("chat.ts — question mode (messages.create throws)", () => {
     it("returns generic error without key when messages.create throws", async () => {
       mockCreate.mockRejectedValue(

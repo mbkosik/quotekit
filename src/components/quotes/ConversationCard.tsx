@@ -13,6 +13,7 @@ interface Props {
   loading: boolean;
   error?: string;
   onRetry?: () => void;
+  onReset?: () => void;
 }
 
 export function ConversationCard({
@@ -24,6 +25,7 @@ export function ConversationCard({
   loading,
   error,
   onRetry,
+  onReset,
 }: Props) {
   const [answer, setAnswer] = useState("");
 
@@ -73,14 +75,21 @@ export function ConversationCard({
         </form>
       )}
 
-      {(error ?? onRetry) && (
+      {!!error && (
         <div className={cn(error && "flex items-center justify-between")}>
-          <InlineError message={error ?? null} />
-          {onRetry && (
-            <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
-              Spróbuj ponownie
-            </Button>
-          )}
+          <InlineError message={error} />
+          <div className="flex gap-2">
+            {onRetry && (
+              <Button type="button" variant="ghost" onClick={onRetry} className="ml-4 text-red-300 hover:text-red-100">
+                Spróbuj ponownie
+              </Button>
+            )}
+            {error && onReset && (
+              <Button type="button" variant="ghost" onClick={onReset} className="text-white/50 hover:text-white/80">
+                Zacznij od nowa
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </div>
