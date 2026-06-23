@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { parseChatResponse } from "@/types";
 import type { QuoteItem, Message, ChatResponse } from "@/types";
+import { API_URLS } from "@/lib/api-routes";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
 
@@ -13,7 +14,7 @@ function is429(err: unknown): boolean {
 }
 
 async function callQuestions(inquiry: string): Promise<string[]> {
-  const res = await fetch("/api/ai/questions", {
+  const res = await fetch(API_URLS.QUESTIONS, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry }),
@@ -26,7 +27,7 @@ async function callQuestions(inquiry: string): Promise<string[]> {
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
-  const res = await fetch("/api/ai/chat", {
+  const res = await fetch(API_URLS.CHAT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry, messages: msgs, generate }),
@@ -64,6 +65,10 @@ export function useQuoteCreator() {
   }
 
   async function handleInquirySubmit(text: string) {
+    if (text.trim().length < 20) {
+      setSparseMessage("Opis jest za krótki — podaj co najmniej 20 znaków.");
+      return;
+    }
     setInquiryText(text);
     setSparseMessage("");
     setPhase("loading");
@@ -199,7 +204,7 @@ export function useQuoteCreator() {
     if (phase === "saving") return;
     setPhase("saving");
     try {
-      const res = await fetch("/api/quotes", {
+      const res = await fetch(API_URLS.QUOTES, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),

@@ -241,12 +241,12 @@ expect(result.current.state.savedQuoteId).toBe("q1");
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` przechodzi bez błędów
+- [x] 1.1 `npm run lint` przechodzi bez błędów
 
 #### Manual
 
-- [ ] 1.2 Input < 20 znaków → sparseMessage, brak network call
-- [ ] 1.3 Input 20+ znaków → normalne przejście do loading
+- [x] 1.2 Input < 20 znaków → sparseMessage, brak network call
+- [x] 1.3 Input 20+ znaków → normalne przejście do loading
 
 ### Phase 2: savedQuoteId
 
