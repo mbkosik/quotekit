@@ -212,7 +212,8 @@ export function useQuoteCreator() {
         body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as { quote: { id: string } };
+      const data = (await res.json()) as { quote?: { id?: string } };
+      if (!data.quote?.id) throw new Error("Missing quote id");
       setSavedQuoteId(data.quote.id);
       setSavedTitle(title);
       setPhase("done");

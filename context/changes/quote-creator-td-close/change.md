@@ -1,7 +1,7 @@
 ---
 change_id: quote-creator-td-close
 title: Close remaining technical debt from quote-creator refactor
-status: implemented
+status: impl_reviewed
 created: 2026-06-23
 updated: 2026-06-23
 archived_at: null
