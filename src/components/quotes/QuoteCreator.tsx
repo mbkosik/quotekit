@@ -32,7 +32,7 @@ export function QuoteCreator() {
     handleBackFromQuestions,
     setItems,
     setError,
-    resetForm,
+    resetCreatorState,
     handleResetToInquiry,
   } = actions;
 
@@ -48,7 +48,7 @@ export function QuoteCreator() {
         >
           Otwórz wycenę <ChevronRight size={16} aria-hidden />
         </a>
-        <Button variant="outline" onClick={resetForm} className="mt-2">
+        <Button variant="outline" onClick={resetCreatorState} className="mt-2">
           Utwórz nową wycenę
         </Button>
       </div>

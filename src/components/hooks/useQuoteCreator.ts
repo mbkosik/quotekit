@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { parseChatResponse } from "@/types";
 import type { QuoteItem, Message, ChatResponse } from "@/types";
-import { API_URLS } from "@/lib/api-routes";
+import { API_ROUTES } from "@/lib/api-routes";
 
 export type Phase = "inquiry" | "loading" | "questions" | "conversation" | "items" | "saving" | "done";
 
@@ -14,7 +14,7 @@ function is429(err: unknown): boolean {
 }
 
 async function callQuestions(inquiry: string): Promise<string[]> {
-  const res = await fetch(API_URLS.QUESTIONS, {
+  const res = await fetch(API_ROUTES.QUESTIONS, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry }),
@@ -27,7 +27,7 @@ async function callQuestions(inquiry: string): Promise<string[]> {
 }
 
 async function callChat(inquiry: string, msgs: Message[], generate: boolean): Promise<ChatResponse> {
-  const res = await fetch(API_URLS.CHAT, {
+  const res = await fetch(API_ROUTES.CHAT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ inquiry_text: inquiry, messages: msgs, generate }),
@@ -52,7 +52,7 @@ export function useQuoteCreator() {
   const [savedTitle, setSavedTitle] = useState("");
   const [savedQuoteId, setSavedQuoteId] = useState("");
 
-  function resetForm() {
+  function resetCreatorState() {
     setPhase("inquiry");
     setInquiryText("");
     setMessages([]);
@@ -140,7 +140,7 @@ export function useQuoteCreator() {
             setTitle(data.title);
             setPhase("items");
           } else {
-            resetForm();
+            resetCreatorState();
           }
           return;
         }
@@ -206,15 +206,15 @@ export function useQuoteCreator() {
     if (phase === "saving") return;
     setPhase("saving");
     try {
-      const res = await fetch(API_URLS.QUOTES, {
+      const res = await fetch(API_ROUTES.QUOTES, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, inquiry_text: inquiryText, content: { items: finalItems } }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as { quote?: { id?: string } };
-      if (!data.quote?.id) throw new Error("Missing quote id");
-      setSavedQuoteId(data.quote.id);
+      const saveResponse = (await res.json()) as { quote?: { id?: string } };
+      if (!saveResponse.quote?.id) throw new Error("Missing quote id");
+      setSavedQuoteId(saveResponse.quote.id);
       setSavedTitle(title);
       setPhase("done");
     } catch {
@@ -248,8 +248,8 @@ export function useQuoteCreator() {
       handleBackFromQuestions,
       setItems,
       setError,
-      resetForm,
-      handleResetToInquiry: resetForm,
+      resetCreatorState,
+      handleResetToInquiry: resetCreatorState,
     },
   };
 }

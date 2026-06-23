@@ -1,4 +1,4 @@
-export const API_URLS = {
+export const API_ROUTES = {
   QUESTIONS: "/api/ai/questions",
   CHAT: "/api/ai/chat",
   QUOTES: "/api/quotes",
